@@ -1,0 +1,13 @@
+{
+    "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
+    "rules": {
+        "import-name": false,
+        "no-unused-variable": true,
+        "quotemark": [true, "double", "jsx-double", "avoid-template"],
+        "max-line-length": [true, 160],
+        "no-var-keyword": false,
+        "ter-indent": [true, 4, { "SwitchCase": true }],
+        "ter-arrow-parens": false,
+        "variable-name": [true, "check-format", "allow-pascal-case", "ban-keywords"]
+    }
+}
