@@ -43,6 +43,7 @@ const NavBar: React.SFC<INavBar> = props => {
                     </Link>
                 </div>
                 {utilSpace}
+                
             </div>
         </div>
     );

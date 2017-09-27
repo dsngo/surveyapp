@@ -95,6 +95,10 @@ module.exports = (env = {}) => {
                               "sass-loader",
                           ],
                 },
+                {
+                    test: /\.json$/,
+                    loader: 'json-loader'
+                }
             ],
         },
         plugins: [

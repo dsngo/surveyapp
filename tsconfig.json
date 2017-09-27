@@ -20,7 +20,8 @@
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true
     // "outDir": "./js" 
     // "outFile": "./app/bundle.js"
     
