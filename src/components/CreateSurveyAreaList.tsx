@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import AnswerOption from './AnswerOption';
-import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, createSurvey } from "./redux/actionCreators";
+import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, createSurvey, changeQuestion } from "./redux/actionCreators";
 
 interface IAreaList {
     surveyData: any;
@@ -11,11 +11,12 @@ interface IAreaList {
     deleteArea: (index: number) => any;
     changeTypeAnswer: (index: number, answerType: string) => any;
     updateDescriptionArea: (index: number, field: string, value: string) => any;
+    changeQuestion: (index: number, value: string) => any;
 }
 
 
 const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
-    const { surveyData, currentArea, chooseArea, deleteArea, changeTypeAnswer, updateDescriptionArea } = props;
+    const { surveyData, currentArea, chooseArea, deleteArea, changeTypeAnswer, updateDescriptionArea, changeQuestion } = props;
     let indexQuestion = 0;
     return (
         <div>
@@ -31,7 +32,7 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                                 <div className="delete-area" onClick={ e => deleteArea(index) }><i className="fa fa-times"></i></div>
                             </div>
                             <div className="group">
-                                <input type="text" required />
+                                <input type="text" required onChange={e => changeQuestion(index, e.target.value)} />
                                 <span className="highlight" />
                                 <span className="bar" />
                                 <label>{"Question " + indexQuestion }</label>
@@ -95,5 +96,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     deleteArea: (index: number) => dispatch(deleteArea(index)),
     chooseArea: (index: number) => dispatch(chooseArea(index)),
     updateDescriptionArea: (index: number, field: string, value: string) => dispatch(updateDescriptionArea(index, field, value)),
+    changeQuestion: (index: number, value: string) => dispatch(changeQuestion(index, value))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSurveyAreaList);

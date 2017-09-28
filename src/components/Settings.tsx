@@ -13,6 +13,7 @@ const Settings: React.SFC<ISettings> = props => {
         type: 'question',
         answer_type: '',
         multiple_answer : [],
+        question: ""
     }
     let areaDescriptionTemplate = {
         type: "description",

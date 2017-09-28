@@ -5,6 +5,7 @@ import { store } from "./redux/store";
 import NavBar from "./NavBar";
 import Menu from "./Menu";
 import SurveyForm from "./SurveyForm";
+import FormSubmit from "./FormSubmit";
 import FoF from "./FoF"
 
 export const App: React.SFC = () => (
@@ -15,6 +16,7 @@ export const App: React.SFC = () => (
                 <Switch>
                     <Route exact path="/" component={Menu} />
                     <Route path="/newform" component={SurveyForm} />
+                    <Route path="/form/:id" component={FormSubmit} />
                     <Route component={FoF} />
                 </Switch>
             </div>

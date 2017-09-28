@@ -1,16 +1,18 @@
 import axios from "axios";
-import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_AREA, CHOOSE_AREA,
+import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_AREA, CHOOSE_AREA, CHANGE_QUESTION_DETAIL,
         ADD_MULTIPLE_CHOICE, UPDATE_MULTIPLE_CHOICE, DELETE_MULTIPLE_CHOICE,
         UPDATE_DESCRIPTION_AREA,
         DIVIDE_SECTION,
         CREATE_SURVEY,
         UPDATE_INFO_SURVEY,
-        MISSING_INFO, CLEAR_ERROR_MSG,
-        CREATE_SUCCESS } from "./actions";
+        MISSING_INFO, CLEAR_MESSAGE,
+        CREATE_SUCCESS,
+        GET_SURVEY_ERROR, GET_SURVEY_SUCCESS } from "./actions";
 import store from "./store";
 
 const config = require("../../config.json");
 const urlServer = config.URL_SERVER_API;
+const clearMsgTimeout = config.CLEAR_MESSAGE_TIME;
 
 
 export const setSearchTerm = (searchTerm: string) => ({
@@ -57,6 +59,12 @@ export const deleteMultipleChoice = (index: number, answer_index: number) => ({
     type: DELETE_MULTIPLE_CHOICE
 })
 
+export const changeQuestion = (index: number, value: string) => ({
+    index,
+    value,
+    type: CHANGE_QUESTION_DETAIL
+})
+
 export const updateDescriptionArea = (index: number, field: string, value: string) => ({
     index,
     field,
@@ -70,7 +78,10 @@ export const divideSection = (value: boolean) => ({
 })
 
 export const createSurvey = () => {
+    console.log("create survey");
+    
     return async (dispatch: any, getState: any) => {
+        console.log("async");
         const surveyData = getState().surveyData;
         let msgError = "";
         if (!surveyData.info.description) msgError = "Please input your survey description.";
@@ -80,6 +91,7 @@ export const createSurvey = () => {
             if ((ctn.type === "description") && (!ctn.title || !ctn.description)){
                 checkMissing = true;
             }
+            if ((ctn.type === "question") && ((ctn.answer_type === "")|| (ctn.question === ""))) checkMissing = true;
             if ((ctn.type === "question") && (ctn.answer_type === "checkbox" || ctn.answer_type === "multiple_choice" || ctn.answer_type === "dropdown" )) {
                 ctn.multiple_answer.map((asw: any) => {
                     if (asw === "") {
@@ -97,8 +109,8 @@ export const createSurvey = () => {
                 msgError
             });
             setTimeout(() => {
-                dispatch({ type: CLEAR_ERROR_MSG })
-            }, 2000)
+                dispatch({ type: CLEAR_MESSAGE })
+            }, clearMsgTimeout)
         } 
         else {
             let resCreate = await axios.post(urlServer + "/api/v1/survey/create", surveyData);
@@ -109,9 +121,9 @@ export const createSurvey = () => {
     }
 }
 
-async function ajaxCreateSurvey(data: any) {
-    
-}
+export const clearMessage = () => ({
+    type: CLEAR_MESSAGE
+})
 
 export const updateInfoSurvey = (field: string, value: string) => ({
     field,
@@ -119,3 +131,21 @@ export const updateInfoSurvey = (field: string, value: string) => ({
     type: UPDATE_INFO_SURVEY
 })
 
+export const getSurveySubmitById = (id: string) => {
+    return async (dispatch: any, getState: any) => {
+        let res = await axios.get(urlServer + "/api/v1/survey/get/" + id);
+        let data = res.data;
+        if (data.code) {
+            dispatch({
+                type: GET_SURVEY_ERROR,
+                message: data.message
+            })
+        } else {
+            dispatch({
+                type: GET_SURVEY_SUCCESS,
+                survey: data.data
+            })
+        }
+        
+    }
+}

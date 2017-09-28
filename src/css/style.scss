@@ -171,99 +171,104 @@ body {
     position: relative;
     margin-bottom: 15px;
 }
-input {
-    font-size: 18px;
-    padding: 10px 10px 10px 5px;
-    display: block;
-    border: none;
-    border-bottom: 1px solid #757575;
-}
-input:focus {
-    outline: none;
-}
 
-label {
-    color: #999;
-    font-size: 18px;
-    font-weight: normal;
-    position: absolute;
-    pointer-events: none;
-    left: 5px;
-    top: 10px;
-    transition: 0.2s ease all;
-}
-
-/* active state */
-input:focus ~ label,
-input:valid ~ label {
-    top: -20px;
-    font-size: 14px;
-    color: $color-green;
-}
-
-.bar {
-    position: relative;
-    display: block;
-    width: 100%;
-}
-
-.bar:before,
-.bar:after {
-    content: "";
-    height: 2px;
-    width: 0;
-    bottom: 1px;
-    position: absolute;
-    background: $color-green;
-    transition: 0.2s ease all;
-}
-.bar:before {
-    left: 50%;
-}
-.bar:after {
-    right: 50%;
-}
-
-/* active state */
-input:focus ~ .bar:before,
-input:focus ~ .bar:after {
-    width: 50%;
-}
-
-.highlight {
-    position: absolute;
-    height: 60%;
-    width: 100px;
-    top: 25%;
-    left: 0;
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-/* active state */
-input:focus ~ .highlight {
-    animation: inputHighlighter 0.3s ease;
-}
-
-/* ANIMATIONS ================ */
-@keyframes inputHighlighter {
-    from {
-        background: $color-green;
-    }
-    to {
-        width: 0;
-        background: transparent;
-    }
-}
 
 .form-title,
 .form-description {
     padding: 20px;
     width: 100%;
 }
-input {
-    width: 100%;
+
+.survey-form-create {
+    input {
+        width: 100%;
+    }
+    input {
+        font-size: 18px;
+        padding: 10px 10px 10px 5px;
+        display: block;
+        border: none;
+        border-bottom: 1px solid #757575;
+    }
+    input:focus {
+        outline: none;
+    }
+    
+    label {
+        color: #999;
+        font-size: 18px;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 5px;
+        top: 10px;
+        transition: 0.2s ease all;
+    }
+    
+    /* active state */
+    input:focus ~ label,
+    input:valid ~ label {
+        top: -20px;
+        font-size: 14px;
+        color: $color-green;
+    }
+    
+    .bar {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+    
+    .bar:before,
+    .bar:after {
+        content: "";
+        height: 2px;
+        width: 0;
+        bottom: 1px;
+        position: absolute;
+        background: $color-green;
+        transition: 0.2s ease all;
+    }
+    .bar:before {
+        left: 50%;
+    }
+    .bar:after {
+        right: 50%;
+    }
+    
+    /* active state */
+    input:focus ~ .bar:before,
+    input:focus ~ .bar:after {
+        width: 50%;
+    }
+    
+    .highlight {
+        position: absolute;
+        height: 60%;
+        width: 100px;
+        top: 25%;
+        left: 0;
+        pointer-events: none;
+        opacity: 0.5;
+    }
+    
+    /* active state */
+    input:focus ~ .highlight {
+        animation: inputHighlighter 0.3s ease;
+    }
+    
+    /* ANIMATIONS ================ */
+    @keyframes inputHighlighter {
+        from {
+            background: $color-green;
+        }
+        to {
+            width: 0;
+            background: transparent;
+        }
+    }
 }
+
 
 .form-description {
     padding-top: 0;
@@ -305,6 +310,7 @@ input {
     transition: background-color 0.3s ease;
     transition: color 0.3s ease;
 }
+
 .settings-icon:hover {
     background-color: $color-light-grey;
     color: white;
@@ -499,3 +505,43 @@ select {
 @-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.form-submit {
+    color: $color-light-grey;
+    .form-title {
+        text-align: left;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .form-info {
+        border-bottom: 1px solid $color-white-grey;
+    }
+
+    .form-description {
+        text-align: left;
+        font-size: 16px; 
+
+    }
+
+    .question-field {
+        padding: 20px;
+    }
+    
+    .question {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .error-message-container {
+        background-color: $color-red;
+        color: white;
+        text-align: left;
+        margin-top: 50px;
+        padding: 40px;
+        font-weight: bold;
+    }
+    .label-checkbox {
+        top: 0;
+    }
+}
+
