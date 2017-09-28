@@ -61,7 +61,29 @@ class FormSubmit extends React.Component<IFormSubmit> {
         if (field.answer_type === "dropdown") {
             return (
                 <div>
+                    <ul className="select">
+		                <li>
+                            <input className="select_close" type="radio" name="awesomeness" id="awesomeness-close" value=""/>
+                            <span className="select_label select_label-placeholder">Awesomeness Level</span>
+                        </li>
+                        
+                        <li className="select_items">
+                            <input className="select_expand" type="radio" name="awesomeness" id="awesomeness-opener"/>
+                            <label className="select_closeLabel" htmlFor="awesomeness-close"></label>
+                            
+                            <ul className="select_options">
+                                <li className="select_option">
+                                    <input className="select_input" type="radio" name="awesomeness" id="awesomeness-ridiculous"/>
+                                    <label className="select_label" htmlFor="awesomeness-ridiculous">ridiculous</label>
+                                </li>
 
+                                <li className="select_option">
+                                    <input className="select_input" type="radio" name="awesomeness" id="awesomeness-reasonable"/>
+                                    <label className="select_label" htmlFor="awesomeness-reasonable">reasonable</label>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             )
         }
