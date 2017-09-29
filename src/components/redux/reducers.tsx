@@ -6,7 +6,9 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         UPDATE_INFO_SURVEY,
         MISSING_INFO, CLEAR_MESSAGE,
         CREATE_SUCCESS,
-        GET_SURVEY_ERROR, GET_SURVEY_SUCCESS } from "./actions";
+        GET_SURVEY_ERROR, GET_SURVEY_SUCCESS,
+        INIT_SURVEY_QUESTION,
+        UPDATE_ANSWER_RESPONSE } from "./actions";
 
 
 let initialSurveyData = [{
@@ -100,8 +102,39 @@ const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error:
     } 
 }
 
+interface ISurveyResponse {
+    question: any[];
+}
+
+const surveyResponse = (state:ISurveyResponse = { question: [] }, action: any) => {
+    let data = { ...state };
+    switch(action.type) {
+        case INIT_SURVEY_QUESTION:
+            data.question = JSON.parse(action.survey.content);
+            return data;
+        case UPDATE_ANSWER_RESPONSE:
+            if (!action.multiAnswer) {
+                data.question[action.index].answer = action.answer;
+                return data;
+            }
+            if (!data.question[action.index].answer)  {
+                data.question[action.index].answer = [action.answer];
+                return data;
+            }
+            if (data.question[action.index].answer.indexOf(action.answer) != -1) {
+                let index = data.question[action.index].answer.indexOf(action.answer);
+                data.question[action.index].answer.splice(index, 1);
+                return data;
+            }
+            data.question[action.index].answer.push(action.answer);                
+            return data;
+        default: 
+            return state;
+    }
+}
+
 const sectionDivide = (state: boolean = false, action: any) => action.type === DIVIDE_SECTION ? action.value : state;
 
 const currentArea = (state: number = -1, action: any) => action.type === CHOOSE_AREA ? action.index : state;
 
-export const rootReducer = combineReducers({ searchTerm, apiData, surveyData, currentArea, surveySubmit });
+export const rootReducer = combineReducers({ searchTerm, apiData, surveyData, currentArea, surveySubmit, surveyResponse });

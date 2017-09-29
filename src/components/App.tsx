@@ -6,9 +6,11 @@ import NavBar from "./NavBar";
 import Menu from "./Menu";
 import SurveyForm from "./SurveyForm";
 import FormSubmit from "./FormSubmit";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FoF from "./FoF"
 
 export const App: React.SFC = () => (
+    <MuiThemeProvider>
     <Router>
         <Provider store={store}>
             <div>
@@ -22,4 +24,5 @@ export const App: React.SFC = () => (
             </div>
         </Provider>
     </Router>
+    </MuiThemeProvider>
 );

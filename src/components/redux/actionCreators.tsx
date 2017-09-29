@@ -7,7 +7,10 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         UPDATE_INFO_SURVEY,
         MISSING_INFO, CLEAR_MESSAGE,
         CREATE_SUCCESS,
-        GET_SURVEY_ERROR, GET_SURVEY_SUCCESS } from "./actions";
+        GET_SURVEY_ERROR, GET_SURVEY_SUCCESS,
+        INIT_SURVEY_QUESTION,
+        UPDATE_ANSWER_RESPONSE,
+        SUBMIT_RESPONSE } from "./actions";
 import store from "./store";
 
 const config = require("../../config.json");
@@ -78,10 +81,7 @@ export const divideSection = (value: boolean) => ({
 })
 
 export const createSurvey = () => {
-    console.log("create survey");
-    
     return async (dispatch: any, getState: any) => {
-        console.log("async");
         const surveyData = getState().surveyData;
         let msgError = "";
         if (!surveyData.info.description) msgError = "Please input your survey description.";
@@ -113,6 +113,7 @@ export const createSurvey = () => {
             }, clearMsgTimeout)
         } 
         else {
+            surveyData.action = "saved";
             let resCreate = await axios.post(urlServer + "/api/v1/survey/create", surveyData);
             dispatch({
                 type: CREATE_SUCCESS
@@ -144,8 +145,27 @@ export const getSurveySubmitById = (id: string) => {
             dispatch({
                 type: GET_SURVEY_SUCCESS,
                 survey: data.data
+            });
+            dispatch({
+                type: INIT_SURVEY_QUESTION,
+                survey: data.data
             })
         }
         
+    }
+}
+
+export const updateAnswer = (index: number, answer: string, multiAnswer: boolean) => ({
+    index,
+    answer,
+    multiAnswer,
+    type: UPDATE_ANSWER_RESPONSE
+});
+
+export const submitResponse = (id: string) => {
+    return async (dispatch: any, getState: any) => {
+        let response = getState().surveyResponse;
+        response.survey_id = id;
+        let resSubmit = await axios.post(urlServer + "/api/v1/response", response);
     }
 }

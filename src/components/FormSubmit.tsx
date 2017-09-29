@@ -3,64 +3,121 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Scrollbars from "react-custom-scrollbars";
 import { getSurveySubmitById } from "./redux/actionCreators";
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
+import { updateAnswer, submitResponse } from "./redux/actionCreators";
+
+
+
 interface IFormSubmit {
+    surveyResponse: any;
     match: any;
     surveySubmit: any;
+    submitResponse: (id: string) => any;
     getSurveySubmitById: (id: string) => any;
+    updateAnswer: (index: number, answer: string, multiAnswer: boolean) => any;
 }
 
 class FormSubmit extends React.Component<IFormSubmit> {
     private scrollBars: Scrollbars;
+    state = {
+        open: false,
+      };
     constructor(props: any) {
         super(props);
     }
 
+    componentDidMount() {
+    }
+
+    handleOpen = () => {
+        this.setState({open: true});
+      };
+    
+    handleClose = () => {
+        this.setState({open: false});
+    };
+    
     componentWillMount() {
         let id = this.props.match.params.id;
         this.props.getSurveySubmitById(id);
     }
 
-    renderAnswers(field: any) {
+    renderAnswers(field: any, index: number) {
         if (field.answer_type === "short_answer") return (
-            <div>
-                <input type='text' required />
-                <span className='highlight' />
-                <span className='bar' />
-            </div>
+            <TextField 
+                hintText="" 
+                fullWidth={ true } 
+                onChange={ (e:any) => this.props.updateAnswer(index, e.target.value, false) }
+            />
         );
         if (field.answer_type === "long_answer") return (
             <div>
-                <textarea id="textarea1" className="materialize-textarea"></textarea>
+                <TextField
+                    onChange={ (e:any) => this.props.updateAnswer(index, e.target.value, false) }
+                    multiLine={true}
+                    rows={ 3 }
+                    fullWidth={ true }
+                /><br />
             </div>
         )
         if (field.answer_type === "checkbox") {
             return field.multiple_answer.map((answer: any, key: any) => {
-                let id = "question_1" + key;
+                let id = "question_" + index + "_" + key;
                 return (
                     <div>
-                        <div className="checkbox clear-fix">
-                            <input id={ id } className="filled-in" type="checkbox" />
-                            <label htmlFor={ id } className="label-checkbox">{ answer }</label>
-                        </div>
+                        <Checkbox onCheck={ e => { this.props.updateAnswer(index, answer, true) }}
+                            label={ answer }
+                        />
                     </div>
                 )
             })
             
         }
         if (field.answer_type === "multiple_choice") {
-            return field.multiple_answer.map((answer: any, key: any) => {
-                let id = "question_2" + key;
-                return (
-                    <div>
-                        <input name="group1" type="radio" id={ id } />
-                        <label htmlFor={ id }>{ answer }</label>
-                    </div>      
-                )
-            })
+            return (
+                <RadioButtonGroup name="shipSpeed" defaultSelected="not_light">
+                    {
+                        field.multiple_answer.map((answer: any, key: any) => {
+                            let id = "question_" + index + "_" + key;
+                            return (
+                                <RadioButton
+                                value={ answer }
+                                label={ answer }
+                                onChange={ e => { this.props.updateAnswer(index, answer, false)}}
+                              />
+                            )
+                        })
+                    }
+                </RadioButtonGroup>
+            )
+            
         }
         if (field.answer_type === "dropdown") {
             return (
                 <div>
+                    <SelectField floatingLabelText="Answer" value={ field.answer } onChange={ (event: object, key: number, payload: any) => { this.props.updateAnswer(index, payload, false)}} className="mui-select">
+                        {
+                            field.multiple_answer.map((answer: any, key: any) => {
+                                let id = "question_" + index + "_" + key;
+                                return (
+                                    <MenuItem value={ answer } label={ answer }> { answer }</MenuItem>
+                                )
+                            })
+                        }
+                    </SelectField>
                 </div>
             )
         }
@@ -70,7 +127,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
     renderFields() {
         let content = this.props.surveySubmit.survey.content;
         if (content) content = JSON.parse(content);
-        return content.map((field: any, index: number) => {
+        return this.props.surveyResponse.question.map((field: any, index: number) => {
             if (field.type === "question") {
                 return (
                     <div className="question-field" key={ index }>
@@ -79,7 +136,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                         </div>
                         <div className="answer">
                             {
-                                this.renderAnswers(field)
+                                this.renderAnswers(field, index)
                             }
                         </div>
                     </div>
@@ -96,6 +153,18 @@ class FormSubmit extends React.Component<IFormSubmit> {
     }
 
     renderForm() {
+        const actions = [
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onClick={this.handleClose}
+            />,
+            <FlatButton
+              label="Submit"
+              primary={true}
+              onClick={ e => {this.props.submitResponse(this.props.match.id)}}
+            />,
+          ];
         return (
             this.props.surveySubmit.error  === true ? (
                 <div className="container">
@@ -109,7 +178,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                 <div>
                     <Scrollbars id="scroll-survey-form" className="form-submit" ref={(bar: any) => { this.scrollBars = bar;}} style={{ height: "calc(100vh - 65px)", width: "100vw"}} autoHide>
                     <div className="row">
-                        <div className="survey-form" style={{ paddingTop: "15px" }}>
+                        <div className="survey-form container" style={{ paddingTop: "15px" }}>
                             <div className="form-create clear-fix">
                                 <div className="form-content">
                                     <div className="form-info">
@@ -127,9 +196,17 @@ class FormSubmit extends React.Component<IFormSubmit> {
                                     </div>
                                 </div>
                             </div>
-                            <div className="btn-save-survey-container">
-                                <a className="waves-effect waves-light btn btn-save-survey green">Submit</a>
+                            <div className="btn-save-survey-container" onClick={this.handleOpen}>
+                                <a className="waves-effect waves-light btn btn-save-survey green"  >Submit</a>
                             </div>
+                            <Dialog
+                                actions={actions}
+                                modal={false}
+                                open={this.state.open}
+                                onRequestClose={this.handleClose}
+                                >
+                                Are you sure to submit this response?
+                            </Dialog>
                         </div>
                     </div>
                 </Scrollbars>
@@ -139,6 +216,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
     }
 
     render() {
+        console.log(this.props.surveyResponse);
         return (
             this.props.surveySubmit.loading ? (
                 <div className="progress green">
@@ -157,11 +235,14 @@ class FormSubmit extends React.Component<IFormSubmit> {
 }
 
 const mapStateToProps = (state: any) => ({
-    surveySubmit: state.surveySubmit
+    surveySubmit: state.surveySubmit,
+    surveyResponse: state.surveyResponse
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getSurveySubmitById: (id: string) => dispatch(getSurveySubmitById(id))
+    updateAnswer: (index: number, answer: string, multiAnswer: boolean) => dispatch(updateAnswer(index, answer, multiAnswer)),
+    getSurveySubmitById: (id: string) => dispatch(getSurveySubmitById(id)),
+    submitResponse: (id: string) => dispatch(submitResponse(id))
 })
 
 export default connect (mapStateToProps, mapDispatchToProps) (FormSubmit);

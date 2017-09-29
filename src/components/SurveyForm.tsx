@@ -94,7 +94,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
 
 const mapStateToProps = (state: any) => ({
     surveyData: state.surveyData,
-    currentArea: state.currentArea
+    currentArea: state.currentArea,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
