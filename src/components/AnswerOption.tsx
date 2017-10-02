@@ -1,6 +1,21 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { addMultipleChoice, updateMultipleChoice, deleteMultipleChoice } from "./redux/actionCreators";
+
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
+
 interface IAnswerOption {
     surveyData: any[];
     area: any;
@@ -38,16 +53,21 @@ const AnswerOption: React.SFC<IAnswerOption> = props => {
                                         { icon_multiple_answer() }
                                     </i>
                                 </div>
-                                <div className="input-field input-text-radio">
-                                    <input placeholder="Option" value={ answer } onChange={e => updateMultipleChoice(index, answer_index, e.target.value) } className="validate" />
+                                <div className="input-field input-text-radio input-option-create">
+                                    <TextField 
+                                        name="question_text"
+                                        hintText="" 
+                                        fullWidth={ true } 
+                                        onChange={(e:any) => updateMultipleChoice(index, answer_index, e.target.value) }
+                                    />
                                 </div>
                             </div>
                         )
                     })
                 }
                 
-                <div className="radio-answer">
-                    <a className="waves-effect waves-light btn green" onClick={ e => addMultipleChoice(index) }>More option</a>
+                <div className="radio-answer align-center">
+                    <RaisedButton label="More option" primary={true} onClick={ e => addMultipleChoice(index) } />
                 </div>
             </div>
         ) : (<div></div>)

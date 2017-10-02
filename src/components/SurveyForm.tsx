@@ -8,7 +8,18 @@ import AnswerOption from "./AnswerOption";
 import CreateSurveyAreaList from "./CreateSurveyAreaList";
 import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, createSurvey, clearMessage } from "./redux/actionCreators";
 import { withRouter } from "react-router-dom";
-
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 interface ISurveyForm {
     surveyData: any;
     currentArea: number;
@@ -38,7 +49,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
     
     render() {
         return (
-            <Scrollbars id="scroll-survey-form" ref={(bar: any) => { this.scrollBars = bar;}} style={{ height: "calc(100vh - 65px)", width: "100vw"}} autoHide>
+            <Scrollbars id="scroll-survey-form" ref={(bar: any) => { this.scrollBars = bar;}} style={{ height: "calc(100vh - 65px)", width: "100%"}} autoHide>
                 <div className="row survey-form-create">
                     <div className="container survey-form" style={{ paddingTop: "15px" }}>
                         <Settings />
@@ -49,20 +60,24 @@ class SurveyForm extends React.Component<ISurveyForm> {
                             </div>
                             <div className="form-content">
                             <div className='form-title'>
-                                <div className='group'>
-                                    <input type='text' required value={ this.props.surveyData.info.title } onChange={ e => this.props.updateInfoSurvey("title", e.target.value)}/>
-                                    <span className='highlight' />
-                                    <span className='bar' />
-                                    <label>Title</label>
-                                </div>
+
+                                <TextField 
+                                    name="question_text"
+                                    hintText="" 
+                                    fullWidth={ true } 
+                                    onChange={ (e:any) => this.props.updateInfoSurvey("title", e.target.value)}
+                                    floatingLabelText="Title"
+                                />
                             </div>
                             <div className='form-description'>
-                                <div className='group'>
-                                    <input type='text' required value={ this.props.surveyData.info.description } onChange={ e => this.props.updateInfoSurvey("description", e.target.value)} />
-                                    <span className='highlight' />
-                                    <span className='bar' />
-                                    <label>Description</label>
-                                </div>
+
+                                <TextField 
+                                    name="question_text"
+                                    hintText="" 
+                                    fullWidth={ true } 
+                                    onChange={ (e:any) => this.props.updateInfoSurvey("description", e.target.value)}
+                                    floatingLabelText="Description"
+                                />
                             </div>
                                 <CreateSurveyAreaList />
                             </div>

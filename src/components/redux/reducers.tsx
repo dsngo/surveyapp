@@ -8,7 +8,10 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         CREATE_SUCCESS,
         GET_SURVEY_ERROR, GET_SURVEY_SUCCESS,
         INIT_SURVEY_QUESTION,
-        UPDATE_ANSWER_RESPONSE } from "./actions";
+        UPDATE_ANSWER_RESPONSE,
+        SUBMIT_SUCCESS,
+        CLEAR_SUBMIT_STATUS
+     } from "./actions";
 
 
 let initialSurveyData = [{
@@ -31,6 +34,14 @@ interface ISurveySubmit {
     errorMsg: string;
 }
 
+interface IStatus {
+    submitResponse: string,
+}
+
+interface ISurveyResponse {
+    question: any[];
+}
+
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
 const apiData = (state = {}, action: any) =>
@@ -48,7 +59,7 @@ const surveyData = (state:ISurveyData = { info: { title: "", description: ""}, c
         case CHANGE_QUESTION_DETAIL:
             data.content[action.index].question = action.value;
             return data;
-        case CHANGE_TYPE_ANSWER :
+        case CHANGE_TYPE_ANSWER:
             data.content[action.index].answer_type = action.answerType;
             data.content[action.index].multiple_answer = [];
             if (action.answerType === "multiple_choice" || action.answerType === "checkbox" || action.answerType === "dropdown") data.content[action.index].multiple_answer = [""];
@@ -102,9 +113,7 @@ const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error:
     } 
 }
 
-interface ISurveyResponse {
-    question: any[];
-}
+
 
 const surveyResponse = (state:ISurveyResponse = { question: [] }, action: any) => {
     let data = { ...state };
@@ -113,28 +122,56 @@ const surveyResponse = (state:ISurveyResponse = { question: [] }, action: any) =
             data.question = JSON.parse(action.survey.content);
             return data;
         case UPDATE_ANSWER_RESPONSE:
+            let answer = {
+                content: action.answer                
+            }
             if (!action.multiAnswer) {
-                data.question[action.index].answer = action.answer;
+                data.question[action.index].answer = answer;
                 return data;
             }
             if (!data.question[action.index].answer)  {
-                data.question[action.index].answer = [action.answer];
+                data.question[action.index].answer = [answer];
                 return data;
             }
-            if (data.question[action.index].answer.indexOf(action.answer) != -1) {
-                let index = data.question[action.index].answer.indexOf(action.answer);
+            let index = checkAnswerExist(answer, data.question[action.index].answer);
+            console.log(index);
+            
+            if (index !== -1) {
                 data.question[action.index].answer.splice(index, 1);
                 return data;
             }
-            data.question[action.index].answer.push(action.answer);                
+            data.question[action.index].answer.push(answer);                
             return data;
         default: 
             return state;
     }
 }
 
+
+const status = (state:IStatus = { submitResponse: ""}, action: any) => {
+    let data = { ...state };
+    switch (action.type) {
+        case SUBMIT_SUCCESS:
+            data.submitResponse = "success";
+            return data;
+        case CLEAR_SUBMIT_STATUS:
+            data.submitResponse = "";
+            return data;
+        default:
+            return state;
+    }
+}
 const sectionDivide = (state: boolean = false, action: any) => action.type === DIVIDE_SECTION ? action.value : state;
 
 const currentArea = (state: number = -1, action: any) => action.type === CHOOSE_AREA ? action.index : state;
 
-export const rootReducer = combineReducers({ searchTerm, apiData, surveyData, currentArea, surveySubmit, surveyResponse });
+export const rootReducer = combineReducers({ searchTerm, apiData, surveyData, currentArea, surveySubmit, surveyResponse, status });
+
+function checkAnswerExist(answer: any, arrayAnswer: any) {    
+    for (let i = 0; i < arrayAnswer.length; i++) {
+        if (answer.content === arrayAnswer[i].content) {
+            return i;
+        }
+    }
+    return -1;
+}

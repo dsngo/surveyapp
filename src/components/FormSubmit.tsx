@@ -3,13 +3,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Scrollbars from "react-custom-scrollbars";
 import { getSurveySubmitById } from "./redux/actionCreators";
+
+import StatusComponent from "./Status";
+
+
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-
 import Checkbox from 'material-ui/Checkbox';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
@@ -35,7 +38,8 @@ class FormSubmit extends React.Component<IFormSubmit> {
     state = {
         open: false,
         survey_id: ""
-      };
+    };
+
     constructor(props: any) {
         super(props);
     }
@@ -45,9 +49,11 @@ class FormSubmit extends React.Component<IFormSubmit> {
 
     handleOpen = () => {
         this.setState({open: true});
-      };
-    
+    };
+
     handleClose = () => {
+        console.log('close');
+        
         this.setState({open: false});
     };
     
@@ -60,6 +66,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
     renderAnswers(field: any, index: number) {
         if (field.answer_type === "short_answer") return (
             <TextField 
+                name="question_text"
                 hintText="" 
                 fullWidth={ true } 
                 onChange={ (e:any) => this.props.updateAnswer(index, e.target.value, false) }
@@ -72,6 +79,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                     multiLine={true}
                     rows={ 3 }
                     fullWidth={ true }
+                    name="question_text"
                 /><br />
             </div>
         )
@@ -82,6 +90,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                     <div>
                         <Checkbox onCheck={ e => { this.props.updateAnswer(index, answer, true) }}
                             label={ answer }
+                            key={ id }
                         />
                     </div>
                 )
@@ -95,7 +104,8 @@ class FormSubmit extends React.Component<IFormSubmit> {
                         field.multiple_answer.map((answer: any, key: any) => {
                             let id = "question_" + index + "_" + key;
                             return (
-                                <RadioButton
+                                <RadioButton 
+                                key={id}
                                 value={ answer }
                                 label={ answer }
                                 onChange={ e => { this.props.updateAnswer(index, answer, false)}}
@@ -115,7 +125,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                             field.multiple_answer.map((answer: any, key: any) => {
                                 let id = "question_" + index + "_" + key;
                                 return (
-                                    <MenuItem value={ answer } label={ answer }> { answer }</MenuItem>
+                                    <MenuItem value={ answer } label={ answer } key={id}> { answer } </MenuItem>
                                 )
                             })
                         }
@@ -146,12 +156,17 @@ class FormSubmit extends React.Component<IFormSubmit> {
             }
             if (field.type === "description") {
                 return (
-                    <div className="description-field">
+                    <div className="description-field" key={index}>
 
                     </div>
                 )
             }
         })
+    }
+
+    handleSubmit = () => {
+        this.handleClose(); 
+        this.props.submitResponse(this.state.survey_id);
     }
 
     renderForm() {
@@ -164,7 +179,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
             <FlatButton
               label="Submit"
               primary={true}
-              onClick={ e => {this.props.submitResponse(this.state.survey_id)}}
+              onClick={ e => { this.handleSubmit() }}
             />,
           ];
         return (
@@ -212,6 +227,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                         </div>
                     </div>
                 </Scrollbars>
+                <StatusComponent />
                 </div>
             )
         )

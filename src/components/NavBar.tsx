@@ -36,7 +36,6 @@ const NavBar: React.SFC<INavBar> = props => {
     );
     return (
         <div className="header">
-            <div className="row">
                 <div className="col-md-2 col-xs-3 logo-title">
                     <Link to="/" onClick={() => props.setSearchTerm("")}>
                         {brandName}
@@ -44,7 +43,6 @@ const NavBar: React.SFC<INavBar> = props => {
                 </div>
                 {utilSpace}
                 
-            </div>
         </div>
     );
 };

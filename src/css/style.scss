@@ -176,45 +176,16 @@ body {
 
 .form-title,
 .form-description {
-    padding: 20px;
     width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
+.form-description {
+    padding-bottom: 20px;
+}
 .survey-form-create {
-    input {
-        width: 100%;
-    }
-    input {
-        font-size: 18px;
-        padding: 10px 10px 10px 5px;
-        display: block;
-        border: none;
-        border-bottom: 1px solid #757575;
-    }
-    input:focus {
-        outline: none;
-    }
-    
-    label {
-        color: #999;
-        font-size: 18px;
-        font-weight: normal;
-        position: absolute;
-        pointer-events: none;
-        left: 5px;
-        top: 10px;
-        transition: 0.2s ease all;
-    }
-    
-    /* active state */
-    input:focus ~ label,
-    input:valid ~ label {
-        top: -20px;
-        font-size: 14px;
-        color: $color-green;
-    }
-    
-   
+
 }
 
 
@@ -238,7 +209,7 @@ body {
 
 .menu-settings {
     position: fixed;
-    right: 15%;
+    right: 10%;
     background-color: white;
     width: 40px;
     height: 200px;
@@ -268,6 +239,7 @@ body {
     position: relative;
     height: calc(100% - 50px);
     overflow: auto;
+    padding-bottom: 50px;
 }
 
 .group {
@@ -286,7 +258,6 @@ body {
 
 .form-question {
     padding: 20px;
-    padding-top: 45px;
     width: 100%;
     border-bottom: 1px solid #cecece;
     position: relative;
@@ -313,41 +284,7 @@ select {
     border-bottom: 1px solid rgba(0,0,0, 0.12);
   }
    
-  /* Remove focus */
-  select:focus {
-    outline: none;
-  }
-   
-  /* Hide label */
-  .mdl-selectfield label {
-    display: none;
-  }
-   
-  /* Use custom arrow */
-  .mdl-selectfield select {
-    -webkit-appearance: none;
-       -moz-appearance: none;
-            appearance: none;
-  }
-   
-  .mdl-selectfield {
-    font-family: 'Roboto','Helvetica','Arial',sans-serif;
-    position: relative;
-  }
-  .mdl-selectfield:after {
-    position: absolute;
-    top: 0.75em;
-    right: 0.5em;
-    /* Styling the down arrow */
-    width: 0;
-    height: 0;
-    padding: 0;
-    content: '';
-    border-left: .25em solid transparent;
-    border-right: .25em solid transparent;
-    border-top: 0.375em solid rgba(0,0,0, 0.12);
-    pointer-events: none;
-  }
+ 
 
   .delete-area {
       position: absolute;
@@ -376,7 +313,7 @@ select {
           text-align: left;
           display: inline-block;
           position: absolute;
-          top: 20px;
+          top: 5px;
           left: -2px;
           width: 10%;
           i {
@@ -384,7 +321,7 @@ select {
           }
       }
       .input-text-radio {
-          width: 90%;
+          width: 80%;
           display: inline-block;
       }
   }
@@ -494,114 +431,12 @@ select {
     .label-checkbox {
         top: 0;
     }
-    .select {
-        width: 225px;
-        height: 40px;
-        cursor: pointer;
-        background-color: white;
-        box-shadow: 0 2px 0 white;
-        border-radius: 2px;
-        
-        &_expand {
-            width: 0;
-            height: 40px;
-            position: absolute;
-            top: 0;
-            right: 0;
-            
-            &::after {
-                content: '\003E';
-                position: absolute;
-                top: 50%;
-                right: 0;
-                transform: translate(-50%, -50%) rotate(90deg) scaleY(1.75);
-                color: #3e3e3e;
-                font-size: 28px;
-                pointer-events: none;
-                z-index: 2;
-                transition: all 250ms cubic-bezier(.4,.25,.3,1);
-                opacity: .6;
-            }
-            
-            &:hover::after {opacity: 1}
-    
-            &:checked::after {transform: translate(-50%, -50%) rotate(90deg) scaleX(-1) scaleY(1.75);}
-        }
-        
-        &_expandLabel {
-            display: block;
-            width: 100%;
-            height: 40px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: pointer;
-        }
-        
-        &_close {display: none}
-        
-        &_closeLabel {
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: none;
-        }
-        
-        &_items {
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border: 2px solid #2fb5d1;
-            border-radius: 2px;
-            padding-top: 40px;
-        }
-        
-        &_input {display: none}
-        
-        &_label {
-            transition: all 250ms cubic-bezier(.4,.25,.3,1);
-            display: block;
-            height: 0;
-            font-size: 1.2rem;
-            line-height: 40px;
-            overflow: hidden;
-            color: #3e3e3e;
-            background-color: #fff;
-            cursor: pointer;
-            padding-left: 20px;
-            
-            &-placeholder {
-                height: 40px;
-                vertical-align: middle;
-                position: absolute;
-                top: 0;
-                left: 0;
-                opacity: .6;
-                background-color: transparent;
-            }
-        }
-        
-        &_expand:checked {
-            + .select_closeLabel {
-                display: block;
-                
-                + .select_options {
-                    .select_label {
-                        height: 40px;
-                        &:hover {background-color: #f7f7f7}
-                    }
-                    
-                    + .select_expandLabel {display: none}
-                }
-            }
-        }
-        
-        &_input:checked + .select_label {
-            height: 40px;
-            margin-top: -40px;
-        }
-    }
+}
+
+.input-option-create {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.align-center {
+    text-align: center
 }

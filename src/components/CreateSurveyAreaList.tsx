@@ -4,6 +4,20 @@ import { Link } from "react-router-dom";
 import AnswerOption from './AnswerOption';
 import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, createSurvey, changeQuestion } from "./redux/actionCreators";
 
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+
+
 interface IAreaList {
     surveyData: any;
     currentArea: number;
@@ -31,24 +45,21 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                             <div>
                                 <div className="delete-area" onClick={ e => deleteArea(index) }><i className="fa fa-times"></i></div>
                             </div>
-                            <div className="group">
-                                <input type="text" required onChange={e => changeQuestion(index, e.target.value)} />
-                                <span className="highlight" />
-                                <span className="bar" />
-                                <label>{"Question " + indexQuestion }</label>
-                            </div>
-                            <div className="mui-form">
-                                <select className="mui-select" value={ area.answer_type } onChange={e => changeTypeAnswer(index, e.target.value)}>
-                                    <option className="option-answer" value="" disabled>Choose answer type</option>
-                                    <option className="option-answer" value="short_answer">Short answer</option>
-                                    <option className="option-answer" value="long_answer">Long answer</option>
-                                    <option className="option-answer" value="checkbox">Checkbox</option>
-                                    <option className="option-answer" value="multiple_choice">Multiple choice</option>
-                                    <option className="option-answer" value="dropdown">Dropdown</option>
-                                </select>
-                            </div>
+                            <TextField 
+                                name="question_text"
+                                hintText="" 
+                                fullWidth={ true } 
+                                onChange={ (e:any) => changeQuestion(index, e.target.value)}
+                                floatingLabelText={"Question " + indexQuestion }
+                            />
+                            <SelectField floatingLabelText="Answer" fullWidth={ true } value={ area.answer_type } onChange={ (event: object, key: number, payload: any) => { changeTypeAnswer(index, payload)}} className="mui-select">
+                                <MenuItem value="short_answer" label="Short answer">Short answer</MenuItem>
+                                <MenuItem value="long_answer" label="Long answer">Long answer</MenuItem>
+                                <MenuItem value="checkbox" label="Checkbox">Checkbox</MenuItem>
+                                <MenuItem value="multiple_choice" label="Multiple choice">Multiple choice</MenuItem>
+                                <MenuItem value="dropdown" label="Dropdown">Dropdown</MenuItem>
+                            </SelectField>
                             <AnswerOption area={ area } index={ index } />
-                            
                         </div>
                     )
                 }

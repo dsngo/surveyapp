@@ -10,7 +10,8 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         GET_SURVEY_ERROR, GET_SURVEY_SUCCESS,
         INIT_SURVEY_QUESTION,
         UPDATE_ANSWER_RESPONSE,
-        SUBMIT_RESPONSE } from "./actions";
+        SUBMIT_SUCCESS,
+        CLEAR_SUBMIT_STATUS } from "./actions";
 import store from "./store";
 
 const config = require("../../config.json");
@@ -114,7 +115,7 @@ export const createSurvey = () => {
         } 
         else {
             surveyData.action = "saved";
-            let resCreate = await axios.post(urlServer + "/api/v1/survey/create", surveyData);
+            let resCreate = await axios.post(urlServer + "/survey", surveyData);
             dispatch({
                 type: CREATE_SUCCESS
             });
@@ -134,7 +135,7 @@ export const updateInfoSurvey = (field: string, value: string) => ({
 
 export const getSurveySubmitById = (id: string) => {
     return async (dispatch: any, getState: any) => {
-        let res = await axios.get(urlServer + "/api/v1/survey/get/" + id);
+        let res = await axios.get(urlServer + "/survey/" + id);
         let data = res.data;
         if (data.code) {
             dispatch({
@@ -165,8 +166,16 @@ export const updateAnswer = (index: number, answer: string, multiAnswer: boolean
 export const submitResponse = (id: string) => {
     return async (dispatch: any, getState: any) => {
         let response = getState().surveyResponse;
-        console.log('survey id', id);
         response.survey_id = id;
-        let resSubmit = await axios.post(urlServer + "/api/v1/response", response);
+        let resSubmit = await axios.post(urlServer + "/client-survey", response);
+        if (!resSubmit.data.code) {
+            dispatch({
+                type: SUBMIT_SUCCESS
+            });
+        }
     }
 }
+
+export const clearSubmitStatus = () => ({
+    type: CLEAR_SUBMIT_STATUS
+})
