@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Scrollbars from "react-custom-scrollbars";
-import { push } from "react-router-redux";
+// import { push } from "react-router-redux";
 import Settings from "./Settings";
 import AnswerOption from "./AnswerOption";
 import CreateSurveyAreaList from "./CreateSurveyAreaList";
@@ -15,7 +15,7 @@ interface ISurveyForm {
     updateInfoSurvey: (field: string, value: string) => any;
     createSurvey: () => any;
     clearMessage: () => any;
-    changeUrl: (url: string) => any;
+    // changeUrl: (url: string) => any;
 }
 
 class SurveyForm extends React.Component<ISurveyForm> {
@@ -101,7 +101,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     updateInfoSurvey: (field: string, value: string) => dispatch(updateInfoSurvey(field, value)),
     createSurvey: () => dispatch(createSurvey()),
     clearMessage: () => dispatch(clearMessage()),
-    changeUrl: (url: any) => dispatch(push(url))
+    // changeUrl: (url: any) => dispatch(push(url))
 });
 
 export default connect (mapStateToProps, mapDispatchToProps) (SurveyForm);

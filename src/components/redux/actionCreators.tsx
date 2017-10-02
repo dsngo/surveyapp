@@ -165,6 +165,7 @@ export const updateAnswer = (index: number, answer: string, multiAnswer: boolean
 export const submitResponse = (id: string) => {
     return async (dispatch: any, getState: any) => {
         let response = getState().surveyResponse;
+        console.log('survey id', id);
         response.survey_id = id;
         let resSubmit = await axios.post(urlServer + "/api/v1/response", response);
     }

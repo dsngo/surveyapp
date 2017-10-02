@@ -34,6 +34,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
     private scrollBars: Scrollbars;
     state = {
         open: false,
+        survey_id: ""
       };
     constructor(props: any) {
         super(props);
@@ -52,6 +53,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
     
     componentWillMount() {
         let id = this.props.match.params.id;
+        this.state.survey_id = id;
         this.props.getSurveySubmitById(id);
     }
 
@@ -162,7 +164,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
             <FlatButton
               label="Submit"
               primary={true}
-              onClick={ e => {this.props.submitResponse(this.props.match.id)}}
+              onClick={ e => {this.props.submitResponse(this.state.survey_id)}}
             />,
           ];
         return (
