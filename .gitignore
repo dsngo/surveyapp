@@ -1,4 +1,5 @@
 node_modules
-
 ./app/*
 !./app/assets/img
+!./app/assets/fonts
+yarn.lock
