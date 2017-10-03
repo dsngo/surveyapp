@@ -40,6 +40,8 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
     return (
         <div>
             {surveyData.content.map((area: any, index: any) => {
+                console.log(area);
+                
                 let classActive = index === currentArea ? "active-area" : "";
                 if (area.type === "question") {
                     indexQuestion += 1;

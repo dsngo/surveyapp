@@ -48,7 +48,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
     private tempLengthArea: number;
     state = {
         open: false,
-        survey_id: "",
+        surveyId: "",
         currentTab: "question",
     };
     constructor(props: any) {
@@ -59,8 +59,10 @@ class SurveyForm extends React.Component<ISurveyForm> {
     componentWillMount() {
         this.props.clearSurvey();
         const id = this.props.match.params.id;
-        this.state.survey_id = id;
-        this.props.getSurveyById(id);
+        if (id) {
+            this.state.surveyId = id;
+            this.props.getSurveyById(id);
+        }
     }
     componentDidUpdate() {
         if (this.props.surveyData.content.length > this.tempLengthArea) {
@@ -93,6 +95,8 @@ class SurveyForm extends React.Component<ISurveyForm> {
         window.location.href = "/form/" + this.props.surveyData.info.id;
     };
     render() {
+        console.log(this.props.surveyData);
+        
         const actions = [
             <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
             <FlatButton label="Submit" primary={true} onClick={e => this.handleSubmitSurvey()} />,

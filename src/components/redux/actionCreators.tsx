@@ -65,10 +65,10 @@ export const addMultipleChoice = (index: number) => ({
     type: ADD_MULTIPLE_CHOICE,
 });
 
-export const updateMultipleChoice = (index: number, answerIndex: number, answer: string) => ({
+export const updateMultipleChoice = (index: number, answerIndex: number, answerContent: string) => ({
     index,
     answerIndex,
-    answer,
+    answerContent,
     type: UPDATE_MULTIPLE_CHOICE,
 });
 

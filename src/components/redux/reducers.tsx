@@ -116,7 +116,7 @@ const surveyData = (
             data.content[action.index].multipleAnswer.push("");
             return data;
         case UPDATE_MULTIPLE_CHOICE:
-            data.content[action.index].multipleAnswer[action.answerIndex] = action.answer;
+            data.content[action.index].multipleAnswer[action.answerIndex] = action.answerContent;
             return data;
         case DELETE_MULTIPLE_CHOICE:
             data.content[action.index].multipleAnswer.splice(action.answerIndex, 1);
