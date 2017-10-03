@@ -1,4 +1,4 @@
 node_modules
 
-app/*
-!app/assets/img
+./app/*
+!./app/assets/img
