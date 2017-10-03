@@ -6,24 +6,24 @@ import NavBar from "./NavBar";
 import Menu from "./Menu";
 import SurveyForm from "./SurveyForm";
 import FormSubmit from "./FormSubmit";
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import FoF from "./FoF"
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import FoF from "./FoF";
 
 export const App: React.SFC = () => (
     <MuiThemeProvider>
-    <Router>
-        <Provider store={store}>
-            <div>
-                <NavBar showSearch />
-                <Switch>
-                    <Route exact path="/" component={Menu} />
-                    <Route path="/newform" component={SurveyForm} />
-                    <Route path="/form/:id" component={FormSubmit} />
-                    <Route path="/editform/:id" component={SurveyForm} />
-                    <Route component={FoF} />
-                </Switch>
-            </div>
-        </Provider>
-    </Router>
+        <Router>
+            <Provider store={store}>
+                <div>
+                    <NavBar showSearch />
+                    <Switch>
+                        <Route exact path="/" component={Menu} />
+                        <Route path="/newform" component={SurveyForm} />
+                        <Route path="/form/:id" component={FormSubmit} />
+                        <Route path="/editform/:id" component={SurveyForm} />
+                        <Route component={FoF} />
+                    </Switch>
+                </div>
+            </Provider>
+        </Router>
     </MuiThemeProvider>
 );

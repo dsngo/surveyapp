@@ -8,47 +8,41 @@ interface IRecentForms {
     getRecentForms: () => any;
 }
 class RecentForms extends React.Component<IRecentForms> {
-     constructor (props: any) {
-         super(props);
-     }
+    constructor(props: any) {
+        super(props);
+    }
 
-     componentWillMount() {
+    componentWillMount() {
         this.props.getRecentForms();
-     }
-     renderTemplate() {
-         return this.props.recentForms.forms.map((form: any) => {
-             return (
-            <Link className="col-sm-4 template-card-container" to={ "/editform/" + form._id + "" }>
-                <div className="template-card">
-                    <div className="template-card-thumbnail" />
-                    <div className="template-name">{ form.title }</div>
-                </div>
-            </Link>
-             )
-            
-         })
-     }
-     render() {
-         return (
+    }
+    renderTemplate() {
+        return this.props.recentForms.forms.map((form: any) => {
+            return (
+                <Link className="col-sm-4 template-card-container" to={"/editform/" + form._id + ""}>
+                    <div className="template-card">
+                        <div className="template-card-thumbnail" />
+                        <div className="template-name">{form.title}</div>
+                    </div>
+                </Link>
+            );
+        });
+    }
+    render() {
+        return (
             <div className="your-forms">
-            <div className="container your-forms">
-                <div className="row title-your-forms">Your recent forms</div>
-                <div className="row">
-                    {
-                        this.renderTemplate()
-                    }
+                <div className="container your-forms">
+                    <div className="row title-your-forms">Your recent forms</div>
+                    <div className="row">{this.renderTemplate()}</div>
                 </div>
             </div>
-        </div>
-         )
-     }
+        );
+    }
 }
 
-
 const mapStateToProps = (state: any) => ({
-    recentForms: state.recentForms
-})
+    recentForms: state.recentForms,
+});
 const mapDispatchToProps = (dispatch: any) => ({
-    getRecentForms: () => dispatch(getRecentForms())
-})
+    getRecentForms: () => dispatch(getRecentForms()),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(RecentForms);

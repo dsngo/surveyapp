@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "production") {
             const NextApp = (await import("./components/App")).App;
             renderApp(
                 <HotContainer>
-                    <App />
+                    <NextApp />
                 </HotContainer>,
             );
         });

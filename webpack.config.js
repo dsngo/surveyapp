@@ -29,7 +29,7 @@ module.exports = (env = {}) => {
     const devtool = defineDevtool(env.prod ? 2 : 3);
     const stats = { colors: true, reasons: true, assets: true, errorDetails: true };
     const extensions = [".ts", ".tsx", ".css", ".scss", ".js", ".json"];
-    const devSassLoader = ExtractTextPlugin.extract({
+    const prodSassLoader = ExtractTextPlugin.extract({
         fallback: "style-loader",
         use: [
             {
@@ -85,7 +85,7 @@ module.exports = (env = {}) => {
                     test: /\.s?css$/,
                     include: join(PATH.src, "css"),
                     use: env.prod
-                        ? devSassLoader
+                        ? prodSassLoader
                         : [
                               "style-loader",
                               {
@@ -95,10 +95,6 @@ module.exports = (env = {}) => {
                               "sass-loader",
                           ],
                 },
-                {
-                    test: /\.json$/,
-                    loader: 'json-loader'
-                }
             ],
         },
         plugins: [
@@ -112,7 +108,7 @@ module.exports = (env = {}) => {
         ],
     };
     // Webpack configurations
-    if(!env.prod) {
+    if (!env.prod) {
         tsBundleConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${developmentPort}/`);
     }
     if (env.prod) {
@@ -145,7 +141,11 @@ module.exports = (env = {}) => {
             }),
             new webpack.optimize.UglifyJsPlugin({ comments: false }),
             new ExtractTextPlugin({ filename: "assets/css/bundle.css", allChunks: true }),
-            new HtmlWebpackPlugin({ title: `${pageTitle}`, filename: "index.html", template: join(__dirname, "src/template.ejs") }),
+            new HtmlWebpackPlugin({
+                title: `${pageTitle}`,
+                filename: "index.html",
+                template: join(__dirname, "src/template.ejs"),
+            }),
         ];
     }
     const config = [tsBundleConfig];
