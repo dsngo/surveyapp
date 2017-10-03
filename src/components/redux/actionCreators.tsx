@@ -11,7 +11,9 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         INIT_SURVEY_QUESTION,
         UPDATE_ANSWER_RESPONSE,
         SUBMIT_SUCCESS,
-        CLEAR_SUBMIT_STATUS } from "./actions";
+        CLEAR_SUBMIT_STATUS,
+        GET_RECENT_FORMS,
+        GET_SURVEY, GET_RESPONSES, CLEAR_SURVEY } from "./actions";
 import store from "./store";
 
 const config = require("../../config.json");
@@ -81,7 +83,7 @@ export const divideSection = (value: boolean) => ({
     type: DIVIDE_SECTION
 })
 
-export const createSurvey = () => {
+export const saveSurvey = () => {
     return async (dispatch: any, getState: any) => {
         const surveyData = getState().surveyData;
         let msgError = "";
@@ -110,12 +112,19 @@ export const createSurvey = () => {
                 msgError
             });
             setTimeout(() => {
-                dispatch({ type: CLEAR_MESSAGE })
-            }, clearMsgTimeout)
+                dispatch({ 
+                    type: CLEAR_MESSAGE
+                 })
+            }, 2000);
         } 
         else {
             surveyData.action = "saved";
-            let resCreate = await axios.post(urlServer + "/survey", surveyData);
+            let resSaveSurvey;
+            if (!surveyData.info.id) {
+                resSaveSurvey = await axios.post(urlServer + "/survey", surveyData);
+            } else {
+                resSaveSurvey = await axios.put(urlServer + "/survey/:id", surveyData);
+            }
             dispatch({
                 type: CREATE_SUCCESS
             });
@@ -176,6 +185,37 @@ export const submitResponse = (id: string) => {
     }
 }
 
+export const getSurveyById = (id: string) => {
+    return async (dispatch: any, getState: any) => {
+        let resGetById = await axios.get(urlServer + "/survey/" + id);
+        if (resGetById.data.data) {
+            dispatch({
+                type: GET_SURVEY,
+                survey: resGetById.data.data
+            })
+            let resGetResponsesBySurvey = await axios.get(urlServer + "/client-survey/" + id);
+            if (resGetResponsesBySurvey.data.data) {
+                dispatch( {
+                    type: GET_RESPONSES,
+                    responses: resGetResponsesBySurvey.data.data
+                })
+            }
+        }
+    }
+}
 export const clearSubmitStatus = () => ({
     type: CLEAR_SUBMIT_STATUS
 })
+
+export const getRecentForms = () => {
+    return async (dispatch: any, getState: any) => {
+        let resForms = await axios.get(urlServer + "/survey");
+        let forms = resForms.data.data;
+        
+        dispatch({
+            type: GET_RECENT_FORMS,
+            forms
+        })
+    }
+}
+

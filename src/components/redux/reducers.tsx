@@ -10,7 +10,9 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         INIT_SURVEY_QUESTION,
         UPDATE_ANSWER_RESPONSE,
         SUBMIT_SUCCESS,
-        CLEAR_SUBMIT_STATUS
+        CLEAR_SUBMIT_STATUS,
+        GET_RECENT_FORMS,
+        GET_SURVEY, GET_RESPONSES
      } from "./actions";
 
 
@@ -21,10 +23,11 @@ let initialSurveyData = [{
 }];
 
 interface ISurveyData {
-    info: object;
+    info: any;
     content: any[];
     msgError: string;
     msgSuccess: string;
+    responses: any[];
 }
 
 interface ISurveySubmit {
@@ -42,12 +45,16 @@ interface ISurveyResponse {
     question: any[];
 }
 
+interface IRecentForms {
+    forms: any[];
+}
+
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
 const apiData = (state = {}, action: any) =>
     action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state;
 
-const surveyData = (state:ISurveyData = { info: { title: "", description: ""}, content: [], msgError: "", msgSuccess: ""}, action: any) => {
+const surveyData = (state:ISurveyData = { info: { title: "", id: "", description: ""}, content: [], msgError: "", msgSuccess: "", responses: []}, action: any) => {
     let data = { ...state };
     switch (action.type) {
         case UPDATE_INFO_SURVEY:
@@ -89,7 +96,15 @@ const surveyData = (state:ISurveyData = { info: { title: "", description: ""}, c
         case CREATE_SUCCESS:
             data.msgSuccess = "success";
             return data;
-        
+        case GET_SURVEY:
+            data.info.id = action.survey._id;
+            data.info.title = action.survey.title;
+            data.info.description = action.survey.description;
+            data.content = JSON.parse(action.survey.content);
+            return data;
+        case GET_RESPONSES:
+            data.responses = action.responses;
+            return data;
         default: 
             return state;
     }
@@ -111,6 +126,17 @@ const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error:
         default: 
             return state;
     } 
+}
+
+const recentForms = (state: IRecentForms = { forms: [] }, action: any ) => {
+    let data = { ...state };
+    switch (action.type) {
+        case GET_RECENT_FORMS:
+            data.forms = action.forms;
+            return data;
+        default:
+            return state;
+    }
 }
 
 
@@ -165,7 +191,7 @@ const sectionDivide = (state: boolean = false, action: any) => action.type === D
 
 const currentArea = (state: number = -1, action: any) => action.type === CHOOSE_AREA ? action.index : state;
 
-export const rootReducer = combineReducers({ searchTerm, apiData, surveyData, currentArea, surveySubmit, surveyResponse, status });
+export const rootReducer = combineReducers({ searchTerm, apiData, surveyData, currentArea, surveySubmit, surveyResponse, status, recentForms });
 
 function checkAnswerExist(answer: any, arrayAnswer: any) {    
     for (let i = 0; i < arrayAnswer.length; i++) {

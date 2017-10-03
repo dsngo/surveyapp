@@ -15,8 +15,6 @@ const Forms: React.SFC = props => (
         </div>
         <div className="row">
             <Template />
-            <Template />
-            <Template />
         </div>
     </div>
 );

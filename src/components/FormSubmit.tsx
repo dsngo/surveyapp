@@ -133,8 +133,6 @@ class FormSubmit extends React.Component<IFormSubmit> {
                 </div>
             )
         }
-        
-        
     }
     renderFields() {
         let content = this.props.surveySubmit.survey.content;
@@ -213,8 +211,13 @@ class FormSubmit extends React.Component<IFormSubmit> {
                                     </div>
                                 </div>
                             </div>
-                            <div className="btn-save-survey-container" onClick={this.handleOpen}>
-                                <a className="waves-effect waves-light btn btn-save-survey green"  >Submit</a>
+                            <div className="btn-save-survey-container">
+                                <RaisedButton
+                                backgroundColor="#4CAF50"
+                                className="btn-save"
+                                label="Submit"
+                                onClick={ e => this.handleOpen() }
+                                />
                             </div>
                             <Dialog
                                 actions={actions}

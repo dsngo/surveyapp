@@ -6,7 +6,7 @@ import Scrollbars from "react-custom-scrollbars";
 import Settings from "./Settings";
 import AnswerOption from "./AnswerOption";
 import CreateSurveyAreaList from "./CreateSurveyAreaList";
-import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, createSurvey, clearMessage } from "./redux/actionCreators";
+import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, saveSurvey, clearMessage, getSurveyById } from "./redux/actionCreators";
 import { withRouter } from "react-router-dom";
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -20,21 +20,35 @@ import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import {Tabs, Tab} from 'material-ui/Tabs';
 interface ISurveyForm {
+    match: any;
     surveyData: any;
     currentArea: number;
     updateInfoSurvey: (field: string, value: string) => any;
-    createSurvey: () => any;
+    saveSurvey: () => any;
     clearMessage: () => any;
+    getSurveyById: (id: string) => any;
     // changeUrl: (url: string) => any;
 }
 
 class SurveyForm extends React.Component<ISurveyForm> {
     private scrollBars: Scrollbars;
     private tempLengthArea: number;
+    state = {
+        open: false,
+        survey_id: "",
+        currentTab: "question"
+    }
     constructor(props: any){
         super(props);
         this.tempLengthArea = this.props.surveyData.content.length;
+    }
+
+    componentWillMount() {
+        let id = this.props.match.params.id;
+        this.state.survey_id = id;
+        this.props.getSurveyById(id);
     }
     componentDidUpdate() {
         if (this.props.surveyData.content.length > this.tempLengthArea) {
@@ -46,46 +60,99 @@ class SurveyForm extends React.Component<ISurveyForm> {
             window.location.href = "/";
         }
     }
-    
+    handleChangeTab = (currentTab: any) => {
+        this.setState({
+          currentTab,
+        });
+      };
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
+
+    handleSubmitSurvey = () => {
+        this.props.saveSurvey();
+        this.handleClose();
+    }
     render() {
+        const actions = [
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onClick={this.handleClose}
+            />,
+            <FlatButton
+              label="Submit"
+              primary={true}
+              onClick={ e => this.handleSubmitSurvey() }
+            />,
+          ];
         return (
             <Scrollbars id="scroll-survey-form" ref={(bar: any) => { this.scrollBars = bar;}} style={{ height: "calc(100vh - 65px)", width: "100%"}} autoHide>
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    >
+                    Are you sure to create this survey?
+                </Dialog>
                 <div className="row survey-form-create">
                     <div className="container survey-form" style={{ paddingTop: "15px" }}>
-                        <Settings />
+                   
                         <div className="form-create clear-fix">
-                            <div className="tabs clear-fix">
-                                <div className="questions-tab active-tab">QUESTIONS</div>
-                                <div className="responses-tab">RESPONSES</div>
-                            </div>
-                            <div className="form-content">
-                            <div className='form-title'>
-
-                                <TextField 
-                                    name="question_text"
-                                    hintText="" 
-                                    fullWidth={ true } 
-                                    onChange={ (e:any) => this.props.updateInfoSurvey("title", e.target.value)}
-                                    floatingLabelText="Title"
-                                />
-                            </div>
-                            <div className='form-description'>
-
-                                <TextField 
-                                    name="question_text"
-                                    hintText="" 
-                                    fullWidth={ true } 
-                                    onChange={ (e:any) => this.props.updateInfoSurvey("description", e.target.value)}
-                                    floatingLabelText="Description"
-                                />
-                            </div>
-                                <CreateSurveyAreaList />
-                            </div>
+                            <Tabs
+                                value={this.state.currentTab}
+                                onChange={this.handleChangeTab}
+                            >
+                                <Tab label="Question" value="question" >
+                                    <Settings />
+                                    <div className="form-content">
+                                        <div className="form-info">
+                                            <div className='form-title'>
+                                                <TextField 
+                                                    name="question_text"
+                                                    hintText="" 
+                                                    fullWidth={ true }
+                                                    value={ this.props.surveyData.info.title }
+                                                    onChange={ (e:any) => this.props.updateInfoSurvey("title", e.target.value)}
+                                                    floatingLabelText="Title"
+                                                />
+                                            </div>
+                                            <div className='form-description'>
+                                                <TextField 
+                                                    name="question_text"
+                                                    hintText="" 
+                                                    fullWidth={ true }
+                                                    value={ this.props.surveyData.info.description } 
+                                                    onChange={ (e:any) => this.props.updateInfoSurvey("description", e.target.value)}
+                                                    floatingLabelText="Description"
+                                                />
+                                            </div>
+                                        </div>
+                                        
+                                        <CreateSurveyAreaList />
+                                    </div>
+                                </Tab>
+                                <Tab label="Responses" value="response">
+                                </Tab>
+                            </Tabs>
+                                
+                            
                         </div>
-                        <div className="btn-save-survey-container" onClick={ e => this.props.createSurvey() }>
-                            <a className="waves-effect waves-light btn btn-save-survey green">Save</a>
+                        <div className="btn-save-survey-container">
+                            <RaisedButton
+                            backgroundColor="#4CAF50"
+                            className="btn-save"
+                            label="Save"
+                            onClick={ e => this.handleOpen() }
+                            />
                         </div>
                         { 
+                            
                             this.props.surveyData.msgError ? (
                                 <div className="error-message">
                                     {this.props.surveyData.msgError}
@@ -103,7 +170,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
     }
 }
 // const SurveyForm: React.SFC<ISurveyForm> = props => {
-//     const { surveyData, updateInfoSurvey, createSurvey } = props;
+//     const { surveyData, updateInfoSurvey, saveSurvey } = props;
     
 // };
 
@@ -114,9 +181,9 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     updateInfoSurvey: (field: string, value: string) => dispatch(updateInfoSurvey(field, value)),
-    createSurvey: () => dispatch(createSurvey()),
+    saveSurvey: () => dispatch(saveSurvey()),
     clearMessage: () => dispatch(clearMessage()),
-    // changeUrl: (url: any) => dispatch(push(url))
+    getSurveyById: (id: string) => dispatch(getSurveyById(id))
 });
 
 export default connect (mapStateToProps, mapDispatchToProps) (SurveyForm);

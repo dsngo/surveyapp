@@ -63,7 +63,7 @@ a:hover {
 
 .new-form {
     background-color: #eeeeee;
-    height: 60%;
+    height: 100%;
     margin-top: 80px;
 }
 body {
@@ -109,15 +109,16 @@ body {
 
 .your-forms {
     background-color: #394242;
-    height: 60%;
+    height: 100%;
 }
 
 .title-your-forms {
-    padding-left: 10px;
     font-size: 20px;
     font-weight: bold;
     color: #eeeeee;
     margin-top: 15px;
+    text-align: left;
+    padding-left: 10px;
 }
 
 .container {
@@ -439,4 +440,11 @@ select {
 }
 .align-center {
     text-align: center
+}
+
+.btn-save {
+    color: white !important;
+    span {
+        color: white !important;
+    }
 }

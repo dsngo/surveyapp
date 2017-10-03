@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import AnswerOption from './AnswerOption';
-import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, createSurvey, changeQuestion } from "./redux/actionCreators";
+import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, changeQuestion } from "./redux/actionCreators";
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -48,7 +48,8 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                             <TextField 
                                 name="question_text"
                                 hintText="" 
-                                fullWidth={ true } 
+                                fullWidth={ true }
+                                value={ surveyData.content[index].question}
                                 onChange={ (e:any) => changeQuestion(index, e.target.value)}
                                 floatingLabelText={"Question " + indexQuestion }
                             />
@@ -71,20 +72,22 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                                 <div className="delete-area" onClick={ e => deleteArea(index) }><i className="fa fa-times"></i></div>
                             </div>
                             <div className='form-title'>
-                                <div className='group'>
-                                    <input type='text' required onChange={ e => updateDescriptionArea(index, "title", e.target.value) }/>
-                                    <span className='highlight' />
-                                    <span className='bar' />
-                                    <label>Title</label>
-                                </div>
+                                <TextField 
+                                    name="question_text"
+                                    hintText="" 
+                                    fullWidth={ true } 
+                                    onChange={ (e:any) => updateDescriptionArea(index, "title", e.target.value) }
+                                    floatingLabelText="Title"
+                                />
                             </div>
                             <div className='form-description'>
-                                <div className='group'>
-                                    <input type='text' required onChange={ e => updateDescriptionArea(index, "description", e.target.value) } />
-                                    <span className='highlight' />
-                                    <span className='bar' />
-                                    <label>Description</label>
-                                </div>
+                                <TextField 
+                                    name="question_text"
+                                    hintText="" 
+                                    fullWidth={ true } 
+                                    onChange={ (e:any) => updateDescriptionArea(index, "description", e.target.value) }
+                                    floatingLabelText="Description"
+                                />
                             </div>
                         </div>
                     )

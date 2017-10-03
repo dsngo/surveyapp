@@ -19,6 +19,7 @@ export const App: React.SFC = () => (
                     <Route exact path="/" component={Menu} />
                     <Route path="/newform" component={SurveyForm} />
                     <Route path="/form/:id" component={FormSubmit} />
+                    <Route path="/editform/:id" component={SurveyForm} />
                     <Route component={FoF} />
                 </Switch>
             </div>

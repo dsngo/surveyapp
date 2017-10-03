@@ -58,6 +58,7 @@ const AnswerOption: React.SFC<IAnswerOption> = props => {
                                         name="question_text"
                                         hintText="" 
                                         fullWidth={ true } 
+                                        value={ area.multiple_answer[answer_index]}
                                         onChange={(e:any) => updateMultipleChoice(index, answer_index, e.target.value) }
                                     />
                                 </div>
