@@ -12,7 +12,7 @@ import { SET_SEARCH_TERM, ADD_API_DATA, ADD_AREA, CHANGE_TYPE_ANSWER, DELETE_ARE
         SUBMIT_SUCCESS,
         CLEAR_SUBMIT_STATUS,
         GET_RECENT_FORMS,
-        GET_SURVEY, GET_RESPONSES
+        GET_SURVEY, GET_RESPONSES, CLEAR_SURVEY
      } from "./actions";
 
 
@@ -54,9 +54,21 @@ const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM
 const apiData = (state = {}, action: any) =>
     action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state;
 
+const initSurveyData = { info: { title: "", id: "", description: ""}, content: [], msgError: "", msgSuccess: "", responses: []};
 const surveyData = (state:ISurveyData = { info: { title: "", id: "", description: ""}, content: [], msgError: "", msgSuccess: "", responses: []}, action: any) => {
     let data = { ...state };
     switch (action.type) {
+        case CLEAR_SURVEY:
+            data.info = {
+                title: "",
+                id: "",
+                description: ""
+            }
+            data.content = [];
+            data.msgError = "";
+            data.msgSuccess = "";
+            data.responses = [];
+            return data;
         case UPDATE_INFO_SURVEY:
             data.info[action.field] = action.value;
             return data;

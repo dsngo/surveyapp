@@ -219,3 +219,6 @@ export const getRecentForms = () => {
     }
 }
 
+export const clearSurvey = () => ({
+    type: CLEAR_SURVEY
+})

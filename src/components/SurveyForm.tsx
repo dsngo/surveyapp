@@ -6,7 +6,8 @@ import Scrollbars from "react-custom-scrollbars";
 import Settings from "./Settings";
 import AnswerOption from "./AnswerOption";
 import CreateSurveyAreaList from "./CreateSurveyAreaList";
-import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, saveSurvey, clearMessage, getSurveyById } from "./redux/actionCreators";
+import { changeTypeAnswer, deleteArea, chooseArea, updateDescriptionArea, updateInfoSurvey, saveSurvey, clearMessage, getSurveyById,
+        clearSurvey } from "./redux/actionCreators";
 import { withRouter } from "react-router-dom";
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -29,6 +30,7 @@ interface ISurveyForm {
     saveSurvey: () => any;
     clearMessage: () => any;
     getSurveyById: (id: string) => any;
+    clearSurvey: () => any;
     // changeUrl: (url: string) => any;
 }
 
@@ -46,6 +48,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
     }
 
     componentWillMount() {
+        this.props.clearSurvey();
         let id = this.props.match.params.id;
         this.state.survey_id = id;
         this.props.getSurveyById(id);
@@ -151,6 +154,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
                             onClick={ e => this.handleOpen() }
                             />
                         </div>
+                        
                         { 
                             
                             this.props.surveyData.msgError ? (
@@ -183,7 +187,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     updateInfoSurvey: (field: string, value: string) => dispatch(updateInfoSurvey(field, value)),
     saveSurvey: () => dispatch(saveSurvey()),
     clearMessage: () => dispatch(clearMessage()),
-    getSurveyById: (id: string) => dispatch(getSurveyById(id))
+    getSurveyById: (id: string) => dispatch(getSurveyById(id)),
+    clearSurvey: () => dispatch(clearSurvey())
 });
 
 export default connect (mapStateToProps, mapDispatchToProps) (SurveyForm);
