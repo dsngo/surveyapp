@@ -54,7 +54,6 @@ const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM
 const apiData = (state = {}, action: any) =>
     action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state;
 
-const initSurveyData = { info: { title: "", id: "", description: ""}, content: [], msgError: "", msgSuccess: "", responses: []};
 const surveyData = (state:ISurveyData = { info: { title: "", id: "", description: ""}, content: [], msgError: "", msgSuccess: "", responses: []}, action: any) => {
     let data = { ...state };
     switch (action.type) {

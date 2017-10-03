@@ -80,6 +80,9 @@ class SurveyForm extends React.Component<ISurveyForm> {
         this.props.saveSurvey();
         this.handleClose();
     }
+    handlePreview = () => {
+        window.location.href = "/form/" + this.props.surveyData.info.id;
+    }
     render() {
         const actions = [
             <FlatButton
@@ -146,6 +149,21 @@ class SurveyForm extends React.Component<ISurveyForm> {
                                 
                             
                         </div>
+                        {
+                            this.props.surveyData.info.id ? (
+                                <div className="btn-preview-survey-container">
+                                <RaisedButton
+                                backgroundColor="#4CAF50"
+                                className="btn-save"
+                                label="Preview"
+                                onClick={ e => this.handlePreview() }
+                                />
+                            </div>
+                            ) : (
+                                <div>
+                                </div>
+                            )
+                        }
                         <div className="btn-save-survey-container">
                             <RaisedButton
                             backgroundColor="#4CAF50"

@@ -123,7 +123,7 @@ export const saveSurvey = () => {
             if (!surveyData.info.id) {
                 resSaveSurvey = await axios.post(urlServer + "/survey", surveyData);
             } else {
-                resSaveSurvey = await axios.put(urlServer + "/survey/:id", surveyData);
+                resSaveSurvey = await axios.put(urlServer + "/survey/" + surveyData.info.id, surveyData);
             }
             dispatch({
                 type: CREATE_SUCCESS

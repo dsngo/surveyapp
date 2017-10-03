@@ -120,7 +120,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
         if (field.answer_type === "dropdown") {
             return (
                 <div>
-                    <SelectField floatingLabelText="Answer" value={ field.answer } onChange={ (event: object, key: number, payload: any) => { this.props.updateAnswer(index, payload, false)}} className="mui-select">
+                    <SelectField floatingLabelText="Answer" fullWidth={ true } value={ field.answer } onChange={ (event: object, key: number, payload: any) => { this.props.updateAnswer(index, payload, false)}} className="mui-select">
                         {
                             field.multiple_answer.map((answer: any, key: any) => {
                                 let id = "question_" + index + "_" + key;
