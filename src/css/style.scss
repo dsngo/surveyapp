@@ -293,6 +293,7 @@ select {
       right: 20px;
       cursor: pointer;
       color: $color-light-grey;
+      z-index: 10;
   }
 
   .active-area { 

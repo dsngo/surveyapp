@@ -110,7 +110,7 @@ export const saveSurvey = () => {
             if (ctn.type === "question" && (ctn.questionType === "" || ctn.question === "")) checkMissing = true;
             if (
                 ctn.type === "question" &&
-                (ctn.questionType === "checkbox" || ctn.questionType === "multiple_choice" || ctn.questionType === "dropdown")
+                (ctn.questionType === "checkbox" || ctn.questionType === "multipleChoices" || ctn.questionType === "dropdown")
             ) {
                 ctn.multipleAnswer.map((asw: any) => {
                     if (asw === "") {

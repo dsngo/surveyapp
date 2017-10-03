@@ -27,11 +27,11 @@ interface IQuestionOptions {
 const QuestionOptions: React.SFC<IQuestionOptions> = props => {
     const { index, area, addMultipleChoice, updateMultipleChoice, deleteMultipleChoice } = props;
     const iconMultipleAnswer = () => {
-        if (area.questionType === "multiple_choice") return "radio_button_checked";
+        if (area.questionType === "multipleChoices") return "radio_button_checked";
         if (area.questionType === "checkbox") return "check_box";
         if (area.questionType === "dropdown") return "arrow_drop_down_circle";
     };
-    return area.questionType === "multiple_choice" || area.questionType === "checkbox" || area.questionType === "dropdown" ? (
+    return area.questionType === "multipleChoices" || area.questionType === "checkbox" || area.questionType === "dropdown" ? (
         <div className="clear-fix multiple-answer">
             {area.multipleAnswer.map((answer: any, answerIndex: number) => {
                 return (

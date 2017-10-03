@@ -103,7 +103,7 @@ const surveyData = (
             data.content[action.index].questionType = action.questionType;
             data.content[action.index].multipleAnswer = [];
             if (
-                action.questionType === "multiple_choice" ||
+                action.questionType === "multipleChoices" ||
                 action.questionType === "checkbox" ||
                 action.questionType === "dropdown"
             )

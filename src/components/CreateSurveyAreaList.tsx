@@ -70,16 +70,16 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                                 }}
                                 className="mui-select"
                             >
-                                <MenuItem value="short_question" label="Short answer">
+                                <MenuItem value="shortQuestion" label="Short answer">
                                     Short answer
                                 </MenuItem>
-                                <MenuItem value="long_question" label="Long answer">
+                                <MenuItem value="longQuestion" label="Long answer">
                                     Long answer
                                 </MenuItem>
                                 <MenuItem value="checkbox" label="Checkbox">
                                     Checkbox
                                 </MenuItem>
-                                <MenuItem value="multiple_choice" label="Multiple choice">
+                                <MenuItem value="multipleChoices" label="Multiple choice">
                                     Multiple choice
                                 </MenuItem>
                                 <MenuItem value="dropdown" label="Dropdown">

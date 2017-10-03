@@ -58,7 +58,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
     }
 
     renderAnswers(field: any, index: number) {
-        if (field.questionType === "short_question")
+        if (field.questionType === "shortQuestion")
             return (
                 <TextField
                     name="question_text"
@@ -67,7 +67,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                     onChange={(e: any) => this.props.updateAnswer(index, e.target.value, false)}
                 />
             );
-        if (field.questionType === "long_question")
+        if (field.questionType === "longQuestion")
             return (
                 <div>
                     <TextField
@@ -96,7 +96,7 @@ class FormSubmit extends React.Component<IFormSubmit> {
                 );
             });
         }
-        if (field.questionType === "multiple_choice") {
+        if (field.questionType === "multipleChoices") {
             return (
                 <RadioButtonGroup name="shipSpeed" defaultSelected="not_light">
                     {field.multipleAnswer.map((answer: any, key: any) => {
