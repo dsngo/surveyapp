@@ -32,6 +32,7 @@ import VisibilityOff from "material-ui/svg-icons/action/visibility-off";
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 import { Tabs, Tab } from "material-ui/Tabs";
 interface ISurveyForm {
+    history: any;
     match: any;
     surveyData: any;
     currentArea: number;
@@ -47,7 +48,8 @@ class SurveyForm extends React.Component<ISurveyForm> {
     private scrollBars: Scrollbars;
     private tempLengthArea: number;
     state = {
-        open: false,
+        openConfirmModal: false,
+        openSuccessModal: false,
         surveyId: "",
         currentTab: "question",
     };
@@ -70,8 +72,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
             this.tempLengthArea = this.props.surveyData.content.length;
         }
         if (this.props.surveyData.msgSuccess) {
-            alert("Create survey success");
-            window.location.href = "/";
+            this.handleOpenSuccess();
         }
     }
     handleChangeTab = (currentTab: any) => {
@@ -79,27 +80,38 @@ class SurveyForm extends React.Component<ISurveyForm> {
             currentTab,
         });
     };
-    handleOpen = () => {
-        this.setState({ open: true });
+    handleOpenConfirm = () => {
+        this.setState({ openConfirmModal: true });
     };
 
-    handleClose = () => {
-        this.setState({ open: false });
+    handleCloseConfirm = () => {
+        this.setState({ openConfirmModal: false });
     };
+
+    handleCloseSuccess = () => {
+        window.location.href = "/";
+        // this.props.history.push("/");
+        // this.setState({ openSuccessModal: false });
+    };
+
+    handleOpenSuccess = () => {
+        this.setState({ openSuccessModal: true})
+    }
 
     handleSubmitSurvey = () => {
         this.props.saveSurvey();
-        this.handleClose();
+        this.handleCloseConfirm();
     };
     handlePreview = () => {
         window.location.href = "/form/" + this.props.surveyData.info.id;
     };
     render() {
-        console.log(this.props.surveyData);
-        
-        const actions = [
-            <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
+        const actionsConfirmModal = [
+            <FlatButton label="Cancel" primary={true} onClick={this.handleCloseConfirm} />,
             <FlatButton label="Submit" primary={true} onClick={e => this.handleSubmitSurvey()} />,
+        ];
+        const actionsSuccessModal = [
+            <FlatButton label="OK" primary={true} onClick={this.handleCloseSuccess} />,
         ];
         return (
             <Scrollbars
@@ -110,9 +122,13 @@ class SurveyForm extends React.Component<ISurveyForm> {
                 style={{ height: "calc(100vh - 65px)", width: "100%" }}
                 autoHide
             >
-                <Dialog actions={actions} modal={false} open={this.state.open} onRequestClose={this.handleClose}>
+                <Dialog actions={actionsConfirmModal} modal={false} open={this.state.openConfirmModal} onRequestClose={this.handleCloseConfirm}>
                     Are you sure to create this survey?
                 </Dialog>
+                <Dialog actions={actionsSuccessModal} modal={false} open={this.state.openSuccessModal} onRequestClose={this.handleCloseSuccess}>
+                    Create survey successfully.
+                </Dialog>
+                
                 <div className="row survey-form-create">
                     <div className="container survey-form" style={{ paddingTop: "15px" }}>
                         <div className="form-create clear-fix">
@@ -167,7 +183,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
                                 backgroundColor="#4CAF50"
                                 className="btn-save"
                                 label="Save"
-                                onClick={e => this.handleOpen()}
+                                onClick={e => this.handleOpenConfirm()}
                             />
                         </div>
 

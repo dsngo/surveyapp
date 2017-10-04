@@ -2,6 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { setSearchTerm } from "./redux/actionCreators";
+import TextField from "material-ui/TextField";
 // import
 
 interface INavBar {
@@ -19,13 +20,15 @@ const NavBar: React.SFC<INavBar> = props => {
             <div id="search-container">
                 <div className="input-group stylish-input-group input-field">
                     <i className="material-icons prefix">search</i>
-                    <input
-                        className="validate"
-                        type="text"
-                        onChange={e => setSearchTerm(e.target.value)}
-                        value={searchTerm}
-                        placeholder="Test Search"
-                    />
+                    <div className="search-input-container">
+                        <TextField
+                            name="question_text"
+                            hintText=""
+                            fullWidth={true}
+                            onChange={ (e:any) => setSearchTerm(e.target.value)}
+                            value={searchTerm}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

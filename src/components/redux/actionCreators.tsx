@@ -39,11 +39,21 @@ export const setSearchTerm = (searchTerm: string) => ({
     type: SET_SEARCH_TERM,
 });
 
-export const addArea = (area: any) => ({
-    area,
-    type: ADD_AREA,
-});
+// export const addArea = (area: any) => ({
+//     area,
+//     type: ADD_AREA,
+// });
 
+export const addArea = (area: any) => {
+    return async (dispatch: any, getState: any) => {
+        const currentArea = getState().currentArea;
+        dispatch({
+            area,
+            currentArea,
+            type: ADD_AREA,
+        })
+    }
+}
 export const changeTypeAnswer = (index: number, questionType: string) => ({
     index,
     questionType,
@@ -223,7 +233,7 @@ export const clearSubmitStatus = () => ({
 
 export const getRecentForms = () => {
     return async (dispatch: any, getState: any) => {
-        const resForms = await axios.get(urlServer + "/survey");
+        const resForms = await axios.get(urlServer + "/survey/index");
         const forms = resForms.data.data;
 
         dispatch({

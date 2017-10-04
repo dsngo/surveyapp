@@ -94,7 +94,7 @@ const surveyData = (
             data.info[action.field] = action.value;
             return data;
         case ADD_AREA:
-            data.content.push(action.area);
+            data.content.splice(action.currentArea + 1, 0, action.area);
             return data;
         case CHANGE_QUESTION_DETAIL:
             data.content[action.index].question = action.value;
@@ -105,7 +105,9 @@ const surveyData = (
             if (
                 action.questionType === "multipleChoices" ||
                 action.questionType === "checkbox" ||
-                action.questionType === "dropdown"
+                action.questionType === "dropdown" ||
+                action.questionType === "priority" ||
+                action.questionType === "multiDropdown"
             )
                 data.content[action.index].multipleAnswer = [""];
             return data;
@@ -198,8 +200,6 @@ const surveyResponse = (state: ISurveyResponse = { question: [] }, action: any) 
                 return data;
             }
             const index = checkAnswerExist(answer, data.question[action.index].answer);
-            console.log(index);
-
             if (index !== -1) {
                 data.question[action.index].answer.splice(index, 1);
                 return data;

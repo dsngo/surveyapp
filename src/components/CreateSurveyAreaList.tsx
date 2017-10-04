@@ -85,6 +85,12 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                                 <MenuItem value="dropdown" label="Dropdown">
                                     Dropdown
                                 </MenuItem>
+                                <MenuItem value="priority" label="Priority">
+                                    Priority
+                                </MenuItem>
+                                <MenuItem value="multiDropdown" label="Priority">
+                                    Multiple dropdown
+                                </MenuItem>
                             </SelectField>
                             <QuestionOptions area={area} index={index} />
                         </div>
