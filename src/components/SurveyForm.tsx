@@ -150,7 +150,9 @@ class SurveyForm extends React.Component<ISurveyForm> {
                                             <div className="form-description">
                                                 <TextField
                                                     name="question_text"
-                                                    hintText=""
+                                                    hintText="Put your description here."
+                                                    multiLine={true}
+                                                    rows={2}
                                                     fullWidth={true}
                                                     value={this.props.surveyData.info.description}
                                                     onChange={(e: any) =>
