@@ -1,36 +1,64 @@
-interface ILongQuestion {
+export interface ILongQuestion {
     questionType: "longQuestion";
     question: string;
     answers: string[];
 }
-interface IShortQuestion {
+export interface IShortQuestion {
     questionType: "shortQuestion";
     question: string;
     answers: string[];
 }
-interface IMultipleChoices {
+export interface IMultipleChoices {
     questionType: "multipleChoices";
     question: string;
     answers: { correct: boolean; answer: string }[];
 }
-interface IDropdown {
+export interface IDropdown {
     questionType: "dropdown";
     question: string;
     answers: { correct: boolean; answer: string }[];
 }
-interface IMultipleDropdown {
+export interface IMultipleDropdown {
     questionType: "multipleDropdown";
     questions: { id: number; question: string }[];
     answers: { answerId: number; contents: { id: number; answer: string[] }[] }[];
 }
-interface ICheckBox {
+export interface ICheckBox {
     questionType: "checkbox";
     question: string;
     answers: string[];
 }
-interface IPriorityQuestion {
+export interface IPriorityQuestion {
     questionType: "priorityQuestion";
     question: string;
     answers: { priority: number; answer: string }[];
     additionalContents: { description: string; contents: { question: string; answer: string }[] };
+}
+
+
+export interface ISurveyData {
+    info: any;
+    content: any[];
+    msgError: string;
+    msgSuccess: string;
+    responses: any[];
+}
+
+export interface ISurveySubmit {
+    loading: boolean;
+    survey: any;
+    error: boolean;
+    errorMsg: string;
+}
+
+export interface IStatus {
+    submitResponse: string;
+}
+
+export interface ISurveyResponse {
+    question: any[];
+}
+
+export interface IRecentForms {
+    forms: any[];
 }

@@ -28,6 +28,8 @@ import {
     CLEAR_SURVEY,
 } from "./actions";
 
+
+import * as Types from "../../types/customTypes";
 const initialSurveyData = [
     {
         type: "description",
@@ -36,39 +38,13 @@ const initialSurveyData = [
     },
 ];
 
-interface ISurveyData {
-    info: any;
-    content: any[];
-    msgError: string;
-    msgSuccess: string;
-    responses: any[];
-}
 
-interface ISurveySubmit {
-    loading: boolean;
-    survey: any;
-    error: boolean;
-    errorMsg: string;
-}
-
-interface IStatus {
-    submitResponse: string;
-}
-
-interface ISurveyResponse {
-    question: any[];
-}
-
-interface IRecentForms {
-    forms: any[];
-}
 
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
 const apiData = (state = {}, action: any) => (action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state);
-
 const surveyData = (
-    state: ISurveyData = {
+    state: Types.ISurveyData = {
         info: { title: "", id: "", description: "" },
         content: [],
         msgError: "",
@@ -152,7 +128,7 @@ const surveyData = (
     }
 };
 
-const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error: false, errorMsg: "" }, action: any) => {
+const surveySubmit = (state: Types.ISurveySubmit = { loading: true, survey: {}, error: false, errorMsg: "" }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case GET_SURVEY_ERROR:
@@ -170,7 +146,7 @@ const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error:
     }
 };
 
-const recentForms = (state: IRecentForms = { forms: [] }, action: any) => {
+const recentForms = (state: Types.IRecentForms = { forms: [] }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case GET_RECENT_FORMS:
@@ -181,7 +157,7 @@ const recentForms = (state: IRecentForms = { forms: [] }, action: any) => {
     }
 };
 
-const surveyResponse = (state: ISurveyResponse = { question: [] }, action: any) => {
+const surveyResponse = (state: Types.ISurveyResponse = { question: [] }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case INIT_SURVEY_QUESTION:
@@ -211,7 +187,7 @@ const surveyResponse = (state: ISurveyResponse = { question: [] }, action: any) 
     }
 };
 
-const status = (state: IStatus = { submitResponse: "" }, action: any) => {
+const status = (state: Types.IStatus = { submitResponse: "" }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case SUBMIT_SUCCESS:
