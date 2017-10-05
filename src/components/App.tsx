@@ -10,9 +10,9 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import FoF from "./FoF";
 
 export const App: React.SFC = () => (
-    <MuiThemeProvider>
-        <Router>
-            <Provider store={store}>
+    <Router>
+        <Provider store={store}>
+            <MuiThemeProvider>
                 <div>
                     <NavBar showSearch />
                     <Switch>
@@ -23,7 +23,7 @@ export const App: React.SFC = () => (
                         <Route component={FoF} />
                     </Switch>
                 </div>
-            </Provider>
-        </Router>
-    </MuiThemeProvider>
+            </MuiThemeProvider>
+        </Provider>
+    </Router>
 );

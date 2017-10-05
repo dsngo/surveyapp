@@ -22,7 +22,7 @@ class ShortQuestion extends React.Component<
     handleChangeQuestion = (newQuestion: string) => {
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
     };
-    handleAddAnswer = (newAnswer: string) => {
+    handleUpdateAnswer = (newAnswer: string) => {
         this.setState(prevState => ({ ...prevState, answers: newAnswer.split("\n") }));
     };
     getAnswerString(answers: string[]) {
@@ -33,7 +33,7 @@ class ShortQuestion extends React.Component<
             props: { questionNumber, removeQuestion },
             state: { question, answers },
             handleChangeQuestion,
-            handleAddAnswer,
+            handleUpdateAnswer,
             getAnswerString,
         } = this;
         return (
@@ -55,7 +55,7 @@ class ShortQuestion extends React.Component<
                     fullWidth
                     rows={2}
                     value={getAnswerString(answers)}
-                    onChange={(e: any) => handleAddAnswer(e.target.value)}
+                    onChange={(e: any) => handleUpdateAnswer(e.target.value)}
                     floatingLabelText="Answer"
                 />
             </div>

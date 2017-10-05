@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { addNewQuestion, removeQuestion, updateQuestion } from "./redux/actionCreators";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
-import { IMultipleChoices } from "../types/customTypes";
+import { IDropdown } from "../types/customTypes";
 
-class MultipleChoicesQuestion extends React.Component<
+class DropdownQuestion extends React.Component<
     {
         questionNumber: number;
         questionIndex: number;
@@ -13,10 +13,10 @@ class MultipleChoicesQuestion extends React.Component<
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
     },
-    IMultipleChoices
+    IDropdown
 > {
-    state: IMultipleChoices = {
-        questionType: "multipleChoices",
+    state: IDropdown = {
+        questionType: "dropdown",
         question: "",
         answers: [],
     };
@@ -38,6 +38,7 @@ class MultipleChoicesQuestion extends React.Component<
             state: { question, answers },
             handleChangeQuestion,
             handleUpdateAnswer,
+            handleAddAnswer,
             handleRemoveAnswer,
         } = this;
         return (
@@ -72,15 +73,14 @@ class MultipleChoicesQuestion extends React.Component<
                                         hintText="Add an answer here."
                                         fullWidth
                                         value={answer}
-                                        onChange={(e: any) =>
-                                            handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
+                                        onChange={(e: any) => handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
                                     />
                                 </div>
                             </div>
                         );
                     })}
                     <div className="radio-answer align-center">
-                        <RaisedButton label="More option" primary={true} onClick={e => addMultipleChoice(index)} />
+                        <RaisedButton label="More option" primary onClick={e => handleAddAnswer({correct: false, answer: ""})} />
                     </div>
                 </div>
             </div>
@@ -98,4 +98,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });
 
-export default connect(null, mapDispatchToProps)(MultipleChoicesQuestion);
+export default connect(null, mapDispatchToProps)(DropdownQuestion);

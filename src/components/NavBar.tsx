@@ -25,7 +25,7 @@ const NavBar: React.SFC<INavBar> = props => {
                             name="question_text"
                             hintText=""
                             fullWidth={true}
-                            onChange={ (e:any) => setSearchTerm(e.target.value)}
+                            onChange={(e: any) => setSearchTerm(e.target.value)}
                             value={searchTerm}
                         />
                     </div>
@@ -39,22 +39,20 @@ const NavBar: React.SFC<INavBar> = props => {
     );
     return (
         <div className="header">
-                <div className="col-md-2 col-xs-3 logo-title">
-                    <Link to="/" onClick={() => props.setSearchTerm("")}>
-                        {brandName}
-                    </Link>
-                </div>
-                {utilSpace}
-                
+            <div className="col-md-2 col-xs-3 logo-title">
+                <Link to="/" onClick={() => props.setSearchTerm("")}>
+                    {brandName}
+                </Link>
+            </div>
+            {utilSpace}
         </div>
     );
 };
 
-
 const mapStateToProps = (state: any) => ({
     searchTerm: state.searchTerm,
     brandName: state.brandName,
-    surveyData: state.surveyData
+    surveyData: state.surveyData,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
