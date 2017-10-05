@@ -1,43 +1,50 @@
 export interface ILongQuestion {
     [key: string]: any;
     questionType: "longQuestion";
-    question: { description: string; text: string };
+    question: string;
+    description: string;
     answers: string[];
 }
 export interface IShortQuestion {
     [key: string]: any;
     questionType: "shortQuestion";
-    question: { description: string; text: string };
+    question: string;
+    description: string;
     answers: string[];
 }
 export interface IMultipleChoices {
     [key: string]: any;
     questionType: "multipleChoices";
-    question: { description: string; text: string };
+    question: string;
+    description: string;
     answers: { correct: boolean; answer: string }[];
 }
 export interface IDropdown {
     [key: string]: any;
     questionType: "dropdown";
-    question: { description: string; text: string };
+    question: string;
+    description: string;
     answers: { correct: boolean; answer: string }[];
 }
 export interface IMultipleDropdown {
     [key: string]: any;
     questionType: "multipleDropdown";
-    questions: { id: number; description: string; text: string }[];
+    questions: { id: number; text: string }[];
+    description: string;
     answers: { answerId: number; contents: { id: number; answers: string[] }[] }[];
 }
 export interface ICheckBox {
     [key: string]: any;
     questionType: "checkbox";
-    question: { description: string; text: string };
+    question: string;
+    description: string;
     answers: string[];
 }
 export interface IPriorityQuestion {
     [key: string]: any;
     questionType: "priorityQuestion";
-    question: { description: string; text: string };
+    question: string;
+    description: string;
     answers: { priority: number; answer: string }[];
     additionalContents: { description: string; contents: { question: string; answers: string }[] }[];
 }
