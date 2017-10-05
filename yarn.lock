@@ -1304,6 +1304,10 @@ destroy@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
 
+detect-newline@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
+
 detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
@@ -5008,6 +5012,12 @@ tslint-microsoft-contrib@^5.0.0:
   resolved "https://registry.yarnpkg.com/tslint-microsoft-contrib/-/tslint-microsoft-contrib-5.0.1.tgz#328ee9c28d07cdf793293204c96e2ffab9221994"
   dependencies:
     tsutils "^1.4.0"
+
+tslint-misc-rules@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/tslint-misc-rules/-/tslint-misc-rules-3.2.0.tgz#1e874277f7c98770cf5c63960eb5e27c12cf5927"
+  dependencies:
+    detect-newline "^2.1.0"
 
 tslint@^5.7.0:
   version "5.7.0"

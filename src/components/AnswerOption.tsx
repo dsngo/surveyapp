@@ -1,19 +1,19 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { addMultipleChoice, updateMultipleChoice, deleteMultipleChoice } from "./redux/actionCreators";
-
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import Dialog from "material-ui/Dialog";
-import FlatButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import Checkbox from "material-ui/Checkbox";
 import ActionFavorite from "material-ui/svg-icons/action/favorite";
 import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
+import Checkbox from "material-ui/Checkbox";
+import Dialog from "material-ui/Dialog";
+import FlatButton from "material-ui/FlatButton";
+import MenuItem from "material-ui/MenuItem";
+import RaisedButton from "material-ui/RaisedButton";
+import SelectField from "material-ui/SelectField";
+import TextField from "material-ui/TextField";
 import Visibility from "material-ui/svg-icons/action/visibility";
 import VisibilityOff from "material-ui/svg-icons/action/visibility-off";
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
+import { addMultipleChoice, deleteMultipleChoice, updateMultipleChoice } from "./redux/actionCreators";
+
 
 interface IQuestionOptions {
     surveyData: any[];

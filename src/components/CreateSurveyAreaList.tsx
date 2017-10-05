@@ -1,28 +1,28 @@
 import * as React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import QuestionOptions from "./AnswerOption";
+import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 import {
+    changeQuestion,
     changeTypeAnswer,
-    deleteArea,
     chooseArea,
+    deleteArea,
     updateDescriptionArea,
     updateInfoSurvey,
-    changeQuestion,
 } from "./redux/actionCreators";
-
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import Dialog from "material-ui/Dialog";
-import FlatButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import Checkbox from "material-ui/Checkbox";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import ActionFavorite from "material-ui/svg-icons/action/favorite";
 import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
+import Checkbox from "material-ui/Checkbox";
+import Dialog from "material-ui/Dialog";
+import FlatButton from "material-ui/FlatButton";
+import MenuItem from "material-ui/MenuItem";
+import QuestionOptions from "./AnswerOption";
+import RaisedButton from "material-ui/RaisedButton";
+import SelectField from "material-ui/SelectField";
+import TextField from "material-ui/TextField";
 import Visibility from "material-ui/svg-icons/action/visibility";
 import VisibilityOff from "material-ui/svg-icons/action/visibility-off";
-import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
+
 
 interface IAreaList {
     surveyData: any;
@@ -41,7 +41,7 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
         <div>
             {surveyData.content.map((area: any, index: any) => {
                 console.log(area);
-                
+
                 let classActive = index === currentArea ? "active-area" : "";
                 if (area.type === "question") {
                     indexQuestion += 1;
