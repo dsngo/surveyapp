@@ -29,9 +29,10 @@ export interface IDropdown {
 export interface IMultipleDropdown {
     [key: string]: any;
     questionType: "multipleDropdown";
-    questions: { id: number; text: string }[];
+    question: string;
     description: string;
-    answers: { answerId: number; contents: { id: number; answers: string[] }[] }[];
+    headers: { headerId: number; text: string; options: string[] }[];
+    answers: { answerId: number; correct: boolean; contents: { refId: number; textAnswer: string }[] }[];
 }
 export interface ICheckBox {
     [key: string]: any;
