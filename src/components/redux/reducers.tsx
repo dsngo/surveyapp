@@ -245,6 +245,7 @@ const status = (state: IStatus = {
 const surveyContents = (state: {}[], action: any) => {
     action.type === "ADD_NEW_QUESTION" ? state.splice(action.questionIndex, 0, action.questionData) : state;
     action.type === "REMOVE_QUESTION" ? state.splice(action.questionIndex, 1) : state;
+    action.type === "UPDATE_QUESTION" ? state.splice(action.questionIndex, 1, action.questionData): state;
 };
 
 const sectionDivide = (state: boolean = false, action: any) => (action.type === DIVIDE_SECTION ? action.value : state);

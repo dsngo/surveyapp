@@ -246,3 +246,23 @@ export const getRecentForms = () => {
 export const clearSurvey = () => ({
     type: CLEAR_SURVEY,
 });
+
+
+// ==================
+
+export const addNewQuestion = (questionIndex: number, questionData: any) => ({
+    questionIndex,
+    questionData,
+    type: "ADD_NEW_QUESTION",
+})
+
+export const removeQuestion = (questionIndex: number) => ({
+    questionIndex,
+    type: "REMOVE_QUESTION",
+})
+
+export const updateQuestion = (questionIndex: number, questionData: any) => ({
+    questionIndex,
+    questionData,
+    type: "UPDATE_QUESTION",
+})
