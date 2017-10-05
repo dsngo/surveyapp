@@ -17,7 +17,8 @@ class PriorityQuestion extends React.Component<
 > {
     state: IPriorityQuestion = {
         questionType: "priorityQuestion",
-        question: { description: "", text: ""},
+        question: "",
+        description: "",
         answers: [],
         additionalContents: []
     };
@@ -36,15 +37,19 @@ class PriorityQuestion extends React.Component<
     handleAddAdditionalContent = (newAdditionalContent: { description: string; contents: { question: string; answers: string }[] }) => {
         this.setState(prevState => ({ ...prevState, additionalContents: prevState.additionalContents.push(newAdditionalContent)}));
     }
+    handleUpdateAndditionalContentDesciption = (contentIndex: number, string) => {
+        this.setState(prevState => ({ ...prevState, }))
+    }
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
-            state: { question, answers },
+            state: { question, answers, additionalContents },
             handleChangeQuestion,
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
-            handleAddAdditionalContent
+            handleAddAdditionalContent,
+            handleUpdateAndditionalContentDesciption
         } = this;
         return (
             <div>
@@ -54,7 +59,7 @@ class PriorityQuestion extends React.Component<
                     multiLine
                     fullWidth
                     rows={2}
-                    value={question.text}
+                    value={question}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
                     floatingLabelText={`Question ${questionNumber}`}
                 />
@@ -70,7 +75,7 @@ class PriorityQuestion extends React.Component<
                                     </div>
                                 )}
                                 <div className="icon-radio clear-fix">
-                                    <i className="material-icons">radio_button_checked</i>
+                                    <i className="material-icons">equalizer</i>
                                 </div>
                                 <div className="input-field input-text-radio input-option-create">
                                     <TextField
@@ -97,6 +102,24 @@ class PriorityQuestion extends React.Component<
                             onClick={e => handleAddAdditionalContent({ description: "", contents: [] })}
                         />
                     </div>
+                </div>
+                <div className="additional-detail">
+                    {
+                        additionalContents.map((content, contentIndex) => {
+                            return (
+                                <div>
+                                <TextField
+                                        name="answerText"
+                                        hintText="Add an answer here."
+                                        fullWidth
+                                        value={content.description}
+                                        onChange={(e: any) =>
+                                            handleUpdateAndditionalContentDesciption(contentIndex, {})}
+                                    />
+                                </div>
+                            )}
+                        )
+                    }
                 </div>
             </div>
         );
