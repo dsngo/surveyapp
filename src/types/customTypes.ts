@@ -47,7 +47,7 @@ export interface IPriorityQuestion {
     question: string;
     description: string;
     answers: { priority: number; answer: string }[];
-    additionalContents: { description: string; contents: { question: string; answers: string }[] }[];
+    additionalContents: { contentId: string, description: string; contents: { contentQuestionId: string, question: string; answers: string }[] }[];
 }
 
 export interface ISurveyFormFromDatabase {

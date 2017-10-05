@@ -34,7 +34,11 @@ class PriorityQuestion extends React.Component<
     handleAddAnswer = (newAnswer: { priority: number; answer: string }) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
     };
-    handleAddAdditionalContent = (newAdditionalContent: { description: string; contents: { question: string; answers: string }[]}) => {
+    handleAddAdditionalContent = (newAdditionalContent: {
+        contentId: string, description: string; contents: { 
+            contentQuestionId: string, question: string; answers: string 
+        }[]
+    }) => {
         this.setState(prevState => ({ 
             ...prevState, 
             additionalContents: prevState.additionalContents.push(newAdditionalContent) && prevState.additionalContents 
@@ -46,7 +50,7 @@ class PriorityQuestion extends React.Component<
             additionalContents: prevState.additionalContents.map((elm, index) => { index === contentIndex ? elm.description = value : ""; return elm;})
         }))
     }
-    handleAddQuestionAdditionContent = (contentIndex: number, newQuestion: { question: string, answers: string}) => {
+    handleAddQuestionAdditionContent = (contentIndex: number, newQuestion: { contentQuestionId: string, question: string, answers: string}) => {
         this.setState(prevState => ({ 
             ...prevState,
             additionalContents: prevState.additionalContents.map((elm, index) => { index === contentIndex ? elm.contents.push(newQuestion) : ""; return elm;})
@@ -125,7 +129,7 @@ class PriorityQuestion extends React.Component<
                         <RaisedButton
                             label="Additional Content"
                             primary={true}
-                            onClick={e => handleAddAdditionalContent({ description: "", contents: [] })}
+                            onClick={e => handleAddAdditionalContent({ contentId: "", description: "", contents: [] })}
                         />
                     </div>
                 </div>
@@ -162,7 +166,7 @@ class PriorityQuestion extends React.Component<
                                     <RaisedButton
                                         label="Add question"
                                         primary={true}
-                                        onClick={e => handleAddAdditionalContent({ description: "", contents: [] })}
+                                        onClick={e => handleAddAdditionalContent({ contentId: "", description: "", contents: [] })}
                                     />
                                 </div>
                             )}
