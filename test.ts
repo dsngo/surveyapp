@@ -1,7 +1,7 @@
 const headers = [
     { headerId: 1, text: "", options: [""] },
-    { headerId: 1, text: "", options: [""] },
-    { headerId: 1, text: "", options: [""] },
+    { headerId: 2, text: "", options: [""] },
+    { headerId: 3, text: "", options: [""] },
 ];
 
 const contents=[];

@@ -31,7 +31,7 @@ export interface IMultipleDropdown {
     questionType: "multipleDropdown";
     question: string;
     description: string;
-    headers: { headerId: number; text: string; answerOptions: string[] }[];
+    headers: { headerId: number; text: string; tooltip: string; answerOptions: string[] }[];
     answers: { answerId: number; correct: boolean; contents: { refId: number; textAnswer: string }[] }[];
 }
 export interface ICheckBox {

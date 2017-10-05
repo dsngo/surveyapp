@@ -8,6 +8,7 @@
         "no-var-keyword": false,
         "ter-indent": [true, 4, { "SwitchCase": true }],
         "ter-arrow-parens": false,
-        "variable-name": [true, "check-format", "allow-pascal-case", "ban-keywords"]
+        "variable-name": [true, "check-format", "allow-pascal-case", "ban-keywords"],
+        "sort-imports": [true, { "member-syntax-sort-order": ["all", "single", "multiple", "none", "alias"] }]
     }
 }

@@ -1,10 +1,8 @@
 import * as React from "react";
+import { IMultipleDropdown } from "../../types/customTypes";
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import ContentAdd from "material-ui/svg-icons/content/add";
-import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
-import { IMultipleDropdown } from "../../types/customTypes";
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import { removeQuestion, updateQuestion } from "../redux/actionCreators";
 
 class MultipleDropdownQuestion extends React.Component<
@@ -20,8 +18,11 @@ class MultipleDropdownQuestion extends React.Component<
         questionType: "multipleDropdown",
         question: "",
         description: "",
-        headers: [{ headerId: 1, text: "", answerOptions: [""] }],
-        answers: [{ answerId: 1, correct: false, contents: [{ refId: 1, textAnswer: "" }] }],
+        headers: [
+            { headerId: 1, text: "", tooltip: "", answerOptions: [""] },
+            { headerId: 2, text: "", tooltip: "", answerOptions: [""] },
+        ],
+        answers: [{ answerId: 1, correct: false, contents: [{ refId: 1, textAnswer: "" }, { refId: 2, textAnswer: "" }] }],
     };
 
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -29,10 +30,10 @@ class MultipleDropdownQuestion extends React.Component<
     handleChangeDescription = (newDescription: string) =>
         this.setState(prevState => ({ ...prevState, description: newDescription }));
 
-    handleChangeHeader = (headerId: number, text: string, answerOptions: string[]) =>
+    handleChangeHeader = (headerId: number, text: string, tooltip: string, answerOptions: string[]) =>
         this.setState(prevState => ({
             ...prevState,
-            headers: prevState.headers.map(e => (e.headerId === headerId ? { headerId, text, answerOptions } : e)),
+            headers: prevState.headers.map(e => (e.headerId === headerId ? { headerId, text, tooltip, answerOptions } : e)),
         }));
 
     handleRemoveAnswer = (answerIndex: number) =>
@@ -94,14 +95,29 @@ class MultipleDropdownQuestion extends React.Component<
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHeaderColumn tooltip="Correct Answer"> Check Box</TableHeaderColumn>
-                            {headers.forEach(e => <TableHeaderColumn tooltip="The ID">{e.text}</TableHeaderColumn>)}
+                            {headers.map(e => <TableHeaderColumn tooltip={e.tooltip}>{e.text}</TableHeaderColumn>)}
                         </TableRow>
                     </TableHeader>
+                    <TableBody>
+                        {answers.map(answer => (
+                            <TableRow>
+                                {answer.contents.map(
+                                    content =>
+                                        content.refId === 1 ? (
+                                            <TableRowColumn>
+                                                <TextField hintText="Additional Question" />
+                                            </TableRowColumn>
+                                        ) : (
+                                            <TableRowColumn></TableRowColumn>
+                                        ),
+                                )}
+                            </TableRow>
+                        ))}
+                    </TableBody>
                 </Table>
 
-                <div className="clear-fix multiple-answer">
-                    {answers.forEach((answer: any, answerIndex: number) => (
+                {/* <div className="clear-fix multiple-answer">
+                    {answers.map((answer: any, answerIndex: number) => (
                         <div className="radio-answer" key={answerIndex}>
                             {answers.length > 1 && (
                                 <div>
@@ -130,7 +146,7 @@ class MultipleDropdownQuestion extends React.Component<
                             <ContentAdd />
                         </FloatingActionButton>
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }
