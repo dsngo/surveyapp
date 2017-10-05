@@ -34,12 +34,37 @@ class PriorityQuestion extends React.Component<
     handleAddAnswer = (newAnswer: { priority: number; answer: string }) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
     };
-    handleAddAdditionalContent = (newAdditionalContent: { description: string; contents: { question: string; answers: string }[] }) => {
-        this.setState(prevState => ({ ...prevState, additionalContents: prevState.additionalContents.push(newAdditionalContent)}));
+    handleAddAdditionalContent = (newAdditionalContent: { description: string; contents: { question: string; answers: string }[]}) => {
+        this.setState(prevState => ({ 
+            ...prevState, 
+            additionalContents: prevState.additionalContents.push(newAdditionalContent) && prevState.additionalContents 
+        }));
     }
-    handleUpdateAndditionalContentDesciption = (contentIndex: number, string) => {
-        this.setState(prevState => ({ ...prevState, }))
+    handleUpdateAndditionalContentDesciption = (contentIndex: number, value: string) => {
+        this.setState(prevState => ({ 
+            ...prevState,
+            additionalContents: prevState.additionalContents.map((elm, index) => { index === contentIndex ? elm.description = value : ""; return elm;})
+        }))
     }
+    handleAddQuestionAdditionContent = (contentIndex: number, newQuestion: { question: string, answers: string}) => {
+        this.setState(prevState => ({ 
+            ...prevState,
+            additionalContents: prevState.additionalContents.map((elm, index) => { index === contentIndex ? elm.contents.push(newQuestion) : ""; return elm;})
+        }))
+    }
+    handleUpdateAdditionQuestion = (contentIndex: number, contentQuestionIndex: number, value: string) => {
+        this.setState(prevState => ({
+            ...prevState,
+            additionalContents: prevState.additionalContents.map((elm, index) => { 
+                index === contentIndex ? elm.contents.map((elmContent, elmContentIndex) => { 
+                    contentQuestionIndex  ===  elmContentIndex ? elmContent.question = value : ""; 
+                    return elmContent;
+                }) : ""; 
+                return elm;
+            })
+        }))
+    }
+
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
@@ -49,7 +74,8 @@ class PriorityQuestion extends React.Component<
             handleAddAnswer,
             handleRemoveAnswer,
             handleAddAdditionalContent,
-            handleUpdateAndditionalContentDesciption
+            handleUpdateAndditionalContentDesciption,
+            handleUpdateAdditionQuestion
         } = this;
         return (
             <div>
@@ -110,14 +136,37 @@ class PriorityQuestion extends React.Component<
                                 <div>
                                 <TextField
                                         name="answerText"
-                                        hintText="Add an answer here."
+                                        hintText="Add description here."
                                         fullWidth
                                         value={content.description}
                                         onChange={(e: any) =>
-                                            handleUpdateAndditionalContentDesciption(contentIndex, {})}
+                                            handleUpdateAndditionalContentDesciption(contentIndex, e.target.value)}
+                                    />
+                                    {
+                                        content.contents.map((ctn, ctnQuestionIndex) => {
+                                            return (
+                                                <div>
+                                                    <TextField
+                                                        name="answerText"
+                                                        hintText="Add an answer here."
+                                                        fullWidth
+                                                        value={ ctn.question }
+                                                        onChange={ (e: any) => handleUpdateAdditionQuestion(contentIndex, ctnQuestionIndex, e.target.value)}
+                                                    />
+                                                    ctn.
+                                                </div>
+                                            )
+
+                                        })     
+                                    }
+                                    <RaisedButton
+                                        label="Add question"
+                                        primary={true}
+                                        onClick={e => handleAddAdditionalContent({ description: "", contents: [] })}
                                     />
                                 </div>
                             )}
+
                         )
                     }
                 </div>
