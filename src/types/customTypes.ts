@@ -59,7 +59,6 @@ export interface ISurveyFormFromDatabase {
     completed: boolean;
 }
 
-
 export interface ISurveyData {
     info: any;
     content: any[];

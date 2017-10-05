@@ -38,6 +38,7 @@ class MultipleChoicesQuestion extends React.Component<
             state: { question, answers },
             handleChangeQuestion,
             handleUpdateAnswer,
+            handleAddAnswer,
             handleRemoveAnswer,
         } = this;
         return (
@@ -80,7 +81,11 @@ class MultipleChoicesQuestion extends React.Component<
                         );
                     })}
                     <div className="radio-answer align-center">
-                        <RaisedButton label="More option" primary={true} onClick={e => addMultipleChoice(index)} />
+                        <RaisedButton
+                            label="More option"
+                            primary={true}
+                            onClick={e => handleAddAnswer({ correct: false, answer: "" })}
+                        />
                     </div>
                 </div>
             </div>
