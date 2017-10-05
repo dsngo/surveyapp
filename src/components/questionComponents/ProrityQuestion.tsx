@@ -2,34 +2,35 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { addNewQuestion, removeQuestion, updateQuestion } from "../redux/actionCreators";
 import TextField from "material-ui/TextField";
+import { IPriorityQuestion } from "../../types/customTypes";
 import RaisedButton from "material-ui/RaisedButton";
-import { IMultipleDropdown } from "../../types/customTypes";
 
-class MultipleDropdownQuestion extends React.Component<
+class PriorityQuestion extends React.Component<
     {
-        questionNumber: number;
-        questionIndex: number;
-        addNewQuestion: (questionIndex: number, questionData: any) => any;
-        removeQuestion: (questionIndex: number) => any;
-        updateQuestion: (questionIndex: number, questionData: any) => any;
+        questionNumber: number,
+        questionIndex: number,
+        addNewQuestion: (questionIndex: number, questionData: any) => any,
+        removeQuestion: (questionIndex: number) => any,
+        updateQuestion: (questionIndex: number, questionData: any) => any,
     },
-    IMultipleDropdown
+    IPriorityQuestion
 > {
-    state: IMultipleDropdown = {
-        questionType: "multipleDropdown",
-        questions: [{id: 1, question: ""}],
-        answers: [{ answerId: 1, contents: [{ id: 1, answers: [""] }] }],
+    state: IPriorityQuestion = {
+        questionType: "priorityQuestion",
+        question: "",
+        answers: [],
+        additionalContents: []
     };
-    handleChangeQuestion = (questionId: number, newQuestion: string) => {
+    handleChangeQuestion = (newQuestion: string) => {
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
     };
     handleRemoveAnswer = (answerIndex: number) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
     };
-    handleUpdateAnswer = (answerIndex: number, newAnswer: { correct: boolean; answer: string }) => {
+    handleUpdateAnswer = (answerIndex: number, newAnswer: { priority: number; answer: string }) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
     };
-    handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) => {
+    handleAddAnswer = (newAnswer: { priority: number; answer: string }) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
     };
     render() {
@@ -45,7 +46,7 @@ class MultipleDropdownQuestion extends React.Component<
             <div>
                 <TextField
                     name="questionText"
-                    hintText="Multiple choices question"
+                    hintText="Priority question"
                     multiLine
                     fullWidth
                     rows={2}
@@ -73,14 +74,19 @@ class MultipleDropdownQuestion extends React.Component<
                                         hintText="Add an answer here."
                                         fullWidth
                                         value={answer}
-                                        onChange={(e: any) => handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
+                                        onChange={(e: any) =>
+                                            handleUpdateAnswer(answerIndex, { priority: 0, answer: e.target.value })}
                                     />
                                 </div>
                             </div>
                         );
                     })}
                     <div className="radio-answer align-center">
-                        <RaisedButton label="More option" primary onClick={e => handleAddAnswer({correct: false, answer: ""})} />
+                        <RaisedButton
+                            label="More option"
+                            primary={true}
+                            onClick={e => handleAddAnswer({ priority: 0, answer: "" })}
+                        />
                     </div>
                 </div>
             </div>
@@ -98,4 +104,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });
 
-export default connect(null, mapDispatchToProps)(MultipleDropdownQuestion);
+export default connect(null, mapDispatchToProps)(PriorityQuestion);

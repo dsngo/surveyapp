@@ -1,9 +1,9 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { addNewQuestion, removeQuestion, updateQuestion } from "./redux/actionCreators";
+import { addNewQuestion, removeQuestion, updateQuestion } from "../redux/actionCreators";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
-import { IMultipleChoices } from "../types/customTypes";
+import { IMultipleChoices } from "../../types/customTypes";
 
 class MultipleChoicesQuestion extends React.Component<
     {

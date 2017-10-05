@@ -1,8 +1,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { addNewQuestion, removeQuestion, updateQuestion } from "./redux/actionCreators";
+import { addNewQuestion, removeQuestion, updateQuestion } from "../redux/actionCreators";
 import TextField from "material-ui/TextField";
-import { IShortQuestion } from "../types/customTypes";
+import { IShortQuestion } from "../../types/customTypes";
 
 class ShortQuestion extends React.Component<
     {
