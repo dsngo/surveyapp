@@ -7,16 +7,6 @@ import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow
 import { IMultipleDropdown } from "../../types/customTypes";
 import { removeQuestion, updateQuestion } from "../redux/actionCreators";
 
-interface IDropdownQuestion {
-    id: number;
-    text: string;
-}
-
-interface IDropdownAnswer {
-    answerId: number;
-    contents: { id: number; answers: string[] }[];
-}
-
 class MultipleDropdownQuestion extends React.Component<
     {
         questionNumber: number;
@@ -28,30 +18,50 @@ class MultipleDropdownQuestion extends React.Component<
 > {
     state: IMultipleDropdown = {
         questionType: "multipleDropdown",
-        questions: [{ id: 1, text: "" }],
+        question: "",
         description: "",
-        answers: [{ answerId: 1, contents: [{ id: 1, answers: [""] }] }],
+        headers: [{ headerId: 1, text: "", answerOptions: [""] }],
+        answers: [{ answerId: 1, correct: false, contents: [{ refId: 1, textAnswer: "" }] }],
     };
 
-    handleChangeQuestion = (questionId: number, newQuestion: IDropdownQuestion) =>
-        this.setState(prevState => ({ ...prevState, question: newQuestion }));
+    handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
     handleChangeDescription = (newDescription: string) =>
         this.setState(prevState => ({ ...prevState, description: newDescription }));
 
+    handleChangeHeader = (headerId: number, text: string, answerOptions: string[]) =>
+        this.setState(prevState => ({
+            ...prevState,
+            headers: prevState.headers.map(e => (e.headerId === headerId ? { headerId, text, answerOptions } : e)),
+        }));
+
     handleRemoveAnswer = (answerIndex: number) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.filter(e => e.answerId !== answerIndex) }));
 
-    handleUpdateAnswer = (answerIndex: number, newAnswer: IDropdownAnswer) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1, newAnswer) }));
+    handleUpdateAnswer = (answerIndex: number, newAnswer: IMultipleDropdown["answers"][any]) =>
+        this.setState(prevState => ({
+            ...prevState,
+            answers: prevState.answers.map(e => (e.answerId === answerIndex ? newAnswer : e)),
+        }));
 
-    handleAddAnswer = (newAnswer: IDropdownAnswer) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
+    handleAddAnswer = () => {
+        const { headers, answers } = this.state;
+        const answerId = answers.length + 1;
+        const contents: IMultipleDropdown["answer"][0]["contents"] = [];
+        const hLen = headers.length;
+        for (let i = 1; i <= hLen; i += 1) {
+            contents.push({ refId: i, textAnswer: "" });
+        }
+        return this.setState(prevState => ({
+            ...prevState,
+            answers: [...prevState.answers, { answerId, contents, correct: false }],
+        }));
+    };
 
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
-            state: { question, answers, description },
+            state: { question, answers, description, headers },
             handleChangeQuestion,
             handleChangeDescription,
             handleUpdateAnswer,
@@ -81,35 +91,42 @@ class MultipleDropdownQuestion extends React.Component<
                     onChange={(e: any) => handleChangeDescription(e.target.value)}
                     floatingLabelText={"Question description"}
                 />
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHeaderColumn tooltip="Correct Answer"> Check Box</TableHeaderColumn>
+                            {headers.forEach(e => <TableHeaderColumn tooltip="The ID">{e.text}</TableHeaderColumn>)}
+                        </TableRow>
+                    </TableHeader>
+                </Table>
+
                 <div className="clear-fix multiple-answer">
-                    {answers.map((answer: any, answerIndex: number) => {
-                        return (
-                            <div className="radio-answer" key={answerIndex}>
-                                {answers.length > 1 && (
-                                    <div>
-                                        <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
-                                            <i className="fa fa-times" />
-                                        </div>
+                    {answers.forEach((answer: any, answerIndex: number) => (
+                        <div className="radio-answer" key={answerIndex}>
+                            {answers.length > 1 && (
+                                <div>
+                                    <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
+                                        <i className="fa fa-times" />
                                     </div>
-                                )}
-                                <div className="icon-radio clear-fix">
-                                    <i className="material-icons">radio_button_checked</i>
                                 </div>
-                                <div className="input-field input-text-radio input-option-create">
-                                    <TextField
-                                        name="answerText"
-                                        hintText="Add an answer here."
-                                        fullWidth
-                                        value={answer}
-                                        onChange={(e: any) =>
-                                            handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
-                                    />
-                                </div>
+                            )}
+                            <div className="icon-radio clear-fix">
+                                <i className="material-icons">radio_button_checked</i>
                             </div>
-                        );
-                    })}
+                            <div className="input-field input-text-radio input-option-create">
+                                <TextField
+                                    name="answerText"
+                                    hintText="Add an answer here."
+                                    fullWidth
+                                    value={answer}
+                                    onChange={(e: any) =>
+                                        handleUpdateAnswer(answerIndex, { correct, contents, answerId: answerIndex })}
+                                />
+                            </div>
+                        </div>
+                    ))}
                     <div className="radio-answer align-center">
-                        <FloatingActionButton onClick={e => handleAddAnswer({ correct: false, answer: "" })}>
+                        <FloatingActionButton onClick={e => handleAddAnswer()}>
                             <ContentAdd />
                         </FloatingActionButton>
                     </div>
