@@ -1,9 +1,10 @@
 import axios from "axios";
 import {
+    ADD_NEW_QUESTION,
     SET_SEARCH_TERM,
     ADD_API_DATA,
     ADD_AREA,
-    CHANGE_TYPE_ANSWER,
+    CHANGE_QUESTION_TYPE,
     DELETE_AREA,
     CHOOSE_AREA,
     CHANGE_QUESTION_DETAIL,
@@ -39,11 +40,6 @@ export const setSearchTerm = (searchTerm: string) => ({
     type: SET_SEARCH_TERM,
 });
 
-// export const addArea = (area: any) => ({
-//     area,
-//     type: ADD_AREA,
-// });
-
 export const addArea = (area: any) => {
     return async (dispatch: any, getState: any) => {
         const currentArea = getState().currentArea;
@@ -54,10 +50,10 @@ export const addArea = (area: any) => {
         })
     }
 }
-export const changeTypeAnswer = (index: number, questionType: string) => ({
+export const changeQuestionType = (index: number, questionType: string) => ({
     index,
     questionType,
-    type: CHANGE_TYPE_ANSWER,
+    type: CHANGE_QUESTION_TYPE,
 });
 
 export const deleteArea = (index: number) => ({
@@ -88,9 +84,10 @@ export const deleteMultipleChoice = (index: number, answerIndex: number) => ({
     type: DELETE_MULTIPLE_CHOICE,
 });
 
-export const changeQuestion = (index: number, value: string) => ({
+export const changeQuestionDetail = (index: number, value: string, multipleDropdownId?: number) => ({
     index,
     value,
+    multipleDropdownId,
     type: CHANGE_QUESTION_DETAIL,
 });
 
@@ -246,3 +243,17 @@ export const getRecentForms = () => {
 export const clearSurvey = () => ({
     type: CLEAR_SURVEY,
 });
+
+
+// ==================
+
+export const addNewQuestion = (questionData: any, questionIndex: number) => ({
+    questionIndex,
+    questionData,
+    type: ADD_NEW_QUESTION,
+})
+
+export const removeQuestion = (questionIndex: number) => ({
+    questionIndex,
+    type: "REMOVE_QUESTION",
+})

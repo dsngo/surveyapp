@@ -1,16 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import QuestionOptions from "./AnswerOption";
-import {
-    changeTypeAnswer,
-    deleteArea,
-    chooseArea,
-    updateDescriptionArea,
-    updateInfoSurvey,
-    changeQuestion,
-} from "./redux/actionCreators";
-
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import Dialog from "material-ui/Dialog";
@@ -23,23 +13,32 @@ import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
 import Visibility from "material-ui/svg-icons/action/visibility";
 import VisibilityOff from "material-ui/svg-icons/action/visibility-off";
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
+import QuestionOptions from "./AnswerOption";
+import {
+    changeQuestionType,
+    deleteArea,
+    chooseArea,
+    updateDescriptionArea,
+    updateInfoSurvey,
+    changeQuestionDetail,
+} from "./redux/actionCreators";
 
 interface IAreaList {
     surveyData: any;
     currentArea: number;
     chooseArea: (index: number) => any;
     deleteArea: (index: number) => any;
-    changeTypeAnswer: (index: number, questionType: string) => any;
+    changeQuestionType: (index: number, questionType: string) => any;
     updateDescriptionArea: (index: number, field: string, value: string) => any;
-    changeQuestion: (index: number, value: string) => any;
+    changeQuestionDetail: (index: number, value: string, multipleDropdownId?: number) => any;
 }
 
 const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
-    const { surveyData, currentArea, chooseArea, deleteArea, changeTypeAnswer, updateDescriptionArea, changeQuestion } = props;
+    const { surveyData, currentArea, chooseArea, deleteArea, changeQuestionType, updateDescriptionArea, changeQuestionDetail } = props;
     let indexQuestion = 0;
     return (
         <div>
-            {surveyData.content.map((area: any, index: any) => {
+            {surveyData.contents.map((area: any, index: any) => {
                 console.log(area);
                 
                 let classActive = index === currentArea ? "active-area" : "";
@@ -57,16 +56,16 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                                 name="question_text"
                                 hintText=""
                                 fullWidth={true}
-                                value={surveyData.content[index].question}
-                                onChange={(e: any) => changeQuestion(index, e.target.value)}
-                                floatingLabelText={"Question " + indexQuestion}
+                                value={surveyData.contents[index].question}
+                                onChange={(e: any) => changeQuestionDetail(index, e.target.value)}
+                                floatingLabelText={`Question ${indexQuestion}`}
                             />
                             <SelectField
                                 floatingLabelText="Answer"
                                 fullWidth={true}
                                 value={area.questionType}
                                 onChange={(event: object, key: number, payload: any) => {
-                                    changeTypeAnswer(index, payload);
+                                    changeQuestionType(index, payload);
                                 }}
                                 className="mui-select"
                             >
@@ -79,17 +78,17 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                                 <MenuItem value="checkbox" label="Checkbox">
                                     Checkbox
                                 </MenuItem>
-                                <MenuItem value="multipleChoices" label="Multiple choice">
-                                    Multiple choice
+                                <MenuItem value="multipleChoices" label="Multiple choices">
+                                    Multiple choices
                                 </MenuItem>
                                 <MenuItem value="dropdown" label="Dropdown">
                                     Dropdown
                                 </MenuItem>
+                                <MenuItem value="multipleDropdown" label="Multiple dropdown">
+                                    Multiple dropdown
+                                </MenuItem>
                                 <MenuItem value="priority" label="Priority">
                                     Priority
-                                </MenuItem>
-                                <MenuItem value="multiDropdown" label="Priority">
-                                    Multiple dropdown
                                 </MenuItem>
                             </SelectField>
                             <QuestionOptions area={area} index={index} />
@@ -133,14 +132,13 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
 
 const mapStateToProps = (state: any) => ({
     surveyData: state.surveyData,
-    currentArea: state.currentArea,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    changeTypeAnswer: (index: number, questionType: string) => dispatch(changeTypeAnswer(index, questionType)),
+    changeQuestionType: (index: number, questionType: string) => dispatch(changeQuestionType(index, questionType)),
     deleteArea: (index: number) => dispatch(deleteArea(index)),
     chooseArea: (index: number) => dispatch(chooseArea(index)),
     updateDescriptionArea: (index: number, field: string, value: string) => dispatch(updateDescriptionArea(index, field, value)),
-    changeQuestion: (index: number, value: string) => dispatch(changeQuestion(index, value)),
+    changeQuestionDetail: (index: number, value: string) => dispatch(changeQuestionDetail(index, value)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSurveyAreaList);

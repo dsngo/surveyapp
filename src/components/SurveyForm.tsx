@@ -7,7 +7,7 @@ import Settings from "./Settings";
 import QuestionOptions from "./AnswerOption";
 import CreateSurveyAreaList from "./CreateSurveyAreaList";
 import {
-    changeTypeAnswer,
+    changeQuestionType,
     deleteArea,
     chooseArea,
     updateDescriptionArea,
@@ -142,7 +142,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
                                                     name="question_text"
                                                     hintText=""
                                                     fullWidth={true}
-                                                    value={this.props.surveyData.info.title}
+                                                    value={this.props.surveyData.title}
                                                     onChange={(e: any) => this.props.updateInfoSurvey("title", e.target.value)}
                                                     floatingLabelText="Title"
                                                 />
@@ -154,7 +154,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
                                                     multiLine={true}
                                                     rows={2}
                                                     fullWidth={true}
-                                                    value={this.props.surveyData.info.description}
+                                                    value={this.props.surveyData.description}
                                                     onChange={(e: any) =>
                                                         this.props.updateInfoSurvey("description", e.target.value)}
                                                     floatingLabelText="Description"

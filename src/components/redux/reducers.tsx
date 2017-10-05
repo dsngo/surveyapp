@@ -3,7 +3,7 @@ import {
     SET_SEARCH_TERM,
     ADD_API_DATA,
     ADD_AREA,
-    CHANGE_TYPE_ANSWER,
+    CHANGE_QUESTION_TYPE,
     DELETE_AREA,
     CHOOSE_AREA,
     CHANGE_QUESTION_DETAIL,
@@ -28,131 +28,143 @@ import {
     CLEAR_SURVEY,
 } from "./actions";
 
-const initialSurveyData = [
-    {
-        type: "description",
-        title: "",
-        description: "",
-    },
-];
+import {
+    ISurveyFormFromDatabase,
+    ILongQuestion,
+    IShortQuestion,
+    IMultipleChoices,
+    IMultipleDropdown,
+    ICheckBox,
+    IDropdown,
+    IPriorityQuestion,
+} from "../../types/customTypes";
 
-interface ISurveyData {
-    info: any;
-    content: any[];
-    msgError: string;
-    msgSuccess: string;
-    responses: any[];
-}
-
-interface ISurveySubmit {
-    loading: boolean;
-    survey: any;
-    error: boolean;
-    errorMsg: string;
-}
+// interface ISurveyForm {
+//     info: { title: string; description: string };
+//     contents: (
+//         | ILongQuestion
+//         | IShortQuestion
+//         | IMultipleChoices
+//         | IMultipleDropdown
+//         | ICheckBox
+//         | IDropdown
+//         | IPriorityQuestion)[];
+//     msgError: string;
+//     msgSuccess: string;
+// }
 
 interface IStatus {
-    submitResponse: string;
+    submitStatus: { error: boolean; message: string };
+    creationFormStatus: { error: boolean; message: string };
+    clientSurveyStatus: { error: boolean; message: string; isLoading: boolean };
 }
 
-interface ISurveyResponse {
-    question: any[];
+interface IClientSurveyAnswers {
+    answers: (
+        | ILongQuestion
+        | IShortQuestion
+        | IMultipleChoices
+        | IMultipleDropdown
+        | ICheckBox
+        | IDropdown
+        | IPriorityQuestion)[];
+    completed: boolean;
 }
 
-interface IRecentForms {
-    forms: any[];
-}
+const DEFAULT_STATE = {
+    searchTerm: "",
+    apiData: {},
+    surveyInfo: {},
+    surveyContents: [],
+    clientSurveyData: {},
+    status: {},
+};
 
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
-const apiData = (state = {}, action: any) => (action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state);
+// const apiData = (state = {}, action: any) => (action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state);
 
 const surveyData = (
-    state: ISurveyData = {
-        info: { title: "", id: "", description: "" },
-        content: [],
-        msgError: "",
-        msgSuccess: "",
-        responses: [],
+    state: ISurveyFormFromDatabase = {
+        title: "",
+        description: "",
+        contents: [],
+        author: { username: "son" },
+        isDeleted: false,
+        completed: false,
     },
     action: any,
 ) => {
-    const data = { ...state };
     switch (action.type) {
         case CLEAR_SURVEY:
-            data.info = {
-                title: "",
-                id: "",
-                description: "",
-            };
-            data.content = [];
-            data.msgError = "";
-            data.msgSuccess = "";
-            data.responses = [];
-            return data;
+            return state;
         case UPDATE_INFO_SURVEY:
-            data.info[action.field] = action.value;
-            return data;
+            state[action.field] = action.value;
+            return state;
         case ADD_AREA:
-            data.content.splice(action.currentArea + 1, 0, action.area);
-            return data;
+            state.contents.splice(action.currentArea + 1, 0, action.area);
+            return state;
         case CHANGE_QUESTION_DETAIL:
-            data.content[action.index].question = action.value;
-            return data;
-        case CHANGE_TYPE_ANSWER:
-            data.content[action.index].questionType = action.questionType;
-            data.content[action.index].multipleAnswer = [];
+            if (action.questionType !== "multipleDropdown") {
+                state.contents[action.index].question = action.value;
+            } else {
+                state.contents[action.index].questions[action.multipleDropdownId].question = action.value;
+            }
+            return state;
+        case CHANGE_QUESTION_TYPE:
+            state.contents[action.index].questionType = action.questionType;
+            state.contents[action.index].multipleAnswer = [];
             if (
                 action.questionType === "multipleChoices" ||
                 action.questionType === "checkbox" ||
                 action.questionType === "dropdown" ||
                 action.questionType === "priority" ||
-                action.questionType === "multiDropdown"
+                action.questionType === "multipleDropdowns"
             )
-                data.content[action.index].multipleAnswer = [""];
-            return data;
+                state.contents[action.index].multipleAnswer = [""];
+            return state;
         case DELETE_AREA:
-            data.content.splice(action.index, 1);
-            return data;
+            state.contents.splice(action.index, 1);
+            return state;
         case ADD_MULTIPLE_CHOICE:
-            data.content[action.index].multipleAnswer.push("");
-            return data;
+            state.contents[action.index].multipleAnswer.push("");
+            return state;
         case UPDATE_MULTIPLE_CHOICE:
-            data.content[action.index].multipleAnswer[action.answerIndex] = action.answerContent;
-            return data;
+            state.contents[action.index].multipleAnswer[action.answerIndex] = action.answerContent;
+            return state;
         case DELETE_MULTIPLE_CHOICE:
-            data.content[action.index].multipleAnswer.splice(action.answerIndex, 1);
-            return data;
+            state.contents[action.index].multipleAnswer.splice(action.answerIndex, 1);
+            return state;
         case UPDATE_DESCRIPTION_AREA:
             action.field === "title"
-                ? (data.content[action.index].title = action.value)
-                : (data.content[action.index].description = action.value);
-            return data;
+                ? (state.contents[action.index].title = action.value)
+                : (state.contents[action.index].description = action.value);
+            return state;
         case MISSING_INFO:
-            data.msgError = action.msgError;
-            return data;
+            state.msgError = action.msgError;
+            return state;
         case CLEAR_MESSAGE:
-            data.msgError = "";
-            data.msgSuccess = "";
-            return data;
+            state.msgError = "";
+            state.msgSuccess = "";
+            return state;
         case CREATE_SUCCESS:
-            data.msgSuccess = "success";
-            return data;
+            state.msgSuccess = "success";
+            return state;
         case GET_SURVEY:
-            data.info.id = action.survey._id;
-            data.info.title = action.survey.title;
-            data.info.description = action.survey.description;
-            data.content = JSON.parse(action.survey.content);
-            return data;
+            state.info.id = action.survey._id;
+            state.info.title = action.survey.title;
+            state.info.description = action.survey.description;
+            state.contents = JSON.parse(action.survey.content);
+            return state;
         case GET_RESPONSES:
-            data.responses = action.responses;
-            return data;
+            state.responses = action.responses;
+            return state;
         default:
             return state;
     }
 };
 
-const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error: false, errorMsg: "" }, action: any) => {
+const surveySubmit = (state: IClientSurvey = { loading: true, surveyForm: {}, error: false, errorMsg: "" }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case GET_SURVEY_ERROR:
@@ -163,62 +175,62 @@ const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error:
         case GET_SURVEY_SUCCESS:
             data.loading = false;
             data.error = false;
-            data.survey = action.survey;
+            data.surveyForm = action.survey;
             return data;
         default:
             return state;
     }
 };
 
-const recentForms = (state: IRecentForms = { forms: [] }, action: any) => {
+const recentForms = (state: IRecentForms = { recentForms: [] }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case GET_RECENT_FORMS:
-            data.forms = action.forms;
+            data.recentForms = action.forms;
             return data;
         default:
             return state;
     }
 };
 
-const surveyResponse = (state: ISurveyResponse = { question: [] }, action: any) => {
+const surveyResponse = (state: IClientSurveyAnswers = { answers: [] }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case INIT_SURVEY_QUESTION:
-            data.question = JSON.parse(action.survey.content);
+            data.answers = JSON.parse(action.survey.content);
             return data;
         case UPDATE_ANSWER_RESPONSE:
             const answer = {
                 content: action.answer,
             };
             if (!action.multiAnswer) {
-                data.question[action.index].answer = answer;
+                data.answers[action.index].answer = answer;
                 return data;
             }
-            if (!data.question[action.index].answer) {
-                data.question[action.index].answer = [answer];
+            if (!data.answers[action.index].answer) {
+                data.answers[action.index].answer = [answer];
                 return data;
             }
-            const index = checkAnswerExist(answer, data.question[action.index].answer);
+            const index = checkAnswerExist(answer, data.answers[action.index].answer);
             if (index !== -1) {
-                data.question[action.index].answer.splice(index, 1);
+                data.answers[action.index].answer.splice(index, 1);
                 return data;
             }
-            data.question[action.index].answer.push(answer);
+            data.answers[action.index].answer.push(answer);
             return data;
         default:
             return state;
     }
 };
 
-const status = (state: IStatus = { submitResponse: "" }, action: any) => {
+const status = (state: IStatus = { submitStatus: "" }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case SUBMIT_SUCCESS:
-            data.submitResponse = "success";
+            data.submitStatus = "success";
             return data;
         case CLEAR_SUBMIT_STATUS:
-            data.submitResponse = "";
+            data.submitStatus = "";
             return data;
         default:
             return state;
@@ -228,17 +240,6 @@ const sectionDivide = (state: boolean = false, action: any) => (action.type === 
 
 const currentArea = (state: number = -1, action: any) => (action.type === CHOOSE_AREA ? action.index : state);
 
-export const rootReducer = combineReducers({
-    searchTerm,
-    apiData,
-    surveyData,
-    currentArea,
-    surveySubmit,
-    surveyResponse,
-    status,
-    recentForms,
-});
-
 function checkAnswerExist(answer: any, arrayAnswer: any) {
     for (let i = 0; i < arrayAnswer.length; i += 1) {
         if (answer.content === arrayAnswer[i].content) {
@@ -247,3 +248,20 @@ function checkAnswerExist(answer: any, arrayAnswer: any) {
     }
     return -1;
 }
+
+const surveyContents = (state: {}[], action: any) => {
+    action.type === "ADD_NEW_QUESTION" ? state.splice(action.questionIndex, 0, action.questionData) : state;
+    action.type === "REMOVE_QUESTION" ? state.splice(action.questionIndex, 1) : state;
+};
+
+export const rootReducer = combineReducers({
+    searchTerm,
+    // apiData,
+    surveyData,
+    currentArea,
+    surveySubmit,
+    surveyResponse,
+    status,
+    recentForms,
+    surveyContents,
+});
