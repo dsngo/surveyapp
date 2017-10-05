@@ -1,15 +1,14 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { addNewQuestion, removeQuestion, updateQuestion } from "../redux/actionCreators";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import { IDropdown } from "../../types/customTypes";
+import { removeQuestion, updateQuestion } from "../redux/actionCreators";
 
 class DropdownQuestion extends React.Component<
     {
         questionNumber: number;
         questionIndex: number;
-        addNewQuestion: (questionIndex: number, questionData: any) => any;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
     },
@@ -17,21 +16,21 @@ class DropdownQuestion extends React.Component<
 > {
     state: IDropdown = {
         questionType: "dropdown",
-        question: "",
+        question: {description: "", text: ""},
         answers: [],
     };
-    handleChangeQuestion = (newQuestion: string) => {
-        this.setState(prevState => ({ ...prevState, question: newQuestion }));
-    };
-    handleRemoveAnswer = (answerIndex: number) => {
+    
+    handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
+
+    handleRemoveAnswer = (answerIndex: number) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
-    };
-    handleUpdateAnswer = (answerIndex: number, newAnswer: { correct: boolean; answer: string }) => {
+
+    handleUpdateAnswer = (answerIndex: number, newAnswer: { correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
-    };
-    handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) => {
+
+    handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
-    };
+
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
@@ -46,6 +45,16 @@ class DropdownQuestion extends React.Component<
                 <TextField
                     name="questionText"
                     hintText="Multiple choices question"
+                    multiLine
+                    fullWidth
+                    rows={2}
+                    value={question}
+                    onChange={(e: any) => handleChangeQuestion(e.target.value)}
+                    floatingLabelText={`Question ${questionNumber}`}
+                />
+                <TextField
+                    name="questionDescription"
+                    hintText="Extra Description"
                     multiLine
                     fullWidth
                     rows={2}
@@ -73,14 +82,19 @@ class DropdownQuestion extends React.Component<
                                         hintText="Add an answer here."
                                         fullWidth
                                         value={answer}
-                                        onChange={(e: any) => handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
+                                        onChange={(e: any) =>
+                                            handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
                                     />
                                 </div>
                             </div>
                         );
                     })}
                     <div className="radio-answer align-center">
-                        <RaisedButton label="More option" primary onClick={e => handleAddAnswer({correct: false, answer: ""})} />
+                        <RaisedButton
+                            label="More option"
+                            primary
+                            onClick={e => handleAddAnswer({ correct: false, answer: "" })}
+                        />
                     </div>
                 </div>
             </div>
@@ -93,7 +107,6 @@ class DropdownQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addNewQuestion: (questionIndex: number, questionData: any) => dispatch(addNewQuestion(questionIndex, questionData)),
     removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });

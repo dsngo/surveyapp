@@ -17,7 +17,7 @@ class PriorityQuestion extends React.Component<
 > {
     state: IPriorityQuestion = {
         questionType: "priorityQuestion",
-        question: "",
+        question: { description: "", text: ""},
         answers: [],
         additionalContents: []
     };
@@ -33,6 +33,9 @@ class PriorityQuestion extends React.Component<
     handleAddAnswer = (newAnswer: { priority: number; answer: string }) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
     };
+    handleAddAdditionalContent = (newAdditionalContent: { description: string; contents: { question: string; answers: string }[] }) => {
+        this.setState(prevState => ({ ...prevState, additionalContents: prevState.additionalContents.push(newAdditionalContent)}));
+    }
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
@@ -41,6 +44,7 @@ class PriorityQuestion extends React.Component<
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
+            handleAddAdditionalContent
         } = this;
         return (
             <div>
@@ -50,7 +54,7 @@ class PriorityQuestion extends React.Component<
                     multiLine
                     fullWidth
                     rows={2}
-                    value={question}
+                    value={question.text}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
                     floatingLabelText={`Question ${questionNumber}`}
                 />
@@ -86,6 +90,11 @@ class PriorityQuestion extends React.Component<
                             label="More option"
                             primary={true}
                             onClick={e => handleAddAnswer({ priority: 0, answer: "" })}
+                        />
+                        <RaisedButton
+                            label="Additional Content"
+                            primary={true}
+                            onClick={e => handleAddAdditionalContent({ description: "", contents: [] })}
                         />
                     </div>
                 </div>
