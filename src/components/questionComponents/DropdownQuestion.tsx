@@ -16,11 +16,13 @@ class DropdownQuestion extends React.Component<
 > {
     state: IDropdown = {
         questionType: "dropdown",
-        question: {description: "", text: ""},
+        question: "",
+        description: "",
         answers: [],
     };
-    
-    handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
+
+    handleChangeQuestion = (newQuestion: string) =>
+        this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
     handleRemoveAnswer = (answerIndex: number) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
