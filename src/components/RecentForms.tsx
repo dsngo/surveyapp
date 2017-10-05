@@ -16,7 +16,7 @@ class RecentForms extends React.Component<IRecentForms> {
         this.props.getRecentForms();
     }
     renderTemplate() {
-        return this.props.recentForms.forms.map((form: any) => {
+        return this.props.recentForms.map((form: any) => {
             return (
                 <Link className="col-sm-4 template-card-container" to={"/editform/" + form._id + ""}>
                     <div className="template-card">

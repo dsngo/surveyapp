@@ -29,7 +29,19 @@ import {
 } from "./actions";
 
 
-import * as Types from "../../types/customTypes";
+import {
+    ISurveyFormFromDatabase,
+    ILongQuestion,
+    IShortQuestion,
+    IMultipleChoices,
+    IMultipleDropdown,
+    ICheckBox,
+    IDropdown,
+    IPriorityQuestion,
+    ISurveyData,
+    ISurveySubmit,
+    ISurveyResponse
+} from "../../types/customTypes";
 const initialSurveyData = [
     {
         type: "description",
@@ -37,14 +49,39 @@ const initialSurveyData = [
         description: "",
     },
 ];
+interface IStatus {
+    submitStatus: { error: boolean; message: string };
+    creationFormStatus: { error: boolean; message: string };
+    clientSurveyStatus: { error: boolean; message: string; isLoading: boolean };
+}
+
+interface IClientSurveyAnswers {
+    answers: (
+        | ILongQuestion
+        | IShortQuestion
+        | IMultipleChoices
+        | IMultipleDropdown
+        | ICheckBox
+        | IDropdown
+        | IPriorityQuestion)[];
+    completed: boolean;
+}
 
 
+const DEFAULT_STATE = {
+    searchTerm: "",
+    apiData: {},
+    surveyInfo: {},
+    surveyContents: [],
+    clientSurveyData: {},
+    status: {},
+};
 
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
 const apiData = (state = {}, action: any) => (action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state);
 const surveyData = (
-    state: Types.ISurveyData = {
+    state: ISurveyData = {
         info: { title: "", id: "", description: "" },
         content: [],
         msgError: "",
@@ -128,7 +165,7 @@ const surveyData = (
     }
 };
 
-const surveySubmit = (state: Types.ISurveySubmit = { loading: true, survey: {}, error: false, errorMsg: "" }, action: any) => {
+const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error: false, errorMsg: "" }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case GET_SURVEY_ERROR:
@@ -146,18 +183,18 @@ const surveySubmit = (state: Types.ISurveySubmit = { loading: true, survey: {}, 
     }
 };
 
-const recentForms = (state: Types.IRecentForms = { forms: [] }, action: any) => {
-    const data = { ...state };
+const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) => {
+    let data = { ...state };
     switch (action.type) {
         case GET_RECENT_FORMS:
-            data.forms = action.forms;
+            data = action.forms;
             return data;
         default:
             return state;
     }
 };
 
-const surveyResponse = (state: Types.ISurveyResponse = { question: [] }, action: any) => {
+const surveyResponse = (state: ISurveyResponse = { question: [] }, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case INIT_SURVEY_QUESTION:
@@ -187,19 +224,29 @@ const surveyResponse = (state: Types.ISurveyResponse = { question: [] }, action:
     }
 };
 
-const status = (state: Types.IStatus = { submitResponse: "" }, action: any) => {
+const status = (state: IStatus = { 
+    submitStatus: { error: false, message: "" }, 
+    creationFormStatus: { error: false, message: ""},  
+    clientSurveyStatus: { error: false, message: "", isLoading: false }
+}, action: any) => {
     const data = { ...state };
     switch (action.type) {
         case SUBMIT_SUCCESS:
-            data.submitResponse = "success";
+            data.submitStatus.message = "success";
             return data;
         case CLEAR_SUBMIT_STATUS:
-            data.submitResponse = "";
+            data.submitStatus.message = "";
             return data;
         default:
             return state;
     }
 };
+
+const surveyContents = (state: {}[], action: any) => {
+    action.type === "ADD_NEW_QUESTION" ? state.splice(action.questionIndex, 0, action.questionData) : state;
+    action.type === "REMOVE_QUESTION" ? state.splice(action.questionIndex, 1) : state;
+};
+
 const sectionDivide = (state: boolean = false, action: any) => (action.type === DIVIDE_SECTION ? action.value : state);
 
 const currentArea = (state: number = -1, action: any) => (action.type === CHOOSE_AREA ? action.index : state);
