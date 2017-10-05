@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { addNewQuestion, removeQuestion } from "./redux/actionCreators";
 import TextField from "material-ui/TextField";
 import { IMultipleChoices } from "../types/customTypes";
 
