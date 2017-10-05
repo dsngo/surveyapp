@@ -1,9 +1,21 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
+import FloatingActionButton from "material-ui/FloatingActionButton";
+import ContentAdd from "material-ui/svg-icons/content/add";
+import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import { IMultipleDropdown } from "../../types/customTypes";
 import { removeQuestion, updateQuestion } from "../redux/actionCreators";
+
+interface IDropdownQuestion {
+    id: number;
+    text: string;
+}
+
+interface IDropdownAnswer {
+    answerId: number;
+    contents: { id: number; answers: string[] }[];
+}
 
 class MultipleDropdownQuestion extends React.Component<
     {
@@ -16,11 +28,12 @@ class MultipleDropdownQuestion extends React.Component<
 > {
     state: IMultipleDropdown = {
         questionType: "multipleDropdown",
-        questions: [{ id: 1, question: "" }],
+        questions: [{ id: 1, text: "" }],
         description: "",
         answers: [{ answerId: 1, contents: [{ id: 1, answers: [""] }] }],
     };
-    handleChangeQuestion = (questionId: number, newQuestion: string) =>
+
+    handleChangeQuestion = (questionId: number, newQuestion: IDropdownQuestion) =>
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
     handleChangeDescription = (newDescription: string) =>
@@ -29,11 +42,12 @@ class MultipleDropdownQuestion extends React.Component<
     handleRemoveAnswer = (answerIndex: number) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
 
-    handleUpdateAnswer = (answerIndex: number, newAnswer: { correct: boolean; answer: string }) =>
+    handleUpdateAnswer = (answerIndex: number, newAnswer: IDropdownAnswer) =>
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1, newAnswer) }));
+
+    handleAddAnswer = (newAnswer: IDropdownAnswer) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
 
-    handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
@@ -95,11 +109,9 @@ class MultipleDropdownQuestion extends React.Component<
                         );
                     })}
                     <div className="radio-answer align-center">
-                        <RaisedButton
-                            label="More option"
-                            primary
-                            onClick={e => handleAddAnswer({ correct: false, answer: "" })}
-                        />
+                        <FloatingActionButton onClick={e => handleAddAnswer({ correct: false, answer: "" })}>
+                            <ContentAdd />
+                        </FloatingActionButton>
                     </div>
                 </div>
             </div>
