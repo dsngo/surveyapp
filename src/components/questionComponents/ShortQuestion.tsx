@@ -1,14 +1,13 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { addNewQuestion, removeQuestion, updateQuestion } from "./redux/actionCreators";
 import TextField from "material-ui/TextField";
-import { IShortQuestion } from "../types/customTypes";
+import { IShortQuestion } from "../../types/customTypes";
+import { removeQuestion, updateQuestion } from "../redux/actionCreators";
 
 class ShortQuestion extends React.Component<
     {
         questionNumber: number,
         questionIndex: number,
-        addNewQuestion: (questionIndex: number, questionData: any) => any,
         removeQuestion: (questionIndex: number) => any,
         updateQuestion: (questionIndex: number, questionData: any) => any,
     },
@@ -19,12 +18,13 @@ class ShortQuestion extends React.Component<
         question: "",
         answers: [""],
     };
-    handleChangeQuestion = (newQuestion: string) => {
+
+    handleChangeQuestion = (newQuestion: string) => 
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
-    };
-    handleUpdateAnswer = (newAnswer: string) => {
+    ;
+    handleUpdateAnswer = (newAnswer: string) => 
         this.setState(prevState => ({ ...prevState, answers: newAnswer.split("\n") }));
-    };
+    ;
     getAnswerString(answers: string[]) {
         return answers.join("\n");
     } 
@@ -67,7 +67,6 @@ class ShortQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addNewQuestion: (questionIndex: number, questionData: any) => dispatch(addNewQuestion(questionIndex, questionData)),
     removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData))
 });
