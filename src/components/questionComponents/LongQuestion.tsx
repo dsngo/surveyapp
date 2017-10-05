@@ -16,10 +16,14 @@ class LongQuestion extends React.Component<
     state: ILongQuestion = {
         questionType: "longQuestion",
         question: "",
+        description: "",
         answers: [""],
     };
 
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
+
+    handleChangeDescription = (newDescription: string) =>
+        this.setState(prevState => ({ ...prevState, description: newDescription }));
 
     handleUpdateAnswer = (newAnswer: string) => this.setState(prevState => ({ ...prevState, answers: newAnswer.split("\n") }));
 
@@ -30,29 +34,41 @@ class LongQuestion extends React.Component<
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
-            state: { question, answers },
+            state: { question, answers, description },
             handleChangeQuestion,
+            handleChangeDescription,
             handleUpdateAnswer,
             getAnswerString,
         } = this;
         return (
             <div>
+                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
+                    <i className="fa fa-times" />
+                </div>
                 <TextField
                     name="questionText"
                     hintText="Long question"
                     multiLine
                     fullWidth
-                    rows={2}
                     value={question}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
                     floatingLabelText={`Question ${questionNumber}`}
+                />
+                <TextField
+                    name="questionDescription"
+                    hintText="Extra Description"
+                    multiLine
+                    fullWidth
+                    value={description}
+                    onChange={(e: any) => handleChangeDescription(e.target.value)}
+                    floatingLabelText={"Question description"}
                 />
                 <TextField
                     name="answerText"
                     hintText="Put your answer here"
                     multiLine
                     fullWidth
-                    rows={2}
+                    rows={4}
                     value={getAnswerString(answers)}
                     onChange={(e: any) => handleUpdateAnswer(e.target.value)}
                     floatingLabelText="Answer"

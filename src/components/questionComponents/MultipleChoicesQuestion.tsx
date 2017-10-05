@@ -17,9 +17,13 @@ class MultipleChoicesQuestion extends React.Component<
     state: IMultipleChoices = {
         questionType: "multipleChoices",
         question: "",
+        description: "",
         answers: [],
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
+
+    handleChangeDescription = (newDescription: string) =>
+        this.setState(prevState => ({ ...prevState, description: newDescription }));
 
     handleRemoveAnswer = (answerIndex: number) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
@@ -33,23 +37,35 @@ class MultipleChoicesQuestion extends React.Component<
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
-            state: { question, answers },
+            state: { question, answers, description },
             handleChangeQuestion,
+            handleChangeDescription,
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
         } = this;
         return (
             <div>
+                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
+                    <i className="fa fa-times" />
+                </div>
                 <TextField
                     name="questionText"
                     hintText="Multiple choices question"
                     multiLine
                     fullWidth
-                    rows={2}
                     value={question}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
                     floatingLabelText={`Question ${questionNumber}`}
+                />
+                <TextField
+                    name="questionDescription"
+                    hintText="Extra Description"
+                    multiLine
+                    fullWidth
+                    value={description}
+                    onChange={(e: any) => handleChangeDescription(e.target.value)}
+                    floatingLabelText={"Question description"}
                 />
                 <div className="clear-fix multiple-answer">
                     {answers.map((answer: any, answerIndex: number) => {
