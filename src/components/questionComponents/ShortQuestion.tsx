@@ -16,6 +16,7 @@ class ShortQuestion extends React.Component<
     state: IShortQuestion = {
         questionType: "shortQuestion",
         question: "",
+        description: "",
         answers: [""],
     };
 
