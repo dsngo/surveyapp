@@ -19,15 +19,23 @@ class PriorityQuestion extends React.Component<
         questionType: "priorityQuestion",
         question: "",
         description: "",
-        answers: [],
+        answers: [{
+            priority: 0,
+            answer: ""
+        }],
         additionalContents: []
     };
     handleChangeQuestion = (newQuestion: string) => {
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
     };
     handleRemoveAnswer = (answerIndex: number) => {
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
     };
+    handleRemoveAdditionalContent = (contentIndex: number) => {
+        this.setState(prevState => ({
+            ...prevState, additionalContents: prevState.additionalContents.splice(contentIndex, 1) && prevState.additionalContents
+        }))
+    }
     handleUpdateAnswer = (answerIndex: number, newAnswer: { priority: number; answer: string }) => {
         this.setState(prevState => ({
             ...prevState, answers: prevState.answers.map(
@@ -73,6 +81,15 @@ class PriorityQuestion extends React.Component<
         }))
     }
 
+    handleRemoveAdditionalContentQuestion = (contentIndex: number, questionIndex: number) => {
+        this.setState(prevState => ({
+            ...prevState,
+            additionalContents: prevState.additionalContents.map((content, contentIdx) => {
+                contentIdx === contentIndex ? content.contents.splice(contentIdx, 1) : "";
+                return content;
+            }) && prevState.additionalContents
+        }))
+    }
     render() {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
@@ -84,10 +101,10 @@ class PriorityQuestion extends React.Component<
             handleAddAdditionalContent,
             handleUpdateAndditionalContentDesciption,
             handleAddQuestionAdditionContent,
-            handleUpdateAdditionQuestion
+            handleUpdateAdditionQuestion,
+            handleRemoveAdditionalContent,
+            handleRemoveAdditionalContentQuestion
         } = this;
-        console.log(additionalContents);
-        
         return (
             <div>
                 <TextField
@@ -148,7 +165,12 @@ class PriorityQuestion extends React.Component<
                     {
                         additionalContents.map((content, contentIndex) => {
                             return (
-                                <div>
+                                <div className="additional-container">
+                                    <div>
+                                        <div className="delete-area" onClick={() => handleRemoveAdditionalContent(contentIndex)}>
+                                            <i className="fa fa-times" />
+                                        </div>
+                                    </div>
                                 <TextField
                                         name="answerText"
                                         hintText="Add description here."
@@ -161,6 +183,11 @@ class PriorityQuestion extends React.Component<
                                         content.contents.map((ctn, ctnQuestionIndex) => {
                                             return (
                                                 <div>
+                                                <div className="additional-question-container">
+                                                    <div className="delete-area" onClick={() => handleRemoveAdditionalContentQuestion(contentIndex, ctnQuestionIndex)}>
+                                                        <i className="fa fa-times" />
+                                                    </div>
+                                                </div>
                                                     <TextField
                                                         name="answerText"
                                                         hintText="Add an answer here."

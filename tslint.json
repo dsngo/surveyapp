@@ -4,7 +4,7 @@
     "import-name": false,
     "no-unused-variable": true,
     "quotemark": [true, "double", "jsx-double", "avoid-template"],
-    "max-line-length": [true, 160],
+    "max-line-length": [false, 160],
     "no-var-keyword": false,
     "ter-indent": [false, 2, { "SwitchCase": true }],
     "ter-arrow-parens": false,
