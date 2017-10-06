@@ -12,16 +12,13 @@ class CheckboxQuestion extends React.Component<
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
     },
-    ICheckbox
+    ICheckBox
 > {
     state: ICheckBox = {
-        questionType: "multipleChoices",
+        questionType: "checkbox",
         question: "",
         description: "",
-        answers: [{
-            correct: false,
-            answer: ""
-        }],
+        answers: [""],
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
@@ -31,15 +28,15 @@ class CheckboxQuestion extends React.Component<
     handleRemoveAnswer = (answerIndex: number) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
 
-    handleUpdateAnswer = (answerIndex: number, newAnswer: { correct: boolean; answer: string }) =>
+    handleUpdateAnswer = (answerIndex: number, newAnswer: string) =>
     this.setState(prevState => ({
         ...prevState, answers: prevState.answers.map(
-            (ans: any, index) => { index === answerIndex ? ans.answer = newAnswer.answer : ""; return ans;}
+            (ans: any, index) => { const temp = index === answerIndex ? newAnswer : ans; return temp;}
         )
     }))
 
-    handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers}));
+    handleAddAnswer = () =>
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push("") && prevState.answers}));
 
     render() {
         const {
@@ -86,7 +83,7 @@ class CheckboxQuestion extends React.Component<
                                     </div>
                                 )}
                                 <div className="icon-radio clear-fix">
-                                    <i className="material-icons">radio_button_checked</i>
+                                    <i className="material-icons">check_circle</i>
                                 </div>
                                 <div className="input-field input-text-radio input-option-create">
                                     <TextField
@@ -95,7 +92,7 @@ class CheckboxQuestion extends React.Component<
                                         fullWidth
                                         value={answer.answer}
                                         onChange={(e: any) =>
-                                            handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
+                                            handleUpdateAnswer(answerIndex, e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -105,7 +102,7 @@ class CheckboxQuestion extends React.Component<
                         <RaisedButton
                             label="More option"
                             primary={true}
-                            onClick={e => handleAddAnswer({ correct: false, answer: "" })}
+                            onClick={e => handleAddAnswer()}
                         />
                     </div>
                 </div>
