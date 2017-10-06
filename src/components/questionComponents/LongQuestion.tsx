@@ -1,8 +1,8 @@
 import * as React from "react";
+import { removeQuestion, updateQuestion } from "../redux/actionCreators";
+import { ILongQuestion } from "../../types/customTypes";
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
-import { ILongQuestion } from "../../types/customTypes";
-import { removeQuestion, updateQuestion } from "../redux/actionCreators";
 
 class LongQuestion extends React.Component<
     {

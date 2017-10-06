@@ -48,9 +48,8 @@ export interface IPriorityQuestion {
   description: string;
   answers: { priority: number; answer: string }[];
   additionalContents: {
-    contentId: string;
     description: string;
-    contents: { contentQuestionId: string; question: string; answers: string }[];
+    contents: { question: string; answers: string }[];
   }[];
 }
 

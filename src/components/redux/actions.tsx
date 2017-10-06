@@ -26,3 +26,9 @@ export const GET_RECENT_FORMS = "GET_RECENT_FORMS";
 export const GET_SURVEY = "GET_SURVEY";
 export const GET_RESPONSES = "GET_RESPONSES";
 export const CLEAR_SURVEY = "CLEAR_SURVEY";
+
+//
+
+export const ADD_NEW_QUESTION = "ADD_NEW_QUESTION";
+export const UPDATE_QUESTION = "UPDATE_QUESTION";
+export const REMOVE_QUESTION = "REMOVE_QUESTION";

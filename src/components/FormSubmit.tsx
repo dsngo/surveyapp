@@ -46,8 +46,6 @@ class FormSubmit extends React.Component<IFormSubmit> {
     };
 
     handleClose = () => {
-        console.log("close");
-
         this.setState({ open: false });
     };
 

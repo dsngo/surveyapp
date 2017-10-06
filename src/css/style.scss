@@ -461,3 +461,17 @@ select {
 .search-input-container {
     display: inline-block;
 }
+.additional-container {
+    position: relative;
+    .delete-area {
+        top: 6px;
+    }
+}
+
+.additional-question-container {
+    position: relative;
+    .delete-area {
+        top: 10px;
+        right: 50px;
+    }
+}
