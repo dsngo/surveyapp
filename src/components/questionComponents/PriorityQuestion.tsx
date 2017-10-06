@@ -9,7 +9,7 @@ class PriorityQuestion extends React.Component<
     {
         questionNumber: number,
         questionIndex: number,
-        addNewQuestion: (questionIndex: number, questionData: any) => any,
+        addNewQuestion: (questionData: any) => any,
         removeQuestion: (questionIndex: number) => any,
         updateQuestion: (questionIndex: number, questionData: any) => any,
     },
@@ -29,13 +29,17 @@ class PriorityQuestion extends React.Component<
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
     };
     handleUpdateAnswer = (answerIndex: number, newAnswer: { priority: number; answer: string }) => {
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
+        this.setState(prevState => ({
+            ...prevState, answers: prevState.answers.map(
+                (ans: any, index) => { index === answerIndex ? ans.answer = newAnswer.answer : ""; return ans;}
+            )
+        }))
     };
     handleAddAnswer = (newAnswer: { priority: number; answer: string }) => {
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
     };
     handleAddAdditionalContent = (newAdditionalContent: {
-        contentId: string, description: string; contents: { 
+        description: string; contents: { 
             contentQuestionId: string, question: string; answers: string 
         }[]
     }) => {
@@ -50,7 +54,7 @@ class PriorityQuestion extends React.Component<
             additionalContents: prevState.additionalContents.map((elm, index) => { index === contentIndex ? elm.description = value : ""; return elm;})
         }))
     }
-    handleAddQuestionAdditionContent = (contentIndex: number, newQuestion: { contentQuestionId: string, question: string, answers: string}) => {
+    handleAddQuestionAdditionContent = (contentIndex: number, newQuestion: { question: string, answers: string}) => {
         this.setState(prevState => ({ 
             ...prevState,
             additionalContents: prevState.additionalContents.map((elm, index) => { index === contentIndex ? elm.contents.push(newQuestion) : ""; return elm;})
@@ -79,8 +83,11 @@ class PriorityQuestion extends React.Component<
             handleRemoveAnswer,
             handleAddAdditionalContent,
             handleUpdateAndditionalContentDesciption,
+            handleAddQuestionAdditionContent,
             handleUpdateAdditionQuestion
         } = this;
+        console.log(additionalContents);
+        
         return (
             <div>
                 <TextField
@@ -95,6 +102,8 @@ class PriorityQuestion extends React.Component<
                 />
                 <div className="clear-fix multiple-answer">
                     {answers.map((answer: any, answerIndex: number) => {
+                        console.log(answer);
+                        
                         return (
                             <div className="radio-answer" key={answerIndex}>
                                 {answers.length > 1 && (
@@ -112,7 +121,7 @@ class PriorityQuestion extends React.Component<
                                         name="answerText"
                                         hintText="Add an answer here."
                                         fullWidth
-                                        value={answer}
+                                        value={answer.answer}
                                         onChange={(e: any) =>
                                             handleUpdateAnswer(answerIndex, { priority: 0, answer: e.target.value })}
                                     />
@@ -129,7 +138,9 @@ class PriorityQuestion extends React.Component<
                         <RaisedButton
                             label="Additional Content"
                             primary={true}
-                            onClick={e => handleAddAdditionalContent({ contentId: "", description: "", contents: [] })}
+                            onClick={e => handleAddAdditionalContent({ description: "", contents: [{
+                                contentQuestionId: "", question: "", answers: ""
+                            }] })}
                         />
                     </div>
                 </div>
@@ -157,7 +168,6 @@ class PriorityQuestion extends React.Component<
                                                         value={ ctn.question }
                                                         onChange={ (e: any) => handleUpdateAdditionQuestion(contentIndex, ctnQuestionIndex, e.target.value)}
                                                     />
-                                                    ctn.
                                                 </div>
                                             )
 
@@ -166,7 +176,7 @@ class PriorityQuestion extends React.Component<
                                     <RaisedButton
                                         label="Add question"
                                         primary={true}
-                                        onClick={e => handleAddAdditionalContent({ contentId: "", description: "", contents: [] })}
+                                        onClick={e => handleAddQuestionAdditionContent(contentIndex, { question: "", answers: "" })}
                                     />
                                 </div>
                             )}
@@ -184,7 +194,7 @@ class PriorityQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addNewQuestion: (questionIndex: number, questionData: any) => dispatch(addNewQuestion(questionIndex, questionData)),
+    addNewQuestion: (questionData: any) => dispatch(addNewQuestion(questionData)),
     removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });

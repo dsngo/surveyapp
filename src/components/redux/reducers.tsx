@@ -247,8 +247,6 @@ const status = (state: IStatus = {
 };
 
 const surveyContents = (state: {}[], action: any) => {
-    console.log(action.questionData);
-    
     action.type === ADD_NEW_QUESTION ? state.splice(action.questionIndex, 0, action.questionData) : state;
     action.type === REMOVE_QUESTION ? state.splice(action.questionIndex, 1) : state;
     action.type === UPDATE_QUESTION ? state.splice(action.questionIndex, 1, action.questionData): state;
@@ -263,11 +261,11 @@ export const rootReducer = combineReducers({
     apiData,
     surveyData,
     currentArea,
-    surveySubmit,
+    surveySubmit, 
     surveyResponse,
     status,
     recentForms,
-    surveyContents
+    // surveyContents
 });
 
 function checkAnswerExist(answer: any, arrayAnswer: any) {

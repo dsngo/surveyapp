@@ -21,10 +21,6 @@ class SelectQuestionType extends React.Component {
                 <SelectField
                     floatingLabelText="Answer"
                     fullWidth={true}
-                    value={area.questionType}
-                    onChange={(event: object, key: number, payload: any) => {
-                        changeTypeAnswer(index, payload);
-                    }}
                     className="mui-select"
                 >
                     <MenuItem value="shortQuestion" label="Short answer">

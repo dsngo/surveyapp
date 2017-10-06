@@ -1,13 +1,15 @@
 import * as React from "react";
-import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import NavBar from "./NavBar";
-import Menu from "./Menu";
-import SurveyForm from "./SurveyForm";
-import FormSubmit from "./FormSubmit";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import FoF from "./FoF";
+// import FormSubmit from "./FormSubmit";
+// import Menu from "./Menu";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import NavBar from "./NavBar";
+// import SurveyForm from "./SurveyForm";
+import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
+import PriorityQuestion from "./questionComponents/PriorityQuestion";
 
 export const App: React.SFC = () => (
     <Router>
@@ -16,10 +18,11 @@ export const App: React.SFC = () => (
                 <div>
                     <NavBar showSearch />
                     <Switch>
-                        <Route exact path="/" component={Menu} />
-                        <Route path="/newform" component={SurveyForm} />
-                        <Route path="/form/:id" component={FormSubmit} />
-                        <Route path="/editform/:id" component={SurveyForm} />
+                        {<Route exact path="/" component={PriorityQuestion} />}
+                        {/* <Route exact path="/" component={Menu} /> */}
+                        {/* <Route path="/newform" component={SurveyForm} /> */}
+                        {/* <Route path="/form/:id" component={FormSubmit} /> */}
+                        {/* <Route path="/editform/:id" component={SurveyForm} /> */}
                         <Route component={FoF} />
                     </Switch>
                 </div>

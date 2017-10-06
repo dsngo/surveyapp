@@ -5,13 +5,13 @@ import * as Types from "../types/customTypes";
 
 interface ISettings {
     addArea: (area: any) => string;
-    addNewQuestion: (questionData: any) => any;
+    // addNewQuestion: (questionData: any) => any;
     surveyData: any[];
     divideSection: (value: boolean) => any;
 }
 
 const Settings: React.SFC<ISettings> = props => {
-    const { addArea, surveyData, divideSection, addNewQuestion } = props;
+    const { addArea, surveyData, divideSection } = props;
     const areaQuestionTemplate = {
         type: "question",
         questionType: "",
@@ -61,7 +61,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     addArea: (area: any) => dispatch(addArea(area)),
-    addNewQuestion: (questionData: any) => dispatch(addNewQuestion(questionData)),
+    // addNewQuestion: (questionData: any) => dispatch(addNewQuestion(questionData)),
     divideSection: (value: boolean) => dispatch(divideSection(value)),
 });
 
