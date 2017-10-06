@@ -96,7 +96,7 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                         </div>
                     );
                 }
-                if (area.type === "description") {
+                {/* if (area.type === "description") {
                     classActive += " form-info";
                     return (
                         <div key={index} className={classActive} onClick={e => chooseArea(index)}>
@@ -125,7 +125,7 @@ const CreateSurveyAreaList: React.SFC<IAreaList> = props => {
                             </div>
                         </div>
                     );
-                }
+                } */}
             })}
         </div>
     );

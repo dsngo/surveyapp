@@ -1,4 +1,3 @@
-import { combineReducers } from "redux";
 import {
     ADD_API_DATA,
     ADD_AREA,
@@ -26,9 +25,10 @@ import {
     UPDATE_DESCRIPTION_AREA,
     UPDATE_INFO_SURVEY,
     UPDATE_MULTIPLE_CHOICE,
+    ADD_NEW_QUESTION,
+    UPDATE_QUESTION,
+    REMOVE_QUESTION
 } from "./actions";
-
-
 import {
     ICheckBox,
     IDropdown,
@@ -42,6 +42,10 @@ import {
     ISurveyResponse,
     ISurveySubmit
 } from "../../types/customTypes";
+import { combineReducers } from "redux";
+
+
+
 const initialSurveyData = [
     {
         type: "description",
@@ -243,9 +247,11 @@ const status = (state: IStatus = {
 };
 
 const surveyContents = (state: {}[], action: any) => {
-    action.type === "ADD_NEW_QUESTION" ? state.splice(action.questionIndex, 0, action.questionData) : state;
-    action.type === "REMOVE_QUESTION" ? state.splice(action.questionIndex, 1) : state;
-    action.type === "UPDATE_QUESTION" ? state.splice(action.questionIndex, 1, action.questionData): state;
+    console.log(action.questionData);
+    
+    action.type === ADD_NEW_QUESTION ? state.splice(action.questionIndex, 0, action.questionData) : state;
+    action.type === REMOVE_QUESTION ? state.splice(action.questionIndex, 1) : state;
+    action.type === UPDATE_QUESTION ? state.splice(action.questionIndex, 1, action.questionData): state;
 };
 
 const sectionDivide = (state: boolean = false, action: any) => (action.type === DIVIDE_SECTION ? action.value : state);
@@ -261,6 +267,7 @@ export const rootReducer = combineReducers({
     surveyResponse,
     status,
     recentForms,
+    surveyContents
 });
 
 function checkAnswerExist(answer: any, arrayAnswer: any) {

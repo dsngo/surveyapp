@@ -6,10 +6,10 @@
         "quotemark": [true, "double", "jsx-double", "avoid-template"],
         "max-line-length": [true, 160],
         "no-var-keyword": false,
-        "ter-indent": [true, 2, { "SwitchCase": true }],
+        "ter-indent": [false, 4, { "SwitchCase": true }],
         "ter-arrow-parens": false,
         "variable-name": [true, "check-format", "allow-pascal-case", "ban-keywords"],
-        "sort-imports": [true, "whitespace-insensitive"],
+        // "sort-imports": [true, "whitespace-insensitive"],
         "prefer-es6-imports": [true, "module-name"],
         "no-braces-for-single-line-arrow-functions": true
     }

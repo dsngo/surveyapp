@@ -1,34 +1,38 @@
 import * as React from "react";
-import { addArea, divideSection } from "./redux/actionCreators";
+import { addArea, addNewQuestion, divideSection } from "./redux/actionCreators";
 import { connect } from "react-redux";
+import * as Types from "../types/customTypes";
+
 interface ISettings {
     addArea: (area: any) => string;
+    addNewQuestion: (questionData: any) => any;
     surveyData: any[];
     divideSection: (value: boolean) => any;
 }
 
 const Settings: React.SFC<ISettings> = props => {
-    const { addArea, surveyData, divideSection } = props;
+    const { addArea, surveyData, divideSection, addNewQuestion } = props;
     const areaQuestionTemplate = {
         type: "question",
         questionType: "",
         multipleAnswer: [],
         question: "",
     };
-    const areaDescriptionTemplate = {
-        type: "description",
-        title: "",
+    const newQuestion:Types.IShortQuestion = {
+        questionType: "shortQuestion",
+        question: "",
         description: "",
-    };
+        answers: []
+    }
     return (
         <div className="menu-settings">
             <div>
-                <div className="settings-icon add-question" onClick={e => addArea(areaQuestionTemplate)}>
+                <div className="settings-icon add-question" onClick={e => addNewQuestion(newQuestion)}>
                     <i className="fa fa-plus-circle" />
                 </div>
             </div>
             <div>
-                <div className="settings-icon add-text" onClick={e => addArea(areaDescriptionTemplate)}>
+                <div className="settings-icon add-text" >
                     <i className="fa fa-font" aria-hidden="true" />
                 </div>
             </div>
@@ -57,6 +61,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
     addArea: (area: any) => dispatch(addArea(area)),
+    addNewQuestion: (questionData: any) => dispatch(addNewQuestion(questionData)),
     divideSection: (value: boolean) => dispatch(divideSection(value)),
 });
 

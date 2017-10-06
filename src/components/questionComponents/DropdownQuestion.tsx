@@ -1,9 +1,9 @@
 import * as React from "react";
-import { connect } from "react-redux";
-import TextField from "material-ui/TextField";
-import RaisedButton from "material-ui/RaisedButton";
-import { IDropdown } from "../../types/customTypes";
 import { removeQuestion, updateQuestion } from "../redux/actionCreators";
+import { IDropdown } from "../../types/customTypes";
+import { connect } from "react-redux";
+import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
 
 class DropdownQuestion extends React.Component<
     {

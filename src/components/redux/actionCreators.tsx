@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
     ADD_AREA,
     ADD_MULTIPLE_CHOICE,
@@ -25,7 +24,13 @@ import {
     UPDATE_DESCRIPTION_AREA,
     UPDATE_INFO_SURVEY,
     UPDATE_MULTIPLE_CHOICE,
+
+    ADD_NEW_QUESTION,
+    UPDATE_QUESTION,
+    REMOVE_QUESTION
 } from "./actions";
+import axios from "axios";
+
 
 const config = require("../../config.json");
 const urlServer = config.URL_SERVER_API;
@@ -247,19 +252,28 @@ export const clearSurvey = () => ({
 
 // ==================
 
-export const addNewQuestion = (questionIndex: number, questionData: any) => ({
-    questionIndex,
-    questionData,
-    type: "ADD_NEW_QUESTION",
-})
+export const addNewQuestion = (questionData: any) => {
+    console.log(questionData);
+    
+    return async (dispatch: any, getState: any) => {
+        const questionIndex = getState().currentArea;
+        console.log(questionIndex);
+        
+        dispatch ({
+            questionIndex,
+            questionData,
+            type: ADD_NEW_QUESTION,
+        })
+    }
+} 
 
 export const removeQuestion = (questionIndex: number) => ({
     questionIndex,
-    type: "REMOVE_QUESTION",
+    type: REMOVE_QUESTION,
 })
 
 export const updateQuestion = (questionIndex: number, questionData: any) => ({
     questionIndex,
     questionData,
-    type: "UPDATE_QUESTION",
+    type: UPDATE_QUESTION,
 })
