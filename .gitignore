@@ -3,3 +3,4 @@ node_modules
 !./app/assets/img
 !./app/assets/fonts
 yarn.lock
+tslint.json
