@@ -10,7 +10,22 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import IconButton from "material-ui/IconButton";
 import MenuItem from "material-ui/MenuItem";
 import DropDownMenu from "material-ui/DropDownMenu";
+import SelectField from "material-ui/SelectField";
+import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
+
+const styles = {
+  textQuestionColumn: {
+    width: "40%",
+  },
+  optionAnswerFieldCoumn: {
+    paddingLeft: "5px",
+    paddingRight: "5px",
+  },
+  removeColumn: {
+    width: "10%",
+  },
+};
 
 class MultipleDropdownQuestion extends React.Component<
   {
@@ -22,16 +37,14 @@ class MultipleDropdownQuestion extends React.Component<
   IMultipleDropdown
 > {
   checkBox = false;
-  mainAnswerFieldColumn = { width: "50%" };
-  removeButtonColumnStyle = { width: "10%" };
   state: IMultipleDropdown = {
     questionType: "multipleDropdown",
     question: "",
     description: "",
     headers: [
-      { headerId: 0, text: "", tooltip: "test1", answerOptions: [""] },
-      { headerId: 1, text: "", tooltip: "test2", answerOptions: ["option1", "option2", "option3"] },
-      { headerId: 2, text: "", tooltip: "test3", answerOptions: ["option4", "option5", "option6"] },
+      { headerId: 0, text: "Q1", tooltip: "tooltip 1", answerOptions: [""] },
+      { headerId: 1, text: "Q2", tooltip: "tooltip 2", answerOptions: ["Not Interested", "Interested", "High Interested"] },
+      { headerId: 2, text: "Q3", tooltip: "tooltip 3", answerOptions: ["God Damnit", "option5", "option6"] },
     ],
     answers: [
       { answerId: 0, contents: [{ refId: 0, textAnswer: "" }, { refId: 1, textAnswer: "" }, { refId: 2, textAnswer: "" }] },
@@ -91,75 +104,82 @@ class MultipleDropdownQuestion extends React.Component<
       handleRemoveAnswer,
       getHeaderAnswerOptions,
       checkBox,
-      removeButtonColumnStyle,
-      mainAnswerFieldColumn,
     } = this;
-    // console.log(this); // tslint:disable-line
     return (
-      <div>
-        <IconButton tooltip="Remove question box" tooltipPosition="top-right" onClick={e => removeQuestion(questionIndex)}>
+      <Paper zDepth={2} style={{ width: "90%", margin: "10px auto" }}>
+        <IconButton
+          style={{ float: "right" }}
+          tooltip="Remove question box"
+          tooltipPosition="top-left"
+          onClick={e => removeQuestion(questionIndex)}
+        >
           <ContentClear />
         </IconButton>
-        <TextField
-          name="questionText"
-          hintText="Multiple choices question"
-          multiLine
-          fullWidth
-          value={question}
-          onChange={(e: any) => handleChangeQuestion(e.target.value)}
-          floatingLabelText={`Question ${questionNumber || "Text"}`}
-        />
-        <TextField
-          name="questionDescription"
-          hintText="Extra Description"
-          multiLine
-          fullWidth
-          value={description}
-          onChange={(e: any) => handleChangeDescription(e.target.value)}
-          floatingLabelText={"Question Description"}
-        />
+        <div style={{ padding: "0 24px" }}>
+          <TextField
+            name="questionText"
+            hintText="Multiple choices question"
+            multiLine
+            fullWidth
+            value={question}
+            onChange={(e: any) => handleChangeQuestion(e.target.value)}
+            floatingLabelText={`Question ${questionNumber || "Text"}`}
+          />
+          <TextField
+            name="questionDescription"
+            hintText="Extra Description"
+            multiLine
+            fullWidth
+            value={description}
+            onChange={(e: any) => handleChangeDescription(e.target.value)}
+            floatingLabelText={"Question Description"}
+          />
+        </div>
         <Table>
           <TableHeader displaySelectAll={checkBox} adjustForCheckbox={checkBox}>
             <TableRow>
               {headers.map((e, i) => (
-                <TableHeaderColumn style={e.headerId === 0 ? mainAnswerFieldColumn : {}} key={`header-${i}`} tooltip={e.tooltip}>
+                <TableHeaderColumn
+                  key={`header-${i}`}
+                  style={e.headerId === 0 ? styles.textQuestionColumn : styles.optionAnswerFieldCoumn}
+                  tooltip={e.tooltip}
+                >
                   {e.text}
                 </TableHeaderColumn>
               ))}
-              <TableHeaderColumn style={removeButtonColumnStyle} tooltip="Remove" />>
+              <TableHeaderColumn tooltip="Remove">Remove</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={checkBox}>
             {answers.map((answer, i) => (
               <TableRow key={`answer-${i}`}>
-                {answer.contents.map(
-                  (content, i) =>
-                    content.refId === 0 ? (
-                      <TableRowColumn key={`content-${i}`} style={mainAnswerFieldColumn}>
-                        <TextField
-                          value={content.textAnswer}
-                          onChange={(e: any) => handleUpdateAnswer(answer.answerId, content.refId, e.target.value)}
-                          multiLine
-                          fullWidth
-                          hintText="Additional Question"
-                        />
-                      </TableRowColumn>
+                {answer.contents.map((content, i) => (
+                  <TableRowColumn
+                    key={`content-${i}`}
+                    style={content.refId === 0 ? styles.textQuestionColumn : styles.optionAnswerFieldCoumn}
+                  >
+                    {content.refId === 0 ? (
+                      <TextField
+                        value={content.textAnswer}
+                        onChange={(e: any) => handleUpdateAnswer(answer.answerId, content.refId, e.target.value)}
+                        multiLine
+                        fullWidth
+                        hintText="Additional Question"
+                      />
                     ) : (
-                      <TableRowColumn key={`content-${i}`}>
-                        <DropDownMenu
-                          autoWidth={false}
-                          style={{ width: "100%" }}
-                          value={content.textAnswer}
-                          onChange={(e, i, p) => handleUpdateAnswer(answer.answerId, content.refId, p)}
-                        >
-                          {getHeaderAnswerOptions(content.refId).map((e, i) => (
-                            <MenuItem key={`option-${i}`} value={e} primaryText={e} />
-                          ))}
-                        </DropDownMenu>
-                      </TableRowColumn>
-                    ),
-                )}
-                <TableRowColumn style={removeButtonColumnStyle}>
+                      <DropDownMenu
+                        autoWidth
+                        value={content.textAnswer}
+                        onChange={(e, i, p) => handleUpdateAnswer(answer.answerId, content.refId, p)}
+                      >
+                        {getHeaderAnswerOptions(content.refId).map((e, i) => (
+                          <MenuItem key={`option-${i}`} value={e} primaryText={e} />
+                        ))}
+                      </DropDownMenu>
+                    )}
+                  </TableRowColumn>
+                ))}
+                <TableRowColumn>
                   <FloatingActionButton mini secondary onClick={e => handleRemoveAnswer(answer.answerId)}>
                     <ContentRemove />
                   </FloatingActionButton>
@@ -169,7 +189,7 @@ class MultipleDropdownQuestion extends React.Component<
           </TableBody>
           <TableFooter adjustForCheckbox={checkBox}>
             <TableRow>
-              <TableRowColumn style={{ textAlign: "right", padding: "auto" }}>
+              <TableRowColumn style={{ textAlign: "center", paddingBottom: "5px" }}>
                 <FloatingActionButton mini onClick={e => handleAddAnswer()}>
                   <ContentAdd />
                 </FloatingActionButton>
@@ -177,39 +197,7 @@ class MultipleDropdownQuestion extends React.Component<
             </TableRow>
           </TableFooter>
         </Table>
-
-        {/* <div className="clear-fix multiple-answer">
-                    {answers.map((answer: any, answerIndex: number) => (
-                        <div className="radio-answer" key={answerIndex}>
-                            {answers.length > 1 && (
-                                <div>
-                                    <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
-                                        <i className="fa fa-times" />
-                                    </div>
-                                </div>
-                            )}
-                            <div className="icon-radio clear-fix">
-                                <i className="material-icons">radio_button_checked</i>
-                            </div>
-                            <div className="input-field input-text-radio input-option-create">
-                                <TextField
-                                    name="answerText"
-                                    hintText="Add an answer here."
-                                    fullWidth
-                                    value={answer}
-                                    onChange={(e: any) =>
-                                        handleUpdateAnswer(answerIndex, { correct, contents, answerId: answerIndex })}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                    <div className="radio-answer align-center">
-                        <FloatingActionButton onClick={e => handleAddAnswer()}>
-                          Clear />
-                        </FloatingActionButton>
-                    </div>
-                </div> */}
-      </div>
+      </Paper>
     );
   }
 
