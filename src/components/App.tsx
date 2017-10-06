@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import FoF from "./FoF";
 // import FormSubmit from "./FormSubmit";
-// import Menu from "./Menu";
+import Menu from "./Menu";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import NavBar from "./NavBar";
 // import SurveyForm from "./SurveyForm";
