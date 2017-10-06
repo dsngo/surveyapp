@@ -11,6 +11,7 @@ import NavBar from "./NavBar";
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
 import PriorityQuestion from "./questionComponents/PriorityQuestion";
 import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestion";
+import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
 
 export const App: React.SFC = () => (
     <Router>
@@ -19,7 +20,7 @@ export const App: React.SFC = () => (
                 <div>
                     <NavBar showSearch />
                     <Switch>
-                        {<Route exact path="/" component={MultipleChoicesQuestion} />}
+                        {<Route exact path="/" component={AddQuestionComponent} />}
                         {/* <Route exact path="/" component={Menu} /> */}
                         {/* <Route path="/newform" component={SurveyForm} /> */}
                         {/* <Route path="/form/:id" component={FormSubmit} /> */}

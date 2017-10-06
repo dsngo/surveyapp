@@ -32,6 +32,7 @@ for (const [key, val] of Object.entries(options)) {
 
 class AddQuestionComponent extends React.Component<
   {
+    questionTypeFromSetting: string;
     questionIndex: number;
     removeQuestion: (questionIndex: number) => any;
     updateCurrentIndex: (currentIndex: number) => any;
@@ -39,13 +40,30 @@ class AddQuestionComponent extends React.Component<
   { questionType: string }
 > {
   state = {
-    questionType: "longQuestion",
+    questionType: "",
   };
 
   handleChangeQuestionType = (questionType: string) => this.setState({ questionType });
 
+  handleCreateQuestion = (questionType: string, questionIndex: number) => {
+    return (
+      (questionType === "longQuestion" && <LongQuestion {...{ questionIndex }} />) ||
+      (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex }} />) ||
+      (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex }} />) ||
+      (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex }} />) ||
+      (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex }} />) ||
+      // (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex }} />) ||
+      (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex }} />)
+    );
+  };
+
   render() {
-    const { handleChangeQuestionType, props: { removeQuestion, questionIndex }, state: { questionType } } = this;
+    const {
+      handleCreateQuestion,
+      handleChangeQuestionType,
+      props: { removeQuestion, questionIndex, questionTypeFromSetting },
+      state: { questionType },
+    } = this;
     return (
       <Paper zDepth={2} style={{ width: "90%", margin: "10px auto" }}>
         <IconButton
@@ -59,13 +77,7 @@ class AddQuestionComponent extends React.Component<
         <DropDownMenu onChange={(e, i, p) => handleChangeQuestionType(p)}>
           {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
         </DropDownMenu>
-        {(questionType === "longQuestion" && <LongQuestion {...{ questionIndex }} />) ||
-          (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex }} />) ||
-          (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex }} />) ||
-          (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex }} />) ||
-          (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex }} />) ||
-          // (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex }} />) ||
-          (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex }} />)}
+        {handleCreateQuestion(questionType || questionTypeFromSetting, questionIndex)}
       </Paper>
     );
   }

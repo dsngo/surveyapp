@@ -43,9 +43,9 @@ class MultipleDropdownQuestion extends React.Component<
     question: "",
     description: "",
     headers: [
-      { headerId: 0, text: "Q1", tooltip: "tooltip 1", answerOptions: [""] },
-      { headerId: 1, text: "Q2", tooltip: "tooltip 2", answerOptions: ["Not Interested", "Interested", "High Interested"] },
-      { headerId: 2, text: "Q3", tooltip: "tooltip 3", answerOptions: ["God Damnit", "option5", "option6"] },
+      { headerId: 0, text: "Q1", tooltip: "Content", answerOptions: [""] },
+      { headerId: 1, text: "Q2", tooltip: "Please choose one", answerOptions: ["Not Interested", "Interested", "High Interested"] },
+      { headerId: 2, text: "Q3", tooltip: "Please choose one", answerOptions: ["God Damnit", "option5", "option6"] },
     ],
     answers: [
       { answerId: 0, contents: [{ refId: 0, textAnswer: "" }, { refId: 1, textAnswer: "" }, { refId: 2, textAnswer: "" }] },
@@ -107,7 +107,7 @@ class MultipleDropdownQuestion extends React.Component<
       checkBox,
     } = this;
     return (
-      <Paper zDepth={2} style={{ width: "90%", margin: "10px auto" }}>
+      <Paper zDepth={1} style={{ width: "90%", margin: "10px auto" }}>
         <div style={{ padding: "0 24px" }}>
           <TextField
             name="questionText"
@@ -164,6 +164,7 @@ class MultipleDropdownQuestion extends React.Component<
                     ) : (
                       <DropDownMenu
                         autoWidth={false}
+                        
                         style={{ width: "100%" }}
                         value={content.textAnswer}
                         onChange={(e, i, p) => handleUpdateAnswer(answer.answerId, content.refId, p)}
