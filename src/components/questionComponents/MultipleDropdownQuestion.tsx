@@ -14,16 +14,20 @@ import SelectField from "material-ui/SelectField";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 
-const styles = {
+
+const styles: { [name: string]: React.CSSProperties } = {
   textQuestionColumn: {
     width: "40%",
+    textAlign: "center"
   },
   optionAnswerFieldCoumn: {
+    textAlign: "center",
     paddingLeft: "5px",
     paddingRight: "5px",
   },
   removeColumn: {
     width: "10%",
+    textAlight: "center",
   },
 };
 
@@ -147,7 +151,7 @@ class MultipleDropdownQuestion extends React.Component<
                   {e.text}
                 </TableHeaderColumn>
               ))}
-              <TableHeaderColumn tooltip="Remove">Remove</TableHeaderColumn>
+              <TableHeaderColumn tooltip="Remove" style={styles.removeColumn}>Remove</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={checkBox}>
@@ -168,7 +172,8 @@ class MultipleDropdownQuestion extends React.Component<
                       />
                     ) : (
                       <DropDownMenu
-                        autoWidth
+                        autoWidth={false}
+                        style={{width: "100%"}}
                         value={content.textAnswer}
                         onChange={(e, i, p) => handleUpdateAnswer(answer.answerId, content.refId, p)}
                       >
@@ -179,7 +184,7 @@ class MultipleDropdownQuestion extends React.Component<
                     )}
                   </TableRowColumn>
                 ))}
-                <TableRowColumn>
+                <TableRowColumn style={styles.removeColumn}>
                   <FloatingActionButton mini secondary onClick={e => handleRemoveAnswer(answer.answerId)}>
                     <ContentRemove />
                   </FloatingActionButton>
@@ -189,7 +194,7 @@ class MultipleDropdownQuestion extends React.Component<
           </TableBody>
           <TableFooter adjustForCheckbox={checkBox}>
             <TableRow>
-              <TableRowColumn style={{ textAlign: "center", paddingBottom: "5px" }}>
+              <TableRowColumn style={{ textAlign: "center", paddingBottom: "1em", height: "5em" }}>
                 <FloatingActionButton mini onClick={e => handleAddAnswer()}>
                   <ContentAdd />
                 </FloatingActionButton>
