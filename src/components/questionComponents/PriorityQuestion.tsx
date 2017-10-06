@@ -7,7 +7,6 @@ import TextField from "material-ui/TextField";
 
 class PriorityQuestion extends React.Component<
     {
-        questionNumber: number,
         questionIndex: number,
         addNewQuestion: (questionData: any) => any,
         removeQuestion: (questionIndex: number) => any,
@@ -92,7 +91,7 @@ class PriorityQuestion extends React.Component<
     }
     render() {
         const {
-            props: { questionNumber, questionIndex, removeQuestion },
+            props: { questionIndex, removeQuestion },
             state: { question, answers, additionalContents },
             handleChangeQuestion,
             handleUpdateAnswer,
@@ -115,7 +114,7 @@ class PriorityQuestion extends React.Component<
                     rows={2}
                     value={question}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
-                    floatingLabelText={`Question ${questionNumber}`}
+                    floatingLabelText={`Question ${questionIndex + 1}`}
                 />
                 <div className="clear-fix multiple-answer">
                     {answers.map((answer: any, answerIndex: number) => {

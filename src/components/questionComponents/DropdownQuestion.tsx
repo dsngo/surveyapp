@@ -7,7 +7,6 @@ import TextField from "material-ui/TextField";
 
 class DropdownQuestion extends React.Component<
     {
-        questionNumber: number;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -37,7 +36,7 @@ class DropdownQuestion extends React.Component<
 
     render() {
         const {
-            props: { questionNumber, questionIndex, removeQuestion },
+            props: { questionIndex, removeQuestion },
             state: { question, answers, description },
             handleChangeQuestion,
             handleChangeDescription,
@@ -57,7 +56,7 @@ class DropdownQuestion extends React.Component<
                     fullWidth
                     value={question}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
-                    floatingLabelText={`Question ${questionNumber}`}
+                    floatingLabelText={`Question ${questionIndex + 1}`}
                 />
                 <TextField
                     name="questionDescription"
