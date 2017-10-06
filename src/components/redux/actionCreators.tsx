@@ -277,3 +277,8 @@ export const updateQuestion = (questionIndex: number, questionData: any) => ({
     questionData,
     type: UPDATE_QUESTION,
 })
+
+export const updateCurrentIndex = (currentIndex: number) => ({
+    currentIndex,
+    type: "UPDATE_CURRENT_INDEX"
+})

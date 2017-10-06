@@ -75,10 +75,18 @@ interface IClientSurveyAnswers {
 const DEFAULT_STATE = {
     searchTerm: "",
     apiData: {},
-    surveyInfo: {},
+    surveyInfo: {
+        title: "",
+        description: "",
+        isDeleted: false,
+        completed: false,
+        author: { username: "daniel" },
+    },
     surveyContents: [],
     clientSurveyData: {},
-    status: {},
+    status: {
+        currentIndex: 1,
+    },
 };
 
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
