@@ -7,7 +7,6 @@ import TextField from "material-ui/TextField";
 
 class MultipleChoicesQuestion extends React.Component<
     {
-        questionNumber: number;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -43,7 +42,7 @@ class MultipleChoicesQuestion extends React.Component<
 
     render() {
         const {
-            props: { questionNumber, questionIndex, removeQuestion },
+            props: { questionIndex, removeQuestion },
             state: { question, answers, description },
             handleChangeQuestion,
             handleChangeDescription,
@@ -63,7 +62,7 @@ class MultipleChoicesQuestion extends React.Component<
                     fullWidth
                     value={question}
                     onChange={(e: any) => handleChangeQuestion(e.target.value)}
-                    floatingLabelText={`Question ${questionNumber}`}
+                    floatingLabelText={`Question ${questionIndex + 1}`}
                 />
                 <TextField
                     name="questionDescription"

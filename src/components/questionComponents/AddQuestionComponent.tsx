@@ -23,19 +23,21 @@ const options = {
   "Priority Question": "priorityQuestion",
 };
 
-const selectOptions: string[] = [];
-const questionType: string[] = [];
+const selectOptionsArr: string[] = [];
+const questionTypeArr: string[] = [];
 for (const [key, val] of Object.entries(options)) {
-  selectOptions.push(key);
-  questionType.push(val);
+  selectOptionsArr.push(key);
+  questionTypeArr.push(val);
 }
 
-class AddQuestionComponent extends React.Component<{
-  questionIndex: number;
-  removeQuestion: (questionIndex: number) => any;
-  updateCurrentIndex: (currentIndex: number) => any;
-  
-}, { questionType: string}> {
+class AddQuestionComponent extends React.Component<
+  {
+    questionIndex: number;
+    removeQuestion: (questionIndex: number) => any;
+    updateCurrentIndex: (currentIndex: number) => any;
+  },
+  { questionType: string }
+> {
   state = {
     questionType: "longQuestion",
   };
@@ -43,7 +45,7 @@ class AddQuestionComponent extends React.Component<{
   handleChangeQuestionType = (questionType: string) => this.setState({ questionType });
 
   render() {
-    const { handleChangeQuestionType, props: { removeQuestion, questionIndex } } = this;
+    const { handleChangeQuestionType, props: { removeQuestion, questionIndex }, state: { questionType } } = this;
     return (
       <Paper zDepth={2} style={{ width: "90%", margin: "10px auto" }}>
         <IconButton
@@ -55,16 +57,23 @@ class AddQuestionComponent extends React.Component<{
           <ContentClear />
         </IconButton>
         <DropDownMenu onChange={(e, i, p) => handleChangeQuestionType(p)}>
-          {selectOptions.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionType[i]} primaryText={e} />)}
+          {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
         </DropDownMenu>
+        {(questionType === "longQuestion" && <LongQuestion {...{ questionIndex }} />) ||
+          (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex }} />) ||
+          (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex }} />) ||
+          (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex }} />) ||
+          (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex }} />) ||
+          // (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex }} />) ||
+          (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex }} />)}
       </Paper>
     );
   }
 }
 
-const mapStateToProps = (state: any)=> ({
+const mapStateToProps = (state: any) => ({
   questionIndex: state.status.currentIndex,
-})
+});
 
 const mapDispatchToProps = (dispatch: any) => ({
   removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),

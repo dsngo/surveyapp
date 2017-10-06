@@ -32,7 +32,6 @@ const styles: { [name: string]: React.CSSProperties } = {
 
 class MultipleDropdownQuestion extends React.Component<
   {
-    questionNumber: number;
     questionIndex: number;
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },
@@ -97,7 +96,7 @@ class MultipleDropdownQuestion extends React.Component<
 
   render() {
     const {
-      props: { questionNumber, questionIndex },
+      props: { questionIndex },
       state: { question, answers, description, headers },
       handleChangeQuestion,
       handleChangeDescription,
@@ -117,7 +116,7 @@ class MultipleDropdownQuestion extends React.Component<
             fullWidth
             value={question}
             onChange={(e: any) => handleChangeQuestion(e.target.value)}
-            floatingLabelText={`Question ${questionNumber || "Text"}`}
+            floatingLabelText={`Question ${questionIndex + 1}`}
           />
           <TextField
             name="questionDescription"
