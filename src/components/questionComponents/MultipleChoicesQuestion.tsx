@@ -18,7 +18,10 @@ class MultipleChoicesQuestion extends React.Component<
         questionType: "multipleChoices",
         question: "",
         description: "",
-        answers: [],
+        answers: [{
+            correct: false,
+            answer: ""
+        }],
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
@@ -26,13 +29,17 @@ class MultipleChoicesQuestion extends React.Component<
         this.setState(prevState => ({ ...prevState, description: newDescription }));
 
     handleRemoveAnswer = (answerIndex: number) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) }));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
 
     handleUpdateAnswer = (answerIndex: number, newAnswer: { correct: boolean; answer: string }) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
+    this.setState(prevState => ({
+        ...prevState, answers: prevState.answers.map(
+            (ans: any, index) => { index === answerIndex ? ans.answer = newAnswer.answer : ""; return ans;}
+        )
+    }))
 
     handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) }));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers}));
 
     render() {
         const {
@@ -86,7 +93,7 @@ class MultipleChoicesQuestion extends React.Component<
                                         name="answerText"
                                         hintText="Add an answer here."
                                         fullWidth
-                                        value={answer}
+                                        value={answer.answer}
                                         onChange={(e: any) =>
                                             handleUpdateAnswer(answerIndex, { correct: false, answer: e.target.value })}
                                     />
