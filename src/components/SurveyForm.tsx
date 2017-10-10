@@ -68,28 +68,13 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
   handleOpenConfirmModal = (open: boolean) => this.setState(prevState => ({ ...prevState, openConfirmModal: open }));
 
   handleOpenSuccessModal = (open: boolean) => this.setState(prevState => ({ ...prevState, openSuccessModal: open }));
-  // {
-  // window.location.href = "/";
-  // this.props.history.push("/");
-  // this.setState({ openSuccessModal: false });
-  // };
 
-  // handleOpenSuccess = () => this.setState({ openSuccessModal: true });
-
-  handleSubmitSurvey = () => {
-    this.props.saveSurvey();
-    this.handleOpenConfirmModal(false);
-  };
-
-  // handlePreview = () => {
-  //   window.location.href = `/form/${this.props.surveyInfo.formId}`;
-  // };
   render() {
     const actionsConfirmModal = [
-      <FlatButton label="Cancel" primary onClick={() => this.handleOpenConfirmModal(false)} />,
-      <FlatButton label="Submit" primary onClick={() => this.handleSubmitSurvey()} />,
+      <FlatButton label="Cancel" primary />,
+      <FlatButton label="Submit" secondary onClick={() => this.props.saveSurvey()} />,
     ];
-    const actionsSuccessModal = [<FlatButton label="OK" primary onClick={() => this.handleOpenSuccessModal(true)} />];
+    const actionsSuccessModal = [<FlatButton label="OK" primary />];
     return (
       <Scrollbars
         id="scroll-survey-form"
