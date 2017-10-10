@@ -12,6 +12,7 @@ import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuest
 import PriorityQuestion from "./questionComponents/PriorityQuestion";
 import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestion";
 import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
+import CheckboxQuestion from "./questionComponents/CheckboxQuestion";
 
 export const App: React.SFC = () => (
     <Router>
@@ -20,7 +21,7 @@ export const App: React.SFC = () => (
                 <div>
                     <NavBar showSearch />
                     <Switch>
-                        {<Route exact path="/" component={AddQuestionComponent} />}
+                        {<Route exact path="/" component={CheckboxQuestion} />}
                         {/* <Route exact path="/" component={Menu} /> */}
                         {/* <Route path="/newform" component={SurveyForm} /> */}
                         {/* <Route path="/form/:id" component={FormSubmit} /> */}
