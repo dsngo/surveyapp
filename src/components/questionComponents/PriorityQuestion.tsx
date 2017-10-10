@@ -8,7 +8,7 @@ import TextField from "material-ui/TextField";
 class PriorityQuestion extends React.Component<
     {
         questionIndex: number,
-        addNewQuestion: (questionData: any) => any,
+        addNewQuestion: (questionIndex:number, questionType: any) => any,
         removeQuestion: (questionIndex: number) => any,
         updateQuestion: (questionIndex: number, questionData: any) => any,
     },
@@ -220,7 +220,7 @@ class PriorityQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addNewQuestion: (questionData: any) => dispatch(addNewQuestion(questionData)),
+    addNewQuestion: (questionIndex:number, questionType: any) => dispatch(addNewQuestion(questionIndex, questionType)),
     removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });

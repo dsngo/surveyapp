@@ -1,7 +1,11 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import Scrollbars from "react-custom-scrollbars";
+// import { push } from "react-router-redux";
 import Settings from "./Settings";
+import QuestionOptions from "./AnswerOption";
+import CreateSurveyAreaList from "./CreateSurveyAreaList";
 import {
   changeTypeAnswer,
   deleteArea,
@@ -13,6 +17,7 @@ import {
   getSurveyById,
   clearSurvey,
 } from "./redux/actionCreators";
+import { withRouter } from "react-router-dom";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import Dialog from "material-ui/Dialog";
@@ -202,9 +207,8 @@ class SurveyForm extends React.Component<ISurveyForm> {
 // };
 
 const mapStateToProps = (state: any) => ({
-  surveyInfo: state.surveyInfo,
-  surveyContents: state.surveyContents,
-  currentIndex: state.stateStatus.currentIndex,
+  surveyData: state.surveyData,
+  currentArea: state.currentArea,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -212,7 +216,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   saveSurvey: () => dispatch(saveSurvey()),
   clearMessage: () => dispatch(clearMessage()),
   getSurveyById: (id: string) => dispatch(getSurveyById(id)),
-  // clearSurvey: () => dispatch(clearSurvey()),
+  clearSurvey: () => dispatch(clearSurvey()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SurveyForm);

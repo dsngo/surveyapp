@@ -71,6 +71,7 @@ const DEFAULT_STATE = {
     isDeleted: false,
     completed: false,
     author: { username: "daniel" },
+    formId: "askjfdq23",
   },
   surveyContents: [],
   clientSurveyData: {},

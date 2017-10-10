@@ -32,7 +32,7 @@ for (const [key, val] of Object.entries(options)) {
 
 class AddQuestionComponent extends React.Component<
   {
-    questionTypeFromSetting: string;
+    selectedQuestionType: string;
     questionIndex: number;
     removeQuestion: (questionIndex: number) => any;
     updateCurrentIndex: (currentIndex: number) => any;
@@ -61,7 +61,7 @@ class AddQuestionComponent extends React.Component<
     const {
       handleCreateQuestion,
       handleChangeQuestionType,
-      props: { removeQuestion, questionIndex, questionTypeFromSetting },
+      props: { removeQuestion, questionIndex, selectedQuestionType },
       state: { questionType },
     } = this;
     return (
@@ -77,14 +77,15 @@ class AddQuestionComponent extends React.Component<
         <DropDownMenu onChange={(e, i, p) => handleChangeQuestionType(p)}>
           {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
         </DropDownMenu>
-        {handleCreateQuestion(questionType || questionTypeFromSetting, questionIndex)}
+        {handleCreateQuestion(questionType || selectedQuestionType, questionIndex)}
       </Paper>
     );
   }
 }
 
 const mapStateToProps = (state: any) => ({
-  questionIndex: state.status.currentIndex,
+  questionIndex: state.stateStatus.currentIndex,
+  selectedQuestionType: state.stateStatus.selectedQuestionType,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

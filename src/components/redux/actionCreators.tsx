@@ -263,9 +263,9 @@ export const clearSurvey = () => ({
 //         })
 //     }
 // }
-export const addNewQuestion = (questionIndex: number, questionData: any) => ({
+export const addNewQuestion = (questionIndex: number, questionType: any) => ({
   questionIndex,
-  questionData,
+  questionType,
   type: ADD_NEW_QUESTION,
 });
 
