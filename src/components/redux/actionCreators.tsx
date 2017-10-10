@@ -284,3 +284,8 @@ export const updateCurrentIndex = (currentIndex: number) => ({
   currentIndex,
   type: "UPDATE_CURRENT_INDEX",
 });
+
+export const updateSelectedQuestionType = (questionType: string) => ({
+  questionType,
+  type: "UPDATE_SELECTED_QUESTION_TYPE",
+});

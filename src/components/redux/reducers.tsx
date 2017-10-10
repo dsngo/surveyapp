@@ -76,8 +76,9 @@ const DEFAULT_STATE = {
   clientSurveyData: {},
   stateStatus: {
     currentIndex: 1,
+    selectedQuestionType: "",
     submitStatus: "",
-    
+
   },
 };
 
@@ -258,6 +259,7 @@ const stateStatus = (state: {}, action: any) =>
   (action.type === "UPDATE_CURRENT_STATUS" && {...state, currentIndex: action.currentIndex}) ||
   (action.type === "SUBMIT_SUCCESS" && {...state, submitStatus: "Success"}) ||
   (action.type === "SUBMIT_ERROR" && {...state, submitStatus: "Error"}) ||
+  (action.type === "UPDATE_SELECTED_QUESTION_TYPE" && {...state, selectedQuestionType: action.questionType}) ||
   (action.type === "CLEAR_SUBMIT_STATUS" && {...state, submitStatus: ""} );
   
 const sectionDivide = (state: boolean = false, action: any) => (action.type === DIVIDE_SECTION ? action.value : state);
