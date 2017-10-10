@@ -4,4 +4,4 @@ tslint.json
 ./app/*
 !./app/assets/img
 !./app/assets/fonts
-
+test.ts
