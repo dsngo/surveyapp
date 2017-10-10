@@ -1,5 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
 import Settings from "./Settings";
 import {
@@ -28,86 +29,67 @@ import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 import { Tabs, Tab } from "material-ui/Tabs";
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
 
-interface ISurveyForm {
-  history: any;
-  match: any;
-  surveyData: any;
-  currentArea: number;
+interface ISurveyFormProps {
+  surveyInfo: any;
+  surveyContents: any[];
+  currentIndex: number;
+  submitStatus: string;
   updateInfoSurvey: (field: string, value: string) => any;
   saveSurvey: () => any;
   clearMessage: () => any;
   getSurveyById: (id: string) => any;
   clearSurvey: () => any;
-  // changeUrl: (url: string) => any;
 }
 
-class SurveyForm extends React.Component<ISurveyForm> {
-  private scrollBars: Scrollbars;
-  private tempLengthArea: number;
+class SurveyForm extends React.Component<ISurveyFormProps> {
+  static defaultProps = {
+    surveyInfo: { formId: "123test"}
+  }
+  scrollBars: Scrollbars;
+  tempLengthArea = 0;
   state = {
     openConfirmModal: false,
     openSuccessModal: false,
-    surveyId: "",
     currentTab: "question",
   };
-  constructor(props: any) {
-    super(props);
-    this.tempLengthArea = this.props.surveyData.content.length;
-  }
 
-  componentWillMount() {
-    this.props.clearSurvey();
-    const id = this.props.match.params.id;
-    if (id) {
-      this.state.surveyId = id;
-      this.props.getSurveyById(id);
-    }
-  }
   componentDidUpdate() {
-    if (this.props.surveyData.content.length > this.tempLengthArea) {
+    const sLen = this.props.surveyContents.length;
+    if (sLen > this.tempLengthArea) {
       this.scrollBars.scrollToBottom();
-      this.tempLengthArea = this.props.surveyData.content.length;
+      this.tempLengthArea = sLen;
     }
-    if (this.props.surveyData.msgSuccess) {
-      this.handleOpenSuccess();
+    if (this.props.submitStatus) {
+      this.handleOpenSuccessModal(true);
     }
   }
-  handleChangeTab = (currentTab: any) => {
-    this.setState({
-      currentTab,
-    });
-  };
-  handleOpenConfirm = () => {
-    this.setState({ openConfirmModal: true });
-  };
+  handleChangeCurrentTab = (currentTab: any) => this.setState(prevState => ({ ...prevState, currentTab }));
 
-  handleCloseConfirm = () => {
-    this.setState({ openConfirmModal: false });
-  };
+  handleOpenConfirmModal = (open: boolean) => this.setState(prevState => ({ ...prevState, openConfirmModal: open }));
 
-  handleCloseSuccess = () => {
-    window.location.href = "/";
-    // this.props.history.push("/");
-    // this.setState({ openSuccessModal: false });
-  };
+  handleOpenSuccessModal = (open: boolean) => this.setState(prevState => ({ ...prevState, openSuccessModal: open }));
+  // {
+  // window.location.href = "/";
+  // this.props.history.push("/");
+  // this.setState({ openSuccessModal: false });
+  // };
 
-  handleOpenSuccess = () => {
-    this.setState({ openSuccessModal: true });
-  };
+  // handleOpenSuccess = () => this.setState({ openSuccessModal: true });
 
   handleSubmitSurvey = () => {
     this.props.saveSurvey();
-    this.handleCloseConfirm();
+    this.handleOpenConfirmModal(false);
   };
-  handlePreview = () => {
-    window.location.href = "/form/" + this.props.surveyData.info.id;
-  };
+
+  // handlePreview = () => {
+  //   window.location.href = `/form/${this.props.surveyInfo.formId}`;
+  // };
   render() {
     const actionsConfirmModal = [
-      <FlatButton label="Cancel" primary={true} onClick={this.handleCloseConfirm} />,
-      <FlatButton label="Submit" primary={true} onClick={e => this.handleSubmitSurvey()} />,
+      <FlatButton label="Cancel" primary onClick={() => this.handleOpenConfirmModal(false)} />,
+      <FlatButton label="Submit" primary onClick={() => this.handleSubmitSurvey()} />,
     ];
-    const actionsSuccessModal = [<FlatButton label="OK" primary={true} onClick={this.handleCloseSuccess} />];
+    const actionsSuccessModal = [<FlatButton label="OK" primary onClick={() => this.handleOpenSuccessModal(true)} />];
     return (
       <Scrollbars
         id="scroll-survey-form"
@@ -119,17 +101,15 @@ class SurveyForm extends React.Component<ISurveyForm> {
       >
         <Dialog
           actions={actionsConfirmModal}
-          modal={false}
           open={this.state.openConfirmModal}
-          onRequestClose={this.handleCloseConfirm}
+          onRequestClose={() => this.handleOpenConfirmModal(false)}
         >
-          Are you sure to create this survey?
+          Are you sure you want to create this survey?
         </Dialog>
         <Dialog
           actions={actionsSuccessModal}
-          modal={false}
           open={this.state.openSuccessModal}
-          onRequestClose={this.handleCloseSuccess}
+          onRequestClose={() => this.handleOpenSuccessModal(false)}
         >
           Create survey successfully.
         </Dialog>
@@ -137,7 +117,7 @@ class SurveyForm extends React.Component<ISurveyForm> {
         <div className="row survey-form-create">
           <div className="container survey-form" style={{ paddingTop: "15px" }}>
             <div className="form-create clear-fix">
-              <Tabs value={this.state.currentTab} onChange={this.handleChangeTab}>
+              <Tabs value={this.state.currentTab} onChange={this.handleChangeCurrentTab}>
                 <MultipleDropdownQuestion {...{ questionIndex: 1, questionNumber: 2 }} />
                 {/* <Tab label="Question" value="question">
                   <Settings />
@@ -170,26 +150,28 @@ class SurveyForm extends React.Component<ISurveyForm> {
                     <CreateSurveyAreaList />
                   </div>
                 </Tab> */}
-                <Tab label="Responses" value="response" />
+                {/* <Tab label="Responses" value="response" /> */}
               </Tabs>
             </div>
-            {this.props.surveyData.info.id ? (
+            {this.props.surveyInfo.formId ? (
               <div className="btn-preview-survey-container">
-                <RaisedButton
-                  backgroundColor="#4CAF50"
-                  className="btn-save"
-                  label="Preview"
-                  onClick={e => this.handlePreview()}
-                />
+                <Link to={`/form/${this.props.surveyInfo.formId}`}>
+                  <RaisedButton backgroundColor="#4CAF50" className="btn-save" label="Preview" />
+                </Link>
               </div>
             ) : (
               <div />
             )}
             <div className="btn-save-survey-container">
-              <RaisedButton backgroundColor="#4CAF50" className="btn-save" label="Save" onClick={e => this.handleOpenConfirm()} />
+              <RaisedButton
+                backgroundColor="#4CAF50"
+                className="btn-save"
+                label="Save"
+                onClick={() => this.handleOpenConfirmModal(true)}
+              />
             </div>
 
-            {this.props.surveyData.msgError ? <div className="error-message">{this.props.surveyData.msgError}</div> : <div />}
+            {this.props.submitStatus ? <div className="error-message">{this.props.submitStatus}</div> : <div />}
           </div>
         </div>
       </Scrollbars>
@@ -205,6 +187,7 @@ const mapStateToProps = (state: any) => ({
   surveyInfo: state.surveyInfo,
   surveyContents: state.surveyContents,
   currentIndex: state.stateStatus.currentIndex,
+  submitStatus: state.stateStatus.submitStatus,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
