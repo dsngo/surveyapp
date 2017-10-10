@@ -263,9 +263,9 @@ export const clearSurvey = () => ({
 //         })
 //     }
 // }
-export const addNewQuestion = (questionIndex: number, questionData: any) => ({
+export const addNewQuestion = (questionIndex: number, questionType: any) => ({
   questionIndex,
-  questionData,
+  questionType,
   type: ADD_NEW_QUESTION,
 });
 
@@ -283,4 +283,9 @@ export const updateQuestion = (questionIndex: number, questionData: any) => ({
 export const updateCurrentIndex = (currentIndex: number) => ({
   currentIndex,
   type: "UPDATE_CURRENT_INDEX",
+});
+
+export const updateSelectedQuestionType = (questionType: string) => ({
+  questionType,
+  type: "UPDATE_SELECTED_QUESTION_TYPE",
 });

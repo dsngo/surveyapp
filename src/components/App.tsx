@@ -7,7 +7,7 @@ import FoF from "./FoF";
 import Menu from "./Menu";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import NavBar from "./NavBar";
-// import SurveyForm from "./SurveyForm";
+import SurveyForm from "./SurveyForm";
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
 import PriorityQuestion from "./questionComponents/PriorityQuestion";
 import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestion";
@@ -22,7 +22,7 @@ export const App: React.SFC = () => (
                 <div>
                     <NavBar showSearch />
                     <Switch>
-                        {<Route exact path="/" component={PriorityQuestion} />}
+                        {<Route exact path="/" component={AddQuestionComponent} />}
                         {/* <Route exact path="/" component={Menu} /> */}
                         {/* <Route path="/newform" component={SurveyForm} /> */}
                         {/* <Route path="/form/:id" component={FormSubmit} /> */}

@@ -6,11 +6,19 @@ import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
-
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn,
+  } from 'material-ui/Table';
+  
 class PriorityQuestion extends React.Component<
     {
         questionIndex: number,
-        addNewQuestion: (questionData: any) => any,
+        addNewQuestion: (questionIndex:number, questionType: any) => any,
         removeQuestion: (questionIndex: number) => any,
         updateQuestion: (questionIndex: number, questionData: any) => any,
     },
@@ -124,27 +132,29 @@ class PriorityQuestion extends React.Component<
                     <div className="description">
                         { description }
                     </div>
-                    <div>
+                    <Table>
+                        <TableBody displayRowCheckbox={ false }>
                         {
                             answers.map((ans, answerIndex) => {
                                 return (
-                                    <div>
-                                    <div className="col-sm-8">{ans.answer}</div>
-                                    <div className="col-sm-4">
-                                        <SelectField fullWidth value={ ans.priority } onChange={(event: object, key: number, payload: any) => updatePriority(answerIndex, payload)} >
-                                            {
-                                                length.map((temp: any) => (
-                                                    <MenuItem value={temp} primaryText={temp} />
-                                                ))    
-                                            }
-                                        </SelectField>
-                                    </div>
-                                </div>
+                                    <TableRow key={answerIndex} >
+                                        <TableRowColumn className="col-sm-8">{ans.answer}</TableRowColumn>
+                                        <TableRowColumn className="col-sm-4">
+                                            <SelectField fullWidth value={ ans.priority } onChange={(event: object, key: number, payload: any) => updatePriority(answerIndex, payload)} >
+                                                {
+                                                    length.map((temp: any) => (
+                                                        <MenuItem value={temp} primaryText={temp} key={temp} />
+                                                    ))    
+                                                }
+                                            </SelectField>
+                                        </TableRowColumn>
+                                    </TableRow>
                                 )
                                 
                             })
                         }
-                    </div>
+                        </TableBody>
+                    </Table>
                 </div>
                 
             </div>
@@ -225,7 +235,7 @@ class PriorityQuestion extends React.Component<
                     {
                         additionalContents.map((content, contentIndex) => {
                             return (
-                                <div className="additional-container">
+                                <div className="additional-container" key={contentIndex}>
                                     <div>
                                         <div className="delete-area" onClick={() => handleRemoveAdditionalContent(contentIndex)}>
                                             <i className="fa fa-times" />
@@ -298,7 +308,7 @@ class PriorityQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addNewQuestion: (questionData: any, questionIndex: number) => dispatch(addNewQuestion(questionIndex, questionData)),
+    addNewQuestion: (questionIndex:number, questionType: any) => dispatch(addNewQuestion(questionIndex, questionType)),
     removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });

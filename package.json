@@ -12,7 +12,7 @@
         "lint": "tslint -p . --type-check -t stylish",
         "g:log": "git log --pretty=format:\"%h - %an, %ar : %s\"",
         "g:commit": "git add . & git commit -m ",
-        "g:push": "git push origin son-dev",
+        "g:push": "git pull & git push origin son-dev",
         "g:pull": "git pull origin son-dev",
         "dev": "webpack-dev-server",
         "dev:d": "webpack-dashboard -- webpack-dev-server"

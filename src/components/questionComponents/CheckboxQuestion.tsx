@@ -8,13 +8,12 @@ import Paper from "material-ui/Paper";
 import Checkbox from "material-ui/Checkbox";
 
 class CheckboxQuestion extends React.Component<
-    {
-        questionNumber: number;
-        questionIndex: number;
-        removeQuestion: (questionIndex: number) => any;
-        updateQuestion: (questionIndex: number, questionData: any) => any;
-    },
-    ICheckBox
+  {
+    questionIndex: number;
+    removeQuestion: (questionIndex: number) => any;
+    updateQuestion: (questionIndex: number, questionData: any) => any;
+  },
+  ICheckBox
 > {
     state: ICheckBox = {
         questionType: "checkbox",
@@ -28,14 +27,14 @@ class CheckboxQuestion extends React.Component<
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
-    handleChangeDescription = (newDescription: string) =>
-        this.setState(prevState => ({ ...prevState, description: newDescription }));
+  handleChangeDescription = (newDescription: string) =>
+    this.setState(prevState => ({ ...prevState, description: newDescription }));
 
-    handleRemoveAnswer = (answerIndex: number) => {
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
-    }
+  handleRemoveAnswer = (answerIndex: number) => {
+    this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
+  };
 
-    handleUpdateAnswer = (answerIndex: number, newAnswer: string) =>
+  handleUpdateAnswer = (answerIndex: number, newAnswer: string) =>
     this.setState(prevState => ({
         ...prevState, answers: prevState.answers.map(
             (ans: any, index) => { index === answerIndex ? ans.text = newAnswer : ""; return ans;}
@@ -51,7 +50,7 @@ class CheckboxQuestion extends React.Component<
 
     renderClientForm = () => {
         const {
-            props: { questionNumber, questionIndex, removeQuestion },
+            props: { questionIndex, removeQuestion },
             state: { question, answers, description },
         } = this;
         return (
@@ -83,9 +82,9 @@ class CheckboxQuestion extends React.Component<
             </div>
         )
     }
-    renderCreateForm = () => {
+    renderCreateForm() {
         const {
-            props: { questionNumber, questionIndex, removeQuestion },
+            props: { questionIndex, removeQuestion },
             state: { question, answers, description },
             handleChangeQuestion,
             handleChangeDescription,
@@ -98,24 +97,16 @@ class CheckboxQuestion extends React.Component<
                 <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
                     <i className="fa fa-times" />
                 </div>
-                <TextField
-                    name="questionText"
-                    hintText="Multiple choices question"
-                    multiLine
-                    fullWidth
-                    value={question}
-                    onChange={(e: any) => handleChangeQuestion(e.target.value)}
-                    floatingLabelText={`Question ${questionNumber}`}
-                />
-                <TextField
-                    name="questionDescription"
-                    hintText="Extra Description"
-                    multiLine
+                <div className="input-field input-text-radio input-option-create">
+                  <TextField
+                    name="answerText"
+                    hintText="Add an answer here."
                     fullWidth
                     value={description}
                     onChange={(e: any) => handleChangeDescription(e.target.value)}
                     floatingLabelText={"Question description"}
                 />
+
                 <div className="clear-fix multiple-answer">
                     {answers.map((answer: any, answerIndex: number) => {
                         return (
@@ -153,6 +144,7 @@ class CheckboxQuestion extends React.Component<
                     </div>
                 </div>
             </div>
+            </div>
         );
     }
     render() {
@@ -172,14 +164,14 @@ class CheckboxQuestion extends React.Component<
         )
     }
 
-    componentDidUpdate() {
-        return this.props.updateQuestion(this.props.questionIndex, this.state);
-    }
+  componentDidUpdate() {
+    return this.props.updateQuestion(this.props.questionIndex, this.state);
+  }
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
-    updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
+  removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
+  updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });
 
 export default connect(null, mapDispatchToProps)(CheckboxQuestion);
