@@ -39,7 +39,10 @@ export interface ICheckBox {
   questionType: "checkbox";
   question: string;
   description: string;
-  answers: string[];
+  answers: {
+    correct: boolean,
+    text: string
+  }[];
 }
 export interface IPriorityQuestion {
   [key: string]: any;

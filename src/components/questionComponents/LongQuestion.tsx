@@ -14,9 +14,10 @@ class LongQuestion extends React.Component<
 > {
   state: ILongQuestion = {
     questionType: "longQuestion",
-    question: "",
+    question: "Who am I?",
     description: "",
     answers: [""],
+    completed: true
   };
 
   handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -30,14 +31,31 @@ class LongQuestion extends React.Component<
     return answers.join("\n");
   }
 
-  render() {
+  renderClientForm() {
+    return(
+      <div>
+        <div className="question">{this.state.question}</div>
+        <div className="description">{this.state.description}</div>  
+        <TextField
+          name="answerText"
+          hintText="Put your answer here"
+          multiLine
+          fullWidth
+          rows={4}
+          value={this.getAnswerString(this.state.answers)}
+          onChange={(e: any) => this.handleUpdateAnswer(e.target.value)}
+          floatingLabelText="Answer"
+        />
+      </div>
+    )
+  }
+
+  renderFormCreate() {
     const {
       props: { questionIndex, removeQuestion },
       state: { question, answers, description },
       handleChangeQuestion,
       handleChangeDescription,
-      handleUpdateAnswer,
-      getAnswerString,
     } = this;
     return (
       <div>
@@ -62,16 +80,29 @@ class LongQuestion extends React.Component<
           onChange={(e: any) => handleChangeDescription(e.target.value)}
           floatingLabelText={"Question description"}
         />
-        <TextField
-          name="answerText"
-          hintText="Put your answer here"
-          multiLine
-          fullWidth
-          rows={4}
-          value={getAnswerString(answers)}
-          onChange={(e: any) => handleUpdateAnswer(e.target.value)}
-          floatingLabelText="Answer"
-        />
+      </div>
+    )
+  }
+
+  render() {
+    const {
+      props: { questionIndex, removeQuestion },
+      state: { question, answers, description },
+      handleUpdateAnswer,
+      getAnswerString,
+    } = this;
+    if (this.state.completed === false) return (
+      <div>
+        {
+          this.renderFormCreate()
+        }
+      </div>
+    )
+    return (
+      <div>
+        {
+          this.renderClientForm()
+        }        
       </div>
     );
   }

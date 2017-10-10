@@ -4,6 +4,8 @@ import { IPriorityQuestion } from "../../types/customTypes";
 import { connect } from "react-redux";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
 
 class PriorityQuestion extends React.Component<
     {
@@ -16,13 +18,17 @@ class PriorityQuestion extends React.Component<
 > {
     state: IPriorityQuestion = {
         questionType: "priorityQuestion",
-        question: "",
-        description: "",
+        question: "Test",
+        description: "testing",
         answers: [{
             priority: 0,
-            answer: ""
+            answer: "asdsad"
+        }, {
+            priority: 0,
+            answer: "xcxzc"
         }],
-        additionalContents: []
+        additionalContents: [],
+        completed: true
     };
     handleChangeQuestion = (newQuestion: string) => {
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -89,7 +95,62 @@ class PriorityQuestion extends React.Component<
             }) && prevState.additionalContents
         }))
     }
-    render() {
+
+    updatePriority = (indexAnswer: number, value: any) => {
+        this.setState(prevState => ({
+            ...prevState, 
+            answers: prevState.answers.map((ans, index) => {
+                index === indexAnswer ? ans.priority = value : ""; return ans
+            })
+        }))
+    } 
+    
+    renderClientForm() {
+        const {
+            props: { questionIndex, removeQuestion },
+            state: { question, description, answers, additionalContents },
+            updatePriority
+        } = this;
+        let length:any = [];
+        for (let i = 1; i <= answers.length; i++) {
+           length.push(i);
+        }
+        return (
+            <div>
+                <div>
+                    <div className="question">
+                        { question }
+                    </div>
+                    <div className="description">
+                        { description }
+                    </div>
+                    <div>
+                        {
+                            answers.map((ans, answerIndex) => {
+                                return (
+                                    <div>
+                                    <div className="col-sm-8">{ans.answer}</div>
+                                    <div className="col-sm-4">
+                                        <SelectField fullWidth value={ ans.priority } onChange={(event: object, key: number, payload: any) => updatePriority(answerIndex, payload)} >
+                                            {
+                                                length.map((temp: any) => (
+                                                    <MenuItem value={temp} primaryText={temp} />
+                                                ))    
+                                            }
+                                        </SelectField>
+                                    </div>
+                                </div>
+                                )
+                                
+                            })
+                        }
+                    </div>
+                </div>
+                
+            </div>
+        )
+    }
+    renderFormCreate() {
         const {
             props: { questionIndex, removeQuestion },
             state: { question, answers, additionalContents },
@@ -204,6 +265,7 @@ class PriorityQuestion extends React.Component<
                                         primary={true}
                                         onClick={e => handleAddQuestionAdditionContent(contentIndex, { question: "", answers: "" })}
                                     />
+
                                 </div>
                             )}
 
@@ -213,6 +275,22 @@ class PriorityQuestion extends React.Component<
             </div>
         );
     }
+    render() {
+        if (this.state.completed === false) return (
+            <div>
+                {
+                    this.renderFormCreate()
+                }
+            </div>
+        )
+        return (
+            <div>
+                {
+                    this.renderClientForm()
+                }
+            </div>
+        )
+    }
 
     componentDidUpdate() {
         return this.props.updateQuestion(this.props.questionIndex, this.state);
@@ -220,7 +298,7 @@ class PriorityQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-    addNewQuestion: (questionData: any) => dispatch(addNewQuestion(questionData)),
+    addNewQuestion: (questionData: any, questionIndex: number) => dispatch(addNewQuestion(questionIndex, questionData)),
     removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
     updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });

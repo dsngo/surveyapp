@@ -27,7 +27,7 @@ const Settings: React.SFC<ISettings> = props => {
     return (
         <div className="menu-settings">
             <div>
-                <div className="settings-icon add-question" onClick={e => addNewQuestion(newQuestion)}>
+                <div className="settings-icon add-question">
                     <i className="fa fa-plus-circle" />
                 </div>
             </div>

@@ -4,6 +4,8 @@ import { ICheckBox } from "../../types/customTypes";
 import { connect } from "react-redux";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
+import Paper from "material-ui/Paper";
+import Checkbox from "material-ui/Checkbox";
 
 class CheckboxQuestion extends React.Component<
     {
@@ -16,9 +18,13 @@ class CheckboxQuestion extends React.Component<
 > {
     state: ICheckBox = {
         questionType: "checkbox",
-        question: "",
-        description: "",
-        answers: [""],
+        question: "How are u?",
+        description: "OK...",
+        answers: [{
+            correct: false,
+            text: "Kai"
+        }],
+        completed: true
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
@@ -32,14 +38,52 @@ class CheckboxQuestion extends React.Component<
     handleUpdateAnswer = (answerIndex: number, newAnswer: string) =>
     this.setState(prevState => ({
         ...prevState, answers: prevState.answers.map(
-            (ans: any, index) => { const temp = index === answerIndex ? newAnswer : ans; return temp;}
+            (ans: any, index) => { index === answerIndex ? ans.text = newAnswer : ""; return ans;}
         )
     }))
-
+    updateAnswer = (indexAnswer: number) => {
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.map((answer, index) => {
+            index === indexAnswer ? answer.correct = !answer.correct : ""; return answer;
+        })}));
+    }
     handleAddAnswer = () =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push("") && prevState.answers}));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push({ correct: false, text: ""}) && prevState.answers}));
 
-    render() {
+    renderClientForm = () => {
+        const {
+            props: { questionNumber, questionIndex, removeQuestion },
+            state: { question, answers, description },
+        } = this;
+        return (
+            <div>
+                <Paper zDepth={3}>
+                    <div className="question-field" >
+                        <div className="question">{question}</div>
+                        <div className="description">{description}</div>
+                        <div className="answer">
+                            {
+                                answers.map((answer: any, key: any) => {
+                                    const id = "question_" + "_" + key;
+                                    return (
+                                        <div>
+                                            <Checkbox
+                                                onCheck={e => {
+                                                    this.updateAnswer(key);
+                                                }}
+                                                label={answer.text}
+                                                key={id}
+                                            />
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
+                    </div>
+                </Paper>
+            </div>
+        )
+    }
+    renderCreateForm = () => {
         const {
             props: { questionNumber, questionIndex, removeQuestion },
             state: { question, answers, description },
@@ -91,7 +135,7 @@ class CheckboxQuestion extends React.Component<
                                         name="answerText"
                                         hintText="Add an answer here."
                                         fullWidth
-                                        value={answer}
+                                        value={answer.text}
                                         onChange={(e: any) =>
                                             handleUpdateAnswer(answerIndex, e.target.value)}
                                             
@@ -110,6 +154,22 @@ class CheckboxQuestion extends React.Component<
                 </div>
             </div>
         );
+    }
+    render() {
+        if (this.state.completed !== true) return (
+            <div>
+                {
+                    this.renderCreateForm()
+                }
+            </div>
+        )
+        return (
+            <div>
+                {
+                    this.renderClientForm()
+                }
+            </div>
+        )
     }
 
     componentDidUpdate() {
