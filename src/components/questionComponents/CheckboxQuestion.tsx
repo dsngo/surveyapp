@@ -25,8 +25,9 @@ class CheckboxQuestion extends React.Component<
     handleChangeDescription = (newDescription: string) =>
         this.setState(prevState => ({ ...prevState, description: newDescription }));
 
-    handleRemoveAnswer = (answerIndex: number) =>
+    handleRemoveAnswer = (answerIndex: number) => {
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
+    }
 
     handleUpdateAnswer = (answerIndex: number, newAnswer: string) =>
     this.setState(prevState => ({
@@ -90,9 +91,10 @@ class CheckboxQuestion extends React.Component<
                                         name="answerText"
                                         hintText="Add an answer here."
                                         fullWidth
-                                        value={answer.answer}
+                                        value={answer}
                                         onChange={(e: any) =>
                                             handleUpdateAnswer(answerIndex, e.target.value)}
+                                            
                                     />
                                 </div>
                             </div>
