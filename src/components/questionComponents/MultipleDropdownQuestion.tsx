@@ -163,8 +163,7 @@ class MultipleDropdownQuestion extends React.Component<
                       />
                     ) : (
                       <DropDownMenu
-                        autoWidth={false}
-                        
+                        autoWidth={false}                        
                         style={{ width: "100%" }}
                         value={content.textAnswer}
                         onChange={(e, i, p) => handleUpdateAnswer(answer.answerId, content.refId, p)}
