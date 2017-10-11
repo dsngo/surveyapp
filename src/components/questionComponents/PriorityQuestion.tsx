@@ -4,7 +4,17 @@ import { IPriorityQuestion } from "../../types/customTypes";
 import { connect } from "react-redux";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
-
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableHeaderColumn,
+    TableRow,
+    TableRowColumn,
+  } from 'material-ui/Table';
+  
 class PriorityQuestion extends React.Component<
     {
         questionIndex: number,
@@ -16,13 +26,17 @@ class PriorityQuestion extends React.Component<
 > {
     state: IPriorityQuestion = {
         questionType: "priorityQuestion",
-        question: "",
-        description: "",
+        question: "Test",
+        description: "testing",
         answers: [{
             priority: 0,
-            answer: ""
+            answer: "asdsad"
+        }, {
+            priority: 0,
+            answer: "xcxzc"
         }],
-        additionalContents: []
+        additionalContents: [],
+        completed: true
     };
     handleChangeQuestion = (newQuestion: string) => {
         this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -89,7 +103,64 @@ class PriorityQuestion extends React.Component<
             }) && prevState.additionalContents
         }))
     }
-    render() {
+
+    updatePriority = (indexAnswer: number, value: any) => {
+        this.setState(prevState => ({
+            ...prevState, 
+            answers: prevState.answers.map((ans, index) => {
+                index === indexAnswer ? ans.priority = value : ""; return ans
+            })
+        }))
+    } 
+    
+    renderClientForm() {
+        const {
+            props: { questionIndex, removeQuestion },
+            state: { question, description, answers, additionalContents },
+            updatePriority
+        } = this;
+        let length:any = [];
+        for (let i = 1; i <= answers.length; i++) {
+           length.push(i);
+        }
+        return (
+            <div>
+                <div>
+                    <div className="question">
+                        { question }
+                    </div>
+                    <div className="description">
+                        { description }
+                    </div>
+                    <Table>
+                        <TableBody displayRowCheckbox={ false }>
+                        {
+                            answers.map((ans, answerIndex) => {
+                                return (
+                                    <TableRow key={answerIndex} >
+                                        <TableRowColumn className="col-sm-8">{ans.answer}</TableRowColumn>
+                                        <TableRowColumn className="col-sm-4">
+                                            <SelectField fullWidth value={ ans.priority } onChange={(event: object, key: number, payload: any) => updatePriority(answerIndex, payload)} >
+                                                {
+                                                    length.map((temp: any) => (
+                                                        <MenuItem value={temp} primaryText={temp} key={temp} />
+                                                    ))    
+                                                }
+                                            </SelectField>
+                                        </TableRowColumn>
+                                    </TableRow>
+                                )
+                                
+                            })
+                        }
+                        </TableBody>
+                    </Table>
+                </div>
+                
+            </div>
+        )
+    }
+    renderFormCreate() {
         const {
             props: { questionIndex, removeQuestion },
             state: { question, answers, additionalContents },
@@ -164,7 +235,7 @@ class PriorityQuestion extends React.Component<
                     {
                         additionalContents.map((content, contentIndex) => {
                             return (
-                                <div className="additional-container">
+                                <div className="additional-container" key={contentIndex}>
                                     <div>
                                         <div className="delete-area" onClick={() => handleRemoveAdditionalContent(contentIndex)}>
                                             <i className="fa fa-times" />
@@ -204,6 +275,7 @@ class PriorityQuestion extends React.Component<
                                         primary={true}
                                         onClick={e => handleAddQuestionAdditionContent(contentIndex, { question: "", answers: "" })}
                                     />
+
                                 </div>
                             )}
 
@@ -212,6 +284,22 @@ class PriorityQuestion extends React.Component<
                 </div>
             </div>
         );
+    }
+    render() {
+        if (this.state.completed === false) return (
+            <div>
+                {
+                    this.renderFormCreate()
+                }
+            </div>
+        )
+        return (
+            <div>
+                {
+                    this.renderClientForm()
+                }
+            </div>
+        )
     }
 
     componentDidUpdate() {

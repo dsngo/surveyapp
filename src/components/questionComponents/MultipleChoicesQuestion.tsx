@@ -40,6 +40,9 @@ class MultipleChoicesQuestion extends React.Component<
     handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers}));
 
+    renderCreateForm() {
+        
+    }
     render() {
         const {
             props: { questionIndex, removeQuestion },
