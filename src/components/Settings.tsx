@@ -1,7 +1,6 @@
 import * as React from "react";
-import { addArea, addNewQuestion, divideSection } from "./redux/actionCreators";
+import { addNewQuestion, divideSection } from "./redux/actionCreators";
 import { connect } from "react-redux";
-import * as Types from "../types/customTypes";
 
 interface ISettings {
   // addArea: (area: any) => string;

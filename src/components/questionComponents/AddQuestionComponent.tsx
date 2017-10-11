@@ -15,7 +15,6 @@ import IconButton from "material-ui/IconButton";
 import ContentClear from "material-ui/svg-icons/content/clear";
 import FlatButton from "material-ui/FlatButton";
 import { removeQuestion, updateCurrentIndex } from "../redux/actionCreators";
-import { red300 } from "material-ui/styles/colors";
 import SelectField from "material-ui/SelectField";
 
 const options = {

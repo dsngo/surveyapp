@@ -9,11 +9,9 @@ import MenuItem from "material-ui/MenuItem";
 import {
     Table,
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
     TableRow,
     TableRowColumn,
-  } from 'material-ui/Table';
+  } from "material-ui/Table";
   
 class PriorityQuestion extends React.Component<
     {
@@ -119,7 +117,7 @@ class PriorityQuestion extends React.Component<
             state: { question, description, answers, additionalContents },
             updatePriority
         } = this;
-        let length:any = [];
+        const length:any = [];
         for (let i = 1; i <= answers.length; i++) {
            length.push(i);
         }

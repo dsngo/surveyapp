@@ -64,6 +64,8 @@ export interface ISurveyFormFromDatabase {
   author: { username: string };
   isDeleted: boolean;
   completed: boolean;
+  sectionBreaks: number[];
+  formId: string;
 }
 
 export interface ISurveyData {

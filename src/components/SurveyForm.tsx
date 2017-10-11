@@ -2,31 +2,16 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
-import Settings from "./Settings";
 import {
-  changeTypeAnswer,
-  deleteArea,
-  chooseArea,
-  updateDescriptionArea,
   updateInfoSurvey,
   saveSurvey,
   clearMessage,
   getSurveyById,
-  clearSurvey,
 } from "./redux/actionCreators";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import Checkbox from "material-ui/Checkbox";
-import ActionFavorite from "material-ui/svg-icons/action/favorite";
-import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
-import Visibility from "material-ui/svg-icons/action/visibility";
-import VisibilityOff from "material-ui/svg-icons/action/visibility-off";
-import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
-import { Tabs, Tab } from "material-ui/Tabs";
+import { Tabs } from "material-ui/Tabs";
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
 
 interface ISurveyFormProps {
@@ -43,8 +28,8 @@ interface ISurveyFormProps {
 
 class SurveyForm extends React.Component<ISurveyFormProps> {
   static defaultProps = {
-    surveyInfo: { formId: "123test"}
-  }
+    surveyInfo: { formId: "123test" },
+  };
   scrollBars: Scrollbars;
   tempLengthArea = 0;
   state = {
