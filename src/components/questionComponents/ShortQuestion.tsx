@@ -14,9 +14,10 @@ class ShortQuestion extends React.Component<
 > {
     state: IShortQuestion = {
         questionType: "shortQuestion",
-        question: "",
-        description: "",
+        question: "What's your favorite sport?",
+        description: "Whatever",
         answers: [""],
+        completed: true
     };
 
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -30,7 +31,30 @@ class ShortQuestion extends React.Component<
         return answers.join("\n");
     }
 
-    render() {
+    renderClientForm() {
+        return (
+            <div>
+                <div className="question-info">
+                    <div className="question">{this.state.question}</div>
+                    <div className="description">{this.state.description}</div>
+                </div>
+                <div className="padding-25-except-top">
+                    <TextField
+                        name="answerText"
+                        hintText="Put your answer here"
+                        multiLine
+                        fullWidth
+                        rows={2}
+                        value={this.getAnswerString(this.state.answers)}
+                        onChange={(e: any) => this.handleUpdateAnswer(e.target.value)}
+                        floatingLabelText="Answer"
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    renderFromCreate() {
         const {
             props: { removeQuestion, questionIndex },
             state: { question, answers, description },
@@ -44,34 +68,41 @@ class ShortQuestion extends React.Component<
                 <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
                     <i className="fa fa-times" />
                 </div>
-                <TextField
-                    name="questionText"
-                    hintText="Short question"
-                    multiLine
-                    fullWidth
-                    value={question}
-                    onChange={(e: any) => handleChangeQuestion(e.target.value)}
-                    floatingLabelText={`Question ${questionIndex + 1}`}
-                />
-                <TextField
-                    name="questionDescription"
-                    hintText="Extra Description"
-                    multiLine
-                    fullWidth
-                    value={description}
-                    onChange={(e: any) => handleChangeDescription(e.target.value)}
-                    floatingLabelText={"Question description"}
-                />
-                <TextField
-                    name="answerText"
-                    hintText="Put your answer here"
-                    multiLine
-                    fullWidth
-                    rows={2}
-                    value={getAnswerString(answers)}
-                    onChange={(e: any) => handleUpdateAnswer(e.target.value)}
-                    floatingLabelText="Answer"
-                />
+                <div className="padding-25-except-top">
+                    <TextField
+                        name="questionText"
+                        hintText="Short question"
+                        multiLine
+                        fullWidth
+                        value={question}
+                        onChange={(e: any) => handleChangeQuestion(e.target.value)}
+                        floatingLabelText={`Question ${questionIndex + 1}`}
+                    />
+                    <TextField
+                        name="questionDescription"
+                        hintText="Extra Description"
+                        multiLine
+                        fullWidth
+                        value={description}
+                        onChange={(e: any) => handleChangeDescription(e.target.value)}
+                        floatingLabelText={"Question description"}
+                    />
+                </div>
+               
+            </div>
+        )
+    }
+    render() {
+        
+        return (
+            <div>
+                {
+                    this.state.completed === false ? (
+                        this.renderFromCreate()
+                    ) : (
+                        this.renderClientForm()
+                    )
+                }
             </div>
         );
     }

@@ -15,6 +15,7 @@ import IconButton from "material-ui/IconButton";
 import ContentClear from "material-ui/svg-icons/content/clear";
 import FlatButton from "material-ui/FlatButton";
 import { removeQuestion, updateCurrentIndex } from "../redux/actionCreators";
+import SelectField from "material-ui/SelectField";
 
 const options = {
   "Long Question": "longQuestion",
@@ -86,9 +87,12 @@ class AddQuestionComponent extends React.Component<
         >
           <ContentClear />
         </IconButton>
-        <DropDownMenu onChange={(e, i, p) => handleChangeQuestionType(p)}>
-          {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
-        </DropDownMenu>
+        <div className="padding-25">
+          <SelectField fullWidth onChange={(e, i, p) => handleChangeQuestionType(p)} value={ questionType }>
+            {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
+          </SelectField>
+        </div>
+        
         {handleCreateQuestion(questionType || selectedQuestionType, questionIndex)}
       </Paper>
     );
