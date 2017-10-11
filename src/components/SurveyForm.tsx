@@ -43,8 +43,8 @@ interface ISurveyFormProps {
 
 class SurveyForm extends React.Component<ISurveyFormProps> {
   static defaultProps = {
-    surveyInfo: { formId: "123test"}
-  }
+    surveyInfo: { formId: "123test" },
+  };
   scrollBars: Scrollbars;
   tempLengthArea = 0;
   state = {

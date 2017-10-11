@@ -64,7 +64,7 @@ interface IClientSurveyAnswers {
 
 const DEFAULT_STATE = {
   searchTerm: "",
-  apiData: {},
+  apiData: [{ formId: "123as", thumbnail: "asdf33aefasf", title: "string", completed: false }],
   surveyInfo: {
     title: "",
     description: "",
@@ -79,115 +79,12 @@ const DEFAULT_STATE = {
     currentIndex: 1,
     selectedQuestionType: "",
     submitStatus: "",
-
   },
 };
 
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
 const apiData = (state = {}, action: any) => (action.type === ADD_API_DATA ? { [action.apiData.id]: action.apiData } : state);
-const surveyData = (
-  state: ISurveyData = {
-    info: { title: "", id: "", description: "" },
-    content: [],
-    msgError: "",
-    msgSuccess: "",
-    responses: [],
-  },
-  action: any,
-) => {
-  const data = { ...state };
-  switch (action.type) {
-    case CLEAR_SURVEY:
-      data.info = {
-        title: "",
-        id: "",
-        description: "",
-      };
-      data.content = [];
-      data.msgError = "";
-      data.msgSuccess = "";
-      data.responses = [];
-      return data;
-    case UPDATE_INFO_SURVEY:
-      data.info[action.field] = action.value;
-      return data;
-    case ADD_AREA:
-      data.content.splice(action.currentArea + 1, 0, action.area);
-      return data;
-    case CHANGE_QUESTION_DETAIL:
-      data.content[action.index].question = action.value;
-      return data;
-    case CHANGE_TYPE_ANSWER:
-      data.content[action.index].questionType = action.questionType;
-      data.content[action.index].multipleAnswer = [];
-      if (
-        action.questionType === "multipleChoices" ||
-        action.questionType === "checkbox" ||
-        action.questionType === "dropdown" ||
-        action.questionType === "priority" ||
-        action.questionType === "multiDropdown"
-      )
-        data.content[action.index].multipleAnswer = [""];
-      return data;
-    case DELETE_AREA:
-      data.content.splice(action.index, 1);
-      return data;
-    case ADD_MULTIPLE_CHOICE:
-      data.content[action.index].multipleAnswer.push("");
-      return data;
-    case UPDATE_MULTIPLE_CHOICE:
-      data.content[action.index].multipleAnswer[action.answerIndex] = action.answerContent;
-      return data;
-    case DELETE_MULTIPLE_CHOICE:
-      data.content[action.index].multipleAnswer.splice(action.answerIndex, 1);
-      return data;
-    case UPDATE_DESCRIPTION_AREA:
-      action.field === "title"
-        ? (data.content[action.index].title = action.value)
-        : (data.content[action.index].description = action.value);
-      return data;
-    case MISSING_INFO:
-      data.msgError = action.msgError;
-      return data;
-    case CLEAR_MESSAGE:
-      data.msgError = "";
-      data.msgSuccess = "";
-      return data;
-    case CREATE_SUCCESS:
-      data.msgSuccess = "success";
-      return data;
-    case GET_SURVEY:
-      data.info.id = action.survey._id;
-      data.info.title = action.survey.title;
-      data.info.description = action.survey.description;
-      data.content = JSON.parse(action.survey.content);
-      return data;
-    case GET_RESPONSES:
-      data.responses = action.responses;
-      return data;
-    default:
-      return state;
-  }
-};
-
-const surveySubmit = (state: ISurveySubmit = { loading: true, survey: {}, error: false, errorMsg: "" }, action: any) => {
-  const data = { ...state };
-  switch (action.type) {
-    case GET_SURVEY_ERROR:
-      data.loading = false;
-      data.error = true;
-      data.errorMsg = action.message;
-      return data;
-    case GET_SURVEY_SUCCESS:
-      data.loading = false;
-      data.error = false;
-      data.survey = action.survey;
-      return data;
-    default:
-      return state;
-  }
-};
 
 const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) => {
   let data = { ...state };
@@ -200,80 +97,52 @@ const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) => {
   }
 };
 
-const surveyResponse = (state: ISurveyResponse = { question: [] }, action: any) => {
-  const data = { ...state };
-  switch (action.type) {
-    case INIT_SURVEY_QUESTION:
-      data.question = JSON.parse(action.survey.content);
-      return data;
-    case UPDATE_ANSWER_RESPONSE:
-      const answer = {
-        content: action.answer,
-      };
-      if (!action.multiAnswer) {
-        data.question[action.index].answer = answer;
-        return data;
-      }
-      if (!data.question[action.index].answer) {
-        data.question[action.index].answer = [answer];
-        return data;
-      }
-      const index = checkAnswerExist(answer, data.question[action.index].answer);
-      if (index !== -1) {
-        data.question[action.index].answer.splice(index, 1);
-        return data;
-      }
-      data.question[action.index].answer.push(answer);
-      return data;
-    default:
-      return state;
-  }
-};
+const surveyInfo = (state = {}, action: any) =>
+  (action.type === "GET_DATA_FROM_DB" && { ...action.surveyInfo }) || 
+  (action.type === "SAVE_SURVEY_TO_DB" && { ...state })
+;
 
-// const status = (
-//   state: IStatus = {
-//     submitStatus: { error: false, message: "" },
-//     creationFormStatus: { error: false, message: "" },
-//     clientSurveyStatus: { error: false, message: "", isLoading: false },
-//   },
-//   action: any,
-// ) => {
-//   const data = { ...state };
-//   switch (action.type) {
-//     case SUBMIT_SUCCESS:
-//       data.submitStatus.message = "success";
-//       return data;
-//     case CLEAR_SUBMIT_STATUS:
-//       data.submitStatus.message = "";
-//       return data;
-//     default:
-//       return state;
-//   }
-// };
+const clientSurveyData = (state = {}, action: any) =>
+  (action.type === "GET_COMPLETED_SURVEY_BY_ID" && { ...action.clientSurveyData }) || 
+  (action.type === "SAVE_SURVEY_TO_DB" && {})
+;
 
-const surveyContents = (state: {}[], action: any) =>
-  (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex, 0, action.questionData), { ...state })) ||
-  (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), { ...state })) ||
-  (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), { ...state })) || { ...state };
+const surveyContents = (
+  state = [
+    {
+      questionType: "longQuestion",
+      question: "",
+      description: "",
+      answers: [""],
+    },
+  ],
+  action: any,
+) =>
+  (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex, 0, action.questionData), [...state])) ||
+  (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
+  (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
+  (action.type === "GET_DATA_FROM_DB" && [...action.surveyContents]) ||
+  (action.type === "SAVE_FORM_TO_DB" && []) || [...state]
+;
 
-const stateStatus = (state: {}, action: any) => 
-  (action.type === "UPDATE_CURRENT_STATUS" && {...state, currentIndex: action.currentIndex}) ||
-  (action.type === "SUBMIT_SUCCESS" && {...state, submitStatus: "Success"}) ||
-  (action.type === "SUBMIT_ERROR" && {...state, submitStatus: "Error"}) ||
-  (action.type === "UPDATE_SELECTED_QUESTION_TYPE" && {...state, selectedQuestionType: action.questionType}) ||
-  (action.type === "CLEAR_SUBMIT_STATUS" && {...state, submitStatus: ""} );
-  
 const sectionDivide = (state: boolean = false, action: any) => (action.type === DIVIDE_SECTION ? action.value : state);
 
 const currentArea = (state: number = -1, action: any) => (action.type === CHOOSE_AREA ? action.index : state);
 
+const stateStatus = (state: {}, action: any) =>
+  (action.type === "UPDATE_CURRENT_STATUS" && { ...state, currentIndex: action.currentIndex }) ||
+  (action.type === "SUBMIT_SUCCESS" && { ...state, submitStatus: "Success" }) ||
+  (action.type === "SUBMIT_ERROR" && { ...state, submitStatus: "Error" }) ||
+  (action.type === "UPDATE_SELECTED_QUESTION_TYPE" && { ...state, selectedQuestionType: action.questionType }) ||
+  (action.type === "CLEAR_SUBMIT_STATUS" && { ...state, submitStatus: "" }) ||
+  (action.type === "SAVE_SURVEY_TO_DB" && { ...state, submitStatus: action.statusMessage })
+;
+
 export const rootReducer = combineReducers({
   searchTerm,
   apiData,
-  surveyData,
   currentArea,
-  surveySubmit,
-  surveyResponse,
+  clientSurveyData,
   stateStatus,
   recentForms,
   // surveyContents
