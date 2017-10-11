@@ -20,7 +20,7 @@ const DEFAULT_STATE = {
     isDeleted: false,
     completed: false,
     author: { username: "daniel" },
-    sectionBreaks: [1, 2, 3, 4, 5],
+    sectionBreaks: [{index: 1, title: "title section", description: "section desc", bigBreak: false}],
     formId: "askjfdq23",
   },
   surveyContents: [
@@ -46,8 +46,8 @@ const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) =>
 
 const surveyInfo = (state = {}, action: any) =>
   (action.type === "GET_DATA_FROM_DB" && { ...action.surveyInfo }) ||
-  (action.type === "SAVE_SURVEY_TO_DB" && { ...state }) ||
-  (action.type === "BREAK_SECTION" && { ...state, sectionBreaks: action.sectionBreaks }) || { ...state };
+  (action.type === "SAVE_FORM_TO_DB" && { ...state }) ||
+  (action.type === "UPDATE_SECTION_BREAK" && { ...state, sectionBreaks: action.sectionBreaks }) || { ...state };
 
 const clientSurveyData = (state = {}, action: any) =>
   (action.type === "GET_CLIENT_SURVEY_FROM_DB" && { ...action.clientSurveyData }) ||

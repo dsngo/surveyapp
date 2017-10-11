@@ -39,151 +39,6 @@ export const setSearchTerm = (searchTerm: string) => ({
   type: SET_SEARCH_TERM,
 });
 
-export const addArea = (area: any) => {
-  return async (dispatch: any, getState: any) => {
-    const currentArea = getState().currentArea;
-    dispatch({
-      area,
-      currentArea,
-      type: ADD_AREA,
-    });
-  };
-};
-export const changeTypeAnswer = (index: number, questionType: string) => ({
-  index,
-  questionType,
-  type: CHANGE_TYPE_ANSWER,
-});
-
-export const deleteArea = (index: number) => ({
-  index,
-  type: DELETE_AREA,
-});
-
-export const chooseArea = (index: number) => ({
-  index,
-  type: CHOOSE_AREA,
-});
-
-export const addMultipleChoice = (index: number) => ({
-  index,
-  type: ADD_MULTIPLE_CHOICE,
-});
-
-export const updateMultipleChoice = (index: number, answerIndex: number, answerContent: string) => ({
-  index,
-  answerIndex,
-  answerContent,
-  type: UPDATE_MULTIPLE_CHOICE,
-});
-
-export const deleteMultipleChoice = (index: number, answerIndex: number) => ({
-  index,
-  answerIndex,
-  type: DELETE_MULTIPLE_CHOICE,
-});
-
-export const changeQuestion = (index: number, value: string) => ({
-  index,
-  value,
-  type: CHANGE_QUESTION_DETAIL,
-});
-
-export const updateDescriptionArea = (index: number, field: string, value: string) => ({
-  index,
-  field,
-  value,
-  type: UPDATE_DESCRIPTION_AREA,
-});
-
-export const divideSection = (value: boolean) => ({
-  value,
-  type: DIVIDE_SECTION,
-});
-
-export const saveSurvey = () => {
-  return async (dispatch: any, getState: any) => {
-    const surveyData = getState().surveyData;
-    let msgError = "";
-    if (!surveyData.info.description) msgError = "Please input your survey description.";
-    if (!surveyData.info.title) msgError = "Please input your survey title";
-    let checkMissing = false;
-    surveyData.content.map((ctn: any) => {
-      if (ctn.type === "description" && (!ctn.title || !ctn.description)) {
-        checkMissing = true;
-      }
-      if (ctn.type === "question" && (ctn.questionType === "" || ctn.question === "")) checkMissing = true;
-      if (
-        ctn.type === "question" &&
-        (ctn.questionType === "checkbox" || ctn.questionType === "multipleChoices" || ctn.questionType === "dropdown")
-      ) {
-        ctn.multipleAnswer.map((asw: any) => {
-          if (asw === "") {
-            checkMissing = true;
-          }
-        });
-      }
-    });
-    if (checkMissing) {
-      msgError = "Please input your survey info.";
-    }
-    if (msgError) {
-      dispatch({
-        msgError,
-        type: MISSING_INFO,
-      });
-      setTimeout(() => {
-        dispatch({
-          type: CLEAR_MESSAGE,
-        });
-      }, 2000);
-    } else {
-      surveyData.action = "saved";
-      let resSaveSurvey;
-      if (!surveyData.info.id) {
-        resSaveSurvey = await axios.post(urlServer + "/survey", surveyData);
-      } else {
-        resSaveSurvey = await axios.put(urlServer + "/survey/" + surveyData.info.id, surveyData);
-      }
-      dispatch({
-        type: CREATE_SUCCESS,
-      });
-    }
-  };
-};
-
-export const clearMessage = () => ({
-  type: CLEAR_MESSAGE,
-});
-
-export const updateInfoSurvey = (field: string, value: string) => ({
-  field,
-  value,
-  type: UPDATE_INFO_SURVEY,
-});
-
-export const getSurveySubmitById = (id: string) => {
-  return async (dispatch: any, getState: any) => {
-    const res = await axios.get(urlServer + "/survey/" + id);
-    const data = res.data;
-    if (data.code) {
-      dispatch({
-        type: GET_SURVEY_ERROR,
-        message: data.message,
-      });
-    } else {
-      dispatch({
-        type: GET_SURVEY_SUCCESS,
-        survey: data.data,
-      });
-      dispatch({
-        type: INIT_SURVEY_QUESTION,
-        survey: data.data,
-      });
-    }
-  };
-};
-
 export const updateAnswer = (index: number, answer: string, multiAnswer: boolean) => ({
   index,
   answer,
@@ -200,25 +55,6 @@ export const submitResponse = (id: string) => {
       dispatch({
         type: SUBMIT_SUCCESS,
       });
-    }
-  };
-};
-
-export const getSurveyById = (formId: string) => {
-  return async (dispatch: any, getState: any) => {
-    const resGetById = await axios.get(urlServer + "/survey/" + formId);
-    if (resGetById.data.data) {
-      dispatch({
-        type: GET_SURVEY,
-        survey: resGetById.data.data,
-      });
-      const resGetResponsesBySurvey = await axios.get(urlServer + "/client-survey/" + formId);
-      if (resGetResponsesBySurvey.data.data) {
-        dispatch({
-          type: GET_RESPONSES,
-          responses: resGetResponsesBySurvey.data.data,
-        });
-      }
     }
   };
 };
@@ -252,6 +88,25 @@ export const updateSelectedQuestionType = (questionType: string) => ({
   type: "UPDATE_SELECTED_QUESTION_TYPE",
 });
 
+export const updateSectionBreaks = (currentIndex: number, title: string, description: string, bigBreak: boolean) => (
+  dispatch: any,
+  getState: any,
+) => {
+  const { sectionBreaks } = getState().surveyInfo;
+  const test = sectionBreaks.findIndex((e: any) => e.index === currentIndex);
+  const section = { title, description, bigBreak, index: currentIndex };
+  if (test > 0) {
+    sectionBreaks[test] = section;
+  } else {
+    sectionBreaks.push(section);
+  }
+  dispatch({
+    sectionBreaks,
+    type: "UPDATE_SECTION_BREAK",
+  });
+};
+
+// API REQUESTS
 export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
   const recentForms = (await axios.get(`${urlServer}/survey/index`)).data.data;
   dispatch({
@@ -260,20 +115,36 @@ export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: an
   });
 };
 
-export const saveFormToDb = () => async (dispatch: any, getState: any) => {
-  const contents = getState().surveyContents;
-  const { formId, ...surveyInfo } = getState().surveyInfo;
-  const formData = { ...surveyInfo, contents };
-
-  const submitStatus = await formId
-    ? axios.put(`${urlServer}/survey/${formId}`, formData)
-    : axios.post(`${urlServer}/survey`, formData);
+export const getDataFromDb = (username = "Daniel") => async (dispatch: any, getState: any) => {
+  const { formId } = getState().surveyInfo;
+  const { data: { contents: surveyContents, ...surveyInfo }, message: submitStatus } = (await axios.get(
+    `${urlServer}/survey/${formId}`,
+  )).data;
+  if (surveyContents) {
+    dispatch({
+      surveyContents,
+      surveyInfo,
+      type: "GET_DATA_FROM_DB",
+    });
+  }
   dispatch({
     submitStatus,
     type: "UPDATE_SUBMIT_STATUS",
   });
 };
 
-// resSaveSurvey = await axios.post(urlServer + "/survey", surveyData);
-// } else {
-//   resSaveSurvey = await axios.put(urlServer + "/survey/" + surveyData.info.id, surveyData);
+export const saveFormToDb = () => async (dispatch: any, getState: any) => {
+  const contents = getState().surveyContents;
+  const { formId, ...surveyInfo } = getState().surveyInfo;
+  const formData = { ...surveyInfo, contents };
+  const submitStatus = await (formId
+    ? axios.put(`${urlServer}/survey/${formId}`, formData)
+    : axios.post(`${urlServer}/survey`, formData));
+  dispatch({
+    type: "SAVE_FORM_TO_DB",
+  });
+  dispatch({
+    submitStatus,
+    type: "UPDATE_SUBMIT_STATUS",
+  });
+};
