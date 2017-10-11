@@ -1,16 +1,13 @@
 import * as React from "react";
 import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
-import { removeQuestion, updateQuestion } from "../redux/actionCreators";
+import { updateQuestion } from "../redux/actionCreators";
 import { IMultipleDropdown } from "../../types/customTypes";
 import { connect } from "react-redux";
 import ContentAdd from "material-ui/svg-icons/content/add";
-import ContentClear from "material-ui/svg-icons/content/clear";
 import ContentRemove from "material-ui/svg-icons/content/remove";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import IconButton from "material-ui/IconButton";
 import MenuItem from "material-ui/MenuItem";
 import DropDownMenu from "material-ui/DropDownMenu";
-import SelectField from "material-ui/SelectField";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 

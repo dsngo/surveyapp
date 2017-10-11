@@ -1,7 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import Template from "./Template";
 import { getRecentForms } from "./redux/actionCreators";
 interface IRecentForms {
     recentForms: any;

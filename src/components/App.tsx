@@ -4,16 +4,9 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import FoF from "./FoF";
 // import FormSubmit from "./FormSubmit";
-import Menu from "./Menu";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import NavBar from "./NavBar";
-import SurveyForm from "./SurveyForm";
-import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
-import PriorityQuestion from "./questionComponents/PriorityQuestion";
-import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestion";
 import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
-import CheckboxQuestion from "./questionComponents/CheckboxQuestion";
-import LongQuestion from "./questionComponents/LongQuestion";
 
 export const App: React.SFC = () => (
     <Router>
