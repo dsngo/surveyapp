@@ -5,7 +5,6 @@ import Scrollbars from "react-custom-scrollbars";
 import {
   updateInfoSurvey,
   saveSurvey,
-  clearMessage,
   getSurveyById,
 } from "./redux/actionCreators";
 import Dialog from "material-ui/Dialog";
@@ -88,7 +87,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
           <div className="container survey-form" style={{ paddingTop: "15px" }}>
             <div className="form-create clear-fix">
               <Tabs value={this.state.currentTab} onChange={this.handleChangeCurrentTab}>
-                <MultipleDropdownQuestion {...{ questionIndex: 1, questionNumber: 2 }} />
+                <MultipleDropdownQuestion {...{ questionIndex: 1 }} />
                 {/* <Tab label="Question" value="question">
                   <Settings />
                   <div className="form-content">
@@ -163,9 +162,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: any) => ({
   updateInfoSurvey: (field: string, value: string) => dispatch(updateInfoSurvey(field, value)),
   saveSurvey: () => dispatch(saveSurvey()),
-  clearMessage: () => dispatch(clearMessage()),
   getSurveyById: (id: string) => dispatch(getSurveyById(id)),
-  // clearSurvey: () => dispatch(clearSurvey()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SurveyForm);

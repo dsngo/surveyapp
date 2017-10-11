@@ -39,11 +39,6 @@ export const setSearchTerm = (searchTerm: string) => ({
   type: SET_SEARCH_TERM,
 });
 
-// export const addArea = (area: any) => ({
-//     area,
-//     type: ADD_AREA,
-// });
-
 export const addArea = (area: any) => {
   return async (dispatch: any, getState: any) => {
     const currentArea = getState().currentArea;
@@ -209,15 +204,15 @@ export const submitResponse = (id: string) => {
   };
 };
 
-export const getSurveyById = (id: string) => {
+export const getSurveyById = (formId: string) => {
   return async (dispatch: any, getState: any) => {
-    const resGetById = await axios.get(urlServer + "/survey/" + id);
+    const resGetById = await axios.get(urlServer + "/survey/" + formId);
     if (resGetById.data.data) {
       dispatch({
         type: GET_SURVEY,
         survey: resGetById.data.data,
       });
-      const resGetResponsesBySurvey = await axios.get(urlServer + "/client-survey/" + id);
+      const resGetResponsesBySurvey = await axios.get(urlServer + "/client-survey/" + formId);
       if (resGetResponsesBySurvey.data.data) {
         dispatch({
           type: GET_RESPONSES,
@@ -227,42 +222,9 @@ export const getSurveyById = (id: string) => {
     }
   };
 };
-export const clearSubmitStatus = () => ({
-  type: CLEAR_SUBMIT_STATUS,
-});
-
-export const getRecentForms = () => {
-  return async (dispatch: any, getState: any) => {
-    const resForms = await axios.get(urlServer + "/survey/index");
-    const forms = resForms.data.data;
-
-    dispatch({
-      forms,
-      type: GET_RECENT_FORMS,
-    });
-  };
-};
-
-export const clearSurvey = () => ({
-  type: CLEAR_SURVEY,
-});
 
 // ==================
 
-// export const addNewQuestion = (questionData: any) => {
-//     console.log(questionData);
-
-//     return async (dispatch: any, getState: any) => {
-//         const questionIndex = getState().currentArea;
-//         console.log(questionIndex);
-
-//         dispatch ({
-// questionIndex,
-// questionData,
-// type: ADD_NEW_QUESTION,
-//         })
-//     }
-// }
 export const addNewQuestion = (questionIndex: number, questionType: any) => ({
   questionIndex,
   questionType,
@@ -289,3 +251,29 @@ export const updateSelectedQuestionType = (questionType: string) => ({
   questionType,
   type: "UPDATE_SELECTED_QUESTION_TYPE",
 });
+
+export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
+  const recentForms = (await axios.get(`${urlServer}/survey/index`)).data.data;
+  dispatch({
+    recentForms,
+    type: "GET_RECENT_FORMS_FROM_DB",
+  });
+};
+
+export const saveFormToDb = () => async (dispatch: any, getState: any) => {
+  const contents = getState().surveyContents;
+  const { formId, ...surveyInfo } = getState().surveyInfo;
+  const formData = { ...surveyInfo, contents };
+
+  const submitStatus = await formId
+    ? axios.put(`${urlServer}/survey/${formId}`, formData)
+    : axios.post(`${urlServer}/survey`, formData);
+  dispatch({
+    submitStatus,
+    type: "UPDATE_SUBMIT_STATUS",
+  });
+};
+
+// resSaveSurvey = await axios.post(urlServer + "/survey", surveyData);
+// } else {
+//   resSaveSurvey = await axios.put(urlServer + "/survey/" + surveyData.info.id, surveyData);
