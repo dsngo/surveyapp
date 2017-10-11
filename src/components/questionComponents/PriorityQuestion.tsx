@@ -126,12 +126,15 @@ class PriorityQuestion extends React.Component<
         return (
             <div>
                 <div>
-                    <div className="question">
-                        { question }
+                    <div className="question-info">
+                        <div className="question">
+                            { question }
+                        </div>
+                        <div className="description">
+                            { description }
+                        </div>
                     </div>
-                    <div className="description">
-                        { description }
-                    </div>
+                    
                     <Table>
                         <TableBody displayRowCheckbox={ false }>
                         {

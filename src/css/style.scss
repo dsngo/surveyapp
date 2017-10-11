@@ -475,3 +475,25 @@ select {
         right: 50px;
     }
 }
+
+.question-info {
+    padding-left: 25px;
+    padding-right: 25px;
+    .question {
+        font-weight: bold;
+        font-size: 18px;
+        padding-bottom: 5px;
+    }
+    .description {
+        font-size: 15px;
+        font-style: italic;
+    }
+}
+
+.padding-25 {
+    padding: 25px;
+}
+
+.padding-25-except-top {
+    padding: 0 25px 25px 25px;
+}

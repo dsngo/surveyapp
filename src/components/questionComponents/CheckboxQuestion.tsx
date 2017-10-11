@@ -57,8 +57,10 @@ class CheckboxQuestion extends React.Component<
             <div>
                 <Paper zDepth={3}>
                     <div className="question-field" >
-                        <div className="question">{question}</div>
-                        <div className="description">{description}</div>
+                        <div className="question-info">
+                            <div className="question">{question}</div>
+                            <div className="description">{description}</div>
+                        </div>
                         <div className="answer">
                             {
                                 answers.map((answer: any, key: any) => {
