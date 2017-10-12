@@ -5,7 +5,6 @@ import Scrollbars from "react-custom-scrollbars";
 import {
   updateInfoSurvey,
   saveSurvey,
-  clearMessage,
   getSurveyById,
 } from "./redux/actionCreators";
 import Dialog from "material-ui/Dialog";
@@ -163,9 +162,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: any) => ({
   updateInfoSurvey: (field: string, value: string) => dispatch(updateInfoSurvey(field, value)),
   saveSurvey: () => dispatch(saveSurvey()),
-  clearMessage: () => dispatch(clearMessage()),
   getSurveyById: (id: string) => dispatch(getSurveyById(id)),
-  // clearSurvey: () => dispatch(clearSurvey()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SurveyForm);

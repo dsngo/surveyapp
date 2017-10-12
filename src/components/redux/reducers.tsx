@@ -20,10 +20,17 @@ const DEFAULT_STATE = {
     isDeleted: false,
     completed: false,
     author: { username: "daniel" },
-    sectionBreaks: [1, 2, 3, 4, 5],
+    sectionBreaks: [{index: 1, title: "title section", description: "section desc", bigBreak: false}],
     formId: "askjfdq23",
   },
-  surveyContents: [],
+  surveyContents: [
+    {
+      questionType: "longQuestion",
+      question: "",
+      description: "",
+      answers: [""],
+    },
+  ],
   clientSurveyData: {},
   stateStatus: {
     currentIndex: 1,
@@ -35,45 +42,28 @@ const DEFAULT_STATE = {
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
 
 const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) =>
-  (action.type === "GET_DATA_FROM_DB" && [...action.recentForms]) || [...state]
-;
+  (action.type === "GET_RECENT_FORMS_FROM_DB" && [...action.recentForms]) || [...state];
 
 const surveyInfo = (state = {}, action: any) =>
   (action.type === "GET_DATA_FROM_DB" && { ...action.surveyInfo }) ||
-  (action.type === "SAVE_SURVEY_TO_DB" && { ...state }) ||
-  (action.type === "BREAK_SECTION" && { ...state, sectionBreaks: action.sectionBreaks }) || { ...state }
-;
+  (action.type === "SAVE_FORM_TO_DB" && { ...state }) ||
+  (action.type === "UPDATE_SECTION_BREAK" && { ...state, sectionBreaks: action.sectionBreaks }) || { ...state };
 
 const clientSurveyData = (state = {}, action: any) =>
   (action.type === "GET_CLIENT_SURVEY_FROM_DB" && { ...action.clientSurveyData }) ||
-  (action.type === "SAVE_SURVEY_TO_DB" && { ...state }) || { ...state }
-;
+  (action.type === "SAVE_SURVEY_TO_DB" && { ...state }) || { ...state };
 
-const surveyContents = (
-  state = [
-    {
-      questionType: "longQuestion",
-      question: "",
-      description: "",
-      answers: [""],
-    },
-  ],
-  action: any,
-) =>
+const surveyContents = (state = DEFAULT_STATE.surveyContents, action: any) =>
   (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex, 0, action.questionData), [...state])) ||
   (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
   (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
   (action.type === "GET_DATA_FROM_DB" && [...action.surveyContents]) ||
-  (action.type === "SAVE_FORM_TO_DB" && []) ||
-  [...state]
-;
+  (action.type === "SAVE_FORM_TO_DB" && []) || [...state];
 
-const stateStatus = (state: {}, action: any) =>
-  (action.type === "UPDATE_CURRENT_STATUS" && { ...state, currentIndex: action.currentIndex }) ||
+const stateStatus = (state = {}, action: any) =>
+  (action.type === "UPDATE_CURRENT_INDEX" && { ...state, currentIndex: action.currentIndex }) ||
   (action.type === "UPDATE_SUBMIT_STATUS" && { ...state, submitStatus: action.submitStatus }) ||
-  (action.type === "UPDATE_SELECTED_QUESTION_TYPE" && { ...state, selectedQuestionType: action.questionType }) ||
-  { ...state }
-;
+  (action.type === "UPDATE_SELECTED_QUESTION_TYPE" && { ...state, selectedQuestionType: action.questionType }) || { ...state };
 
 export const rootReducer = combineReducers({
   searchTerm,
