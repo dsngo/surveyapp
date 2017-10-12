@@ -1,5 +1,5 @@
 import * as React from "react";
-import { addNewQuestion, divideSection } from "./redux/actionCreators";
+import { addNewQuestion } from "./redux/actionCreators";
 import { connect } from "react-redux";
 
 interface ISettings {
@@ -8,7 +8,6 @@ interface ISettings {
   currentIndex: number;
   addNewQuestion: (questionIndex: number, questionData: any) => any;
   // surveyData: any[];
-  divideSection: (value: boolean) => any;
 }
 
 const Settings: React.SFC<ISettings> = props => {
@@ -17,7 +16,6 @@ const Settings: React.SFC<ISettings> = props => {
     selectedQuestionType,
     addNewQuestion,
     // surveyData,
-    divideSection,
   } = props;
 //   const areaQuestionTemplate = {
 //     type: "question",
@@ -45,7 +43,7 @@ const Settings: React.SFC<ISettings> = props => {
       </div>
       <div>
         <div className="settings-icon">
-          <i className="fa fa-picture-o" aria-hidden="true" onClick={e => divideSection(true)} />
+          <i className="fa fa-picture-o" aria-hidden="true" />
         </div>
       </div>
       <div>
@@ -71,7 +69,6 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: any) => ({
   // addArea: (area: any) => dispatch(addArea(area)),
   addNewQuestion: (questionIndex: number, questionData: any) => dispatch(addNewQuestion(questionIndex, questionData)),
-  divideSection: (value: boolean) => dispatch(divideSection(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

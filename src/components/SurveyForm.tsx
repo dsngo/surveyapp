@@ -2,16 +2,12 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Scrollbars from "react-custom-scrollbars";
-import {
-  updateInfoSurvey,
-  saveSurvey,
-  getSurveyById,
-} from "./redux/actionCreators";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
 import { Tabs } from "material-ui/Tabs";
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
+import Settings from "./Settings";
 
 interface ISurveyFormProps {
   surveyInfo: any;
@@ -143,6 +139,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
             {this.props.submitStatus ? <div className="error-message">{this.props.submitStatus}</div> : <div />}
           </div>
         </div>
+        <Settings />
       </Scrollbars>
     );
   }
@@ -160,9 +157,6 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  updateInfoSurvey: (field: string, value: string) => dispatch(updateInfoSurvey(field, value)),
-  saveSurvey: () => dispatch(saveSurvey()),
-  getSurveyById: (id: string) => dispatch(getSurveyById(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SurveyForm);
