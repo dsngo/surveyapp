@@ -33,12 +33,12 @@ class ShortQuestion extends React.Component<
 
     renderClientForm() {
         return (
-            <div>
+            <div className="input-option-create">
                 <div className="question-info">
                     <div className="question">{this.state.question}</div>
                     <div className="description">{this.state.description}</div>
                 </div>
-                <div className="padding-25-except-top">
+                <div className="padding-25-except-top ">
                     <TextField
                         name="answerText"
                         hintText="Put your answer here"
@@ -68,7 +68,7 @@ class ShortQuestion extends React.Component<
                 <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
                     <i className="fa fa-times" />
                 </div>
-                <div className="padding-25-except-top">
+                <div className="padding-25-except-top input-option-create">
                     <TextField
                         name="questionText"
                         hintText="Short question"

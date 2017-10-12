@@ -11,13 +11,13 @@ class LongQuestion extends React.Component<
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },
   ILongQuestion
-> {
+  > {
   state: ILongQuestion = {
     questionType: "longQuestion",
     question: "Who am I?",
     description: "",
     answers: [""],
-    completed: true
+    completed: false
   };
 
   handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -32,7 +32,7 @@ class LongQuestion extends React.Component<
   }
 
   renderClientForm() {
-    return(
+    return (
       <div>
         <div className="question-info">
           <div className="question">{this.state.question}</div>
@@ -49,7 +49,7 @@ class LongQuestion extends React.Component<
             onChange={(e: any) => this.handleUpdateAnswer(e.target.value)}
             floatingLabelText="Answer"
           />
-        </div>  
+        </div>
       </div>
     )
   }
@@ -66,24 +66,26 @@ class LongQuestion extends React.Component<
         <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
           <i className="fa fa-times" />
         </div>
-        <TextField
-          name="questionText"
-          hintText="Long question"
-          multiLine
-          fullWidth
-          value={question}
-          onChange={(e: any) => handleChangeQuestion(e.target.value)}
-          floatingLabelText={`Question ${questionIndex + 1}`}
-        />
-        <TextField
-          name="questionDescription"
-          hintText="Extra Description"
-          multiLine
-          fullWidth
-          value={description}
-          onChange={(e: any) => handleChangeDescription(e.target.value)}
-          floatingLabelText={"Question description"}
-        />
+        <div className="input-option-create padding-bottom-25">
+          <TextField
+            name="questionText"
+            hintText="Long question"
+            multiLine
+            fullWidth
+            value={question}
+            onChange={(e: any) => handleChangeQuestion(e.target.value)}
+            floatingLabelText={`Question ${questionIndex + 1}`}
+          />
+          <TextField
+            name="questionDescription"
+            hintText="Extra Description"
+            multiLine
+            fullWidth
+            value={description}
+            onChange={(e: any) => handleChangeDescription(e.target.value)}
+            floatingLabelText={"Question description"}
+          />
+        </div>
       </div>
     )
   }
@@ -106,7 +108,7 @@ class LongQuestion extends React.Component<
       <div>
         {
           this.renderClientForm()
-        }        
+        }
       </div>
     );
   }

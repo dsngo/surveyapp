@@ -494,6 +494,28 @@ select {
     padding: 25px;
 }
 
+.padding-bottom-25 {
+    padding-bottom: 25px;
+}
 .padding-25-except-top {
     padding: 0 25px 25px 25px;
+}
+
+.content {
+    border: 1px solid $color-white-grey;
+    padding: 15px;
+    .content-description {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+        font-style: italic
+    }
+    .content-question {
+        display: inline-block;
+        width: 50%;
+    }
+    .content-answer {
+        display: inline-block;
+        width: 50%;
+    }
 }
