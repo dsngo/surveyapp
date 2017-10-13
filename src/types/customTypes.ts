@@ -17,7 +17,7 @@ export interface IMultipleChoices {
   questionType: "multipleChoices";
   question: string;
   description: string;
-  answers: { correct: boolean; answer: string }[];
+  answers: { userInput: boolean, correct: boolean; answer: string }[];
 }
 export interface IDropdown {
   [key: string]: any;
@@ -40,6 +40,7 @@ export interface ICheckBox {
   question: string;
   description: string;
   answers: {
+    userInput: boolean,
     correct: boolean,
     text: string
   }[];
