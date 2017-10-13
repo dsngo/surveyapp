@@ -1,5 +1,5 @@
 import * as React from "react";
-import { clearSubmitStatus } from "./redux/actionCreators";
+// import { clearSubmitStatus } from "./redux/actionCreators";
 import { connect } from "react-redux";
 
 import Dialog from "material-ui/Dialog";
@@ -70,7 +70,7 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    clearSubmitStatus: () => dispatch(clearSubmitStatus()),
+    // clearSubmitStatus: () => dispatch(clearSubmitStatus()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatusComponent);

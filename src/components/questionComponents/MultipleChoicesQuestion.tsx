@@ -10,6 +10,7 @@ import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 
 class MultipleChoicesQuestion extends React.Component<
     {
+        questionData: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -18,16 +19,13 @@ class MultipleChoicesQuestion extends React.Component<
     > {
     state: IMultipleChoices = {
         questionType: "multipleChoices",
-        question: "Do you like programming?",
-        description: "Your desire",
+        question: "",
+        description: "",
         answers: [{
             correct: false,
-            answer: "Yes. I really love programming."
-        }, {
-            correct: false,
-            answer: "No. I prefer traveling."
+            answer: ""
         }],
-        completed: true
+        completed: false
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
@@ -44,25 +42,32 @@ class MultipleChoicesQuestion extends React.Component<
             )
         }))
 
+    handleChooseAnswer = (answerIndex: any) => {
+        this.setState(prevState => ({
+            ...prevState, answers: prevState.answers.map(
+                (ans: any, index: number) => {index === answerIndex ? ans.correct = true : ans.correct = false; return ans;}
+            )
+        }))
+    }
+        
     handleAddAnswer = (newAnswer: { correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
 
     renderCreateForm() {
         const {
-            props: { questionIndex, removeQuestion },
-            state: { question, answers, description },
+            props: { questionIndex, removeQuestion, questionData },
             handleChangeQuestion,
             handleChangeDescription,
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
         } = this;
+        const { question, answers, description } = questionData;
+        
         return (
             <div>
-                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
-                    <i className="fa fa-times" />
-                </div>
-                <div className="padding-25-except-top">
+                
+                <div className="padding-25-except-top input-option-create">
                     <TextField
                         name="questionText"
                         hintText="Multiple choices question"
@@ -112,11 +117,6 @@ class MultipleChoicesQuestion extends React.Component<
                             <FloatingActionButton mini onClick={e => handleAddAnswer({ correct: false, answer: "" })}>
                                 <ContentAdd />
                             </FloatingActionButton>
-                            {/* <RaisedButton
-                                label="More option"
-                                primary={true}
-                                onClick={e => handleAddAnswer({ correct: false, answer: "" })}
-                            /> */}
                         </div>
                     </div>
                 </div>
@@ -125,9 +125,9 @@ class MultipleChoicesQuestion extends React.Component<
     }
 
     renderClientForm() {
-        const { state: { question, description, answers } } = this;
+        const { question, description, answers } = this.props.questionData;
         return (
-            <div>
+            <div className="input-option-create">
                 <div className="question-info">
                     <div className="question">
                         {question}
@@ -137,13 +137,14 @@ class MultipleChoicesQuestion extends React.Component<
                     </div>
                 </div>
                 <div className="padding-25">
-                    <RadioButtonGroup name="shipSpeed" defaultSelected="not_light">
+                    <RadioButtonGroup name="shipSpeed" defaultSelected="not_light" onChange={ (event: object, selected: string) => { this.handleChooseAnswer(selected)} }>
                         {answers.map((answer: any, key: any) => {
                             return (
                                 <RadioButton
                                     key={key}
-                                    value={answer.answer}
+                                    value={key}
                                     label={answer.answer}
+                                    
                                 />
                             );
                         })}
@@ -155,7 +156,7 @@ class MultipleChoicesQuestion extends React.Component<
     render() {
 
         return (
-            <div>
+            <div className="question-component">
                 {
                     this.state.completed === false ? (
                         this.renderCreateForm()

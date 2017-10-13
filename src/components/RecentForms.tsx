@@ -1,10 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { getRecentForms } from "./redux/actionCreators";
+// import { getRecentForms } from "./redux/actionCreators";
 interface IRecentForms {
     recentForms: any;
-    getRecentForms: () => any;
+    // getRecentForms: () => any;
 }
 class RecentForms extends React.Component<IRecentForms> {
     constructor(props: any) {
@@ -12,7 +12,7 @@ class RecentForms extends React.Component<IRecentForms> {
     }
 
     componentWillMount() {
-        this.props.getRecentForms();
+        // this.props.getRecentForms();
     }
     renderTemplate() {
         return this.props.recentForms.map((form: any) => {
@@ -42,6 +42,6 @@ const mapStateToProps = (state: any) => ({
     recentForms: state.recentForms,
 });
 const mapDispatchToProps = (dispatch: any) => ({
-    getRecentForms: () => dispatch(getRecentForms()),
+    // getRecentForms: () => dispatch(getRecentForms()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(RecentForms);

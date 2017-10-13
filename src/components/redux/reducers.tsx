@@ -1,4 +1,4 @@
-import { SET_SEARCH_TERM, ADD_NEW_QUESTION, UPDATE_QUESTION, REMOVE_QUESTION } from "./actions";
+import { SET_SEARCH_TERM, ADD_NEW_QUESTION, UPDATE_QUESTION, REMOVE_QUESTION, UPDATE_INFO_SURVEY, UPDATE_QUESTION_TYPE } from "./actions";
 import {
   // ICheckBox,
   // IDropdown,
@@ -47,7 +47,7 @@ const DEFAULT_STATE = {
   },
   stateStatus: {
     currentIndex: 1,
-    selectedQuestionType: "",
+    selectedQuestionType: "shortQuestion",
     submitStatus: "",
   },
 };
@@ -58,6 +58,7 @@ const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) =>
   (action.type === "GET_RECENT_FORMS_FROM_DB" && [...action.recentForms]) || [...state];
 
 const surveyInfo = (state = {}, action: any) =>
+  (action.type === UPDATE_INFO_SURVEY && { ...state, title: action.info.title, description: action.info.description}) ||
   (action.type === "GET_DATA_FROM_DB" && { ...action.surveyInfo }) ||
   (action.type === "SAVE_FORM_TO_DB" && { ...state }) ||
   (action.type === "UPDATE_SECTION_BREAK" && { ...state, sectionBreaks: action.sectionBreaks }) || { ...state };
@@ -67,7 +68,7 @@ const clientSurveyData = (state = {}, action: any) =>
   (action.type === "SAVE_SURVEY_TO_DB" && { ...state }) || { ...state };
 
 const surveyContents = (state = DEFAULT_STATE.surveyContents, action: any) =>
-  (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex, 0, action.questionData), [...state])) ||
+  (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex ? action.questionIndex : state.length , 0, { questionType: "shortQuestion", question: "", description: "", answers: []}), [...state])) ||
   (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
   (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
   (action.type === "GET_DATA_FROM_DB" && [...action.surveyContents]) ||

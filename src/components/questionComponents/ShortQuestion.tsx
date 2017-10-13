@@ -6,6 +6,7 @@ import TextField from "material-ui/TextField";
 
 class ShortQuestion extends React.Component<
     {
+        questionData: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -14,10 +15,10 @@ class ShortQuestion extends React.Component<
 > {
     state: IShortQuestion = {
         questionType: "shortQuestion",
-        question: "What's your favorite sport?",
-        description: "Whatever",
+        question: "",
+        description: "",
         answers: [""],
-        completed: true
+        completed: false
     };
 
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -33,12 +34,12 @@ class ShortQuestion extends React.Component<
 
     renderClientForm() {
         return (
-            <div>
+            <div className="input-option-create">
                 <div className="question-info">
                     <div className="question">{this.state.question}</div>
                     <div className="description">{this.state.description}</div>
                 </div>
-                <div className="padding-25-except-top">
+                <div className="">
                     <TextField
                         name="answerText"
                         hintText="Put your answer here"
@@ -56,19 +57,16 @@ class ShortQuestion extends React.Component<
 
     renderFromCreate() {
         const {
-            props: { removeQuestion, questionIndex },
-            state: { question, answers, description },
+            props: { removeQuestion, questionIndex, questionData },
             handleChangeQuestion,
             handleChangeDescription,
             handleUpdateAnswer,
             getAnswerString,
         } = this;
+        const { question, answers, description } = questionData;
         return (
-            <div>
-                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
-                    <i className="fa fa-times" />
-                </div>
-                <div className="padding-25-except-top">
+            <div className="input-option-create">
+                <div className="">
                     <TextField
                         name="questionText"
                         hintText="Short question"
@@ -95,7 +93,7 @@ class ShortQuestion extends React.Component<
     render() {
         
         return (
-            <div>
+            <div className="question-component">
                 {
                     this.state.completed === false ? (
                         this.renderFromCreate()
