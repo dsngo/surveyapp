@@ -39,25 +39,25 @@ export const setSearchTerm = (searchTerm: string) => ({
   type: SET_SEARCH_TERM,
 });
 
-export const updateAnswer = (index: number, answer: string, multiAnswer: boolean) => ({
-  index,
-  answer,
-  multiAnswer,
-  type: UPDATE_ANSWER_RESPONSE,
-});
+// export const updateAnswer = (index: number, answer: string, multiAnswer: boolean) => ({
+//   index,
+//   answer,
+//   multiAnswer,
+//   type: UPDATE_ANSWER_RESPONSE,
+// });
 
-export const submitResponse = (id: string) => {
-  return async (dispatch: any, getState: any) => {
-    const response = getState().surveyResponse;
-    response.survey_id = id;
-    const resSubmit = await axios.post(urlServer + "/client-survey", response);
-    if (!resSubmit.data.code) {
-      dispatch({
-        type: SUBMIT_SUCCESS,
-      });
-    }
-  };
-};
+// export const submitResponse = (id: string) => {
+//   return async (dispatch: any, getState: any) => {
+//     const response = getState().surveyResponse;
+//     response.survey_id = id;
+//     const resSubmit = await axios.post(urlServer + "/client-survey", response);
+//     if (!resSubmit.data.code) {
+//       dispatch({
+//         type: SUBMIT_SUCCESS,
+//       });
+//     }
+//   };
+// };
 
 // ==================
 
@@ -108,10 +108,14 @@ export const updateSectionBreaks = (currentIndex: number, title: string, descrip
 
 // API REQUESTS
 export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
-  const recentForms = (await axios.get(`${urlServer}/survey/index`)).data.data;
+  const { data: recentForms, message: submitStatus } = (await axios.get(`${urlServer}/survey/recent-forms`)).data;
   dispatch({
     recentForms,
     type: "GET_RECENT_FORMS_FROM_DB",
+  });
+  dispatch({
+    submitStatus,
+    type: "UPDATE_SUBMIT_STATUS",
   });
 };
 
@@ -137,12 +141,26 @@ export const saveFormToDb = () => async (dispatch: any, getState: any) => {
   const contents = getState().surveyContents;
   const { formId, ...surveyInfo } = getState().surveyInfo;
   const formData = { ...surveyInfo, contents };
-  const submitStatus = await (formId
+  const { data: { message: submitStatus } } = (await (formId
     ? axios.put(`${urlServer}/survey/${formId}`, formData)
-    : axios.post(`${urlServer}/survey`, formData));
+    : axios.post(`${urlServer}/survey`, formData))).data;
   dispatch({
     type: "SAVE_FORM_TO_DB",
   });
+  dispatch({
+    submitStatus,
+    type: "UPDATE_SUBMIT_STATUS",
+  });
+};
+
+export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
+  const clientSurveyData = getState().clientSurveyData;
+  const { data: { message: submitStatus } } = (await (clientSurveyId
+    ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
+    : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;
+  dispatch({
+    type: "SAVE_SURVEY_TO_DB",
+  })
   dispatch({
     submitStatus,
     type: "UPDATE_SUBMIT_STATUS",

@@ -31,7 +31,20 @@ const DEFAULT_STATE = {
       answers: [""],
     },
   ],
-  clientSurveyData: {},
+  clientSurveyData: {
+    completed: false,
+    formId: "String",
+    clientSurveyId: "String",
+    author: { username: "daniel"},
+    contents: [
+      {
+        questionType: "longQuestion",
+        question: "",
+        description: "",
+        answers: [""],
+      },
+    ],
+  },
   stateStatus: {
     currentIndex: 1,
     selectedQuestionType: "",
