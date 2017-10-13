@@ -11,6 +11,7 @@ import MenuItem from "material-ui/MenuItem";
 
 class DropdownQuestion extends React.Component<
     {
+        questionData: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -19,14 +20,11 @@ class DropdownQuestion extends React.Component<
     > {
     state: IDropdown = {
         questionType: "dropdown",
-        question: "Your profession",
-        description: "Career",
+        question: "",
+        description: "",
         answers: [{
-            correct: true,
-            answer: "Developer"
-        }, {
             correct: false,
-            answer: "Designer"
+            answer: ""
         }],
         completed: false
     };
@@ -64,7 +62,7 @@ class DropdownQuestion extends React.Component<
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
 
     renderClientForm() {
-        const { state: { question, description, answers } } = this;
+        const { question, description, answers } = this.props.questionData;
         return (
             <div className="input-option-create">
                 <div className="question-info">
@@ -102,18 +100,16 @@ class DropdownQuestion extends React.Component<
     renderFormCreate() {
         const {
             props: { questionIndex, removeQuestion },
-            state: { question, answers, description },
             handleChangeQuestion,
             handleChangeDescription,
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
         } = this;
+        const { question, description, answers } = this.props.questionData;
+        
         return (
             <div>
-                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
-                    <i className="fa fa-times" />
-                </div>
                 <div className="padding-25-except-top input-option-create">
                     <TextField
                         name="questionText"
@@ -172,7 +168,7 @@ class DropdownQuestion extends React.Component<
     }
     render() {
         return (
-            <div>
+            <div className="question-component">
                 {
                     this.state.completed === false ? (
                         this.renderFormCreate()

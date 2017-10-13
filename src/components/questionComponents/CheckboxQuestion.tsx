@@ -9,6 +9,7 @@ import Checkbox from "material-ui/Checkbox";
 
 class CheckboxQuestion extends React.Component<
     {
+        questionData: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -17,16 +18,13 @@ class CheckboxQuestion extends React.Component<
     > {
     state: ICheckBox = {
         questionType: "checkbox",
-        question: "How are u?",
-        description: "OK...",
+        question: "",
+        description: "",
         answers: [{
             correct: false,
-            text: "Test 1"
-        }, {
-            correct: false,
-            text: "Test 2"
+            text: ""
         }],
-        completed: true
+        completed: false
     };
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
@@ -55,9 +53,10 @@ class CheckboxQuestion extends React.Component<
 
     renderClientForm = () => {
         const {
-            props: { questionIndex, removeQuestion },
-            state: { question, answers, description },
+            props: { questionIndex, removeQuestion, questionData },
         } = this;
+        const { question, answers, description } = questionData;
+        
         return (
             <div className="input-option-create">
                 <div className="question-field" >
@@ -89,19 +88,18 @@ class CheckboxQuestion extends React.Component<
     }
     renderCreateForm() {
         const {
-            props: { questionIndex, removeQuestion },
-            state: { question, answers, description },
+            props: { questionIndex, removeQuestion, questionData },
             handleChangeQuestion,
             handleChangeDescription,
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
         } = this;
+        const { question, answers, description } = this.props.questionData;
+        console.log(questionData);
+        
         return (
             <div>
-                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
-                    <i className="fa fa-times" />
-                </div>
                 <div className="input-field input-text-radio input-option-create padding-bottom-25">
                     <TextField
                         name="questionText"
@@ -163,14 +161,14 @@ class CheckboxQuestion extends React.Component<
     }
     render() {
         if (this.state.completed !== true) return (
-            <div>
+            <div className="question-component">
                 {
                     this.renderCreateForm()
                 }
             </div>
         )
         return (
-            <div>
+            <div className="question-component">
                 {
                     this.renderClientForm()
                 }
@@ -179,6 +177,9 @@ class CheckboxQuestion extends React.Component<
     }
 
     componentDidUpdate() {
+        console.log(this.props.questionIndex);
+        console.log(this.state);
+        
         return this.props.updateQuestion(this.props.questionIndex, this.state);
     }
 }

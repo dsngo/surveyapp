@@ -6,6 +6,7 @@ import TextField from "material-ui/TextField";
 
 class LongQuestion extends React.Component<
   {
+    questionData: any;
     questionIndex: number;
     removeQuestion: (questionIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -14,7 +15,7 @@ class LongQuestion extends React.Component<
   > {
   state: ILongQuestion = {
     questionType: "longQuestion",
-    question: "Who am I?",
+    question: "",
     description: "",
     answers: [""],
     completed: false
@@ -56,16 +57,13 @@ class LongQuestion extends React.Component<
 
   renderFormCreate() {
     const {
-      props: { questionIndex, removeQuestion },
-      state: { question, answers, description },
+      props: { questionIndex, removeQuestion, questionData },
       handleChangeQuestion,
       handleChangeDescription,
     } = this;
-    return (
+    const { question, answers, description } = questionData;
+    return (  
       <div>
-        <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
-          <i className="fa fa-times" />
-        </div>
         <div className="input-option-create padding-bottom-25">
           <TextField
             name="questionText"
@@ -98,14 +96,14 @@ class LongQuestion extends React.Component<
       getAnswerString,
     } = this;
     if (this.state.completed === false) return (
-      <div>
+      <div className="question-component">
         {
           this.renderFormCreate()
         }
       </div>
     )
     return (
-      <div>
+      <div className="question-component">
         {
           this.renderClientForm()
         }

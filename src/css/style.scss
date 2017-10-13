@@ -125,11 +125,15 @@ body {
     text-align: center;
 }
 .form-create {
-    margin-left: 15%;
-    margin-right: 15%;
     background-color: white;
     box-shadow: -5px 5px 5px 0 #e0e0e0;
     text-align: left;
+}
+
+@media (min-width: 1200px) {
+    .containter {
+        width: 970px;
+    }
 }
 
 .title-survey-new-form {
@@ -209,6 +213,7 @@ body {
 }
 
 .menu-settings {
+    top: 80px;
     position: fixed;
     right: 10%;
     background-color: white;
@@ -241,6 +246,9 @@ body {
     height: calc(100% - 50px);
     overflow: auto;
     padding-bottom: 50px;
+    @media (min-width: 1200px) {
+        width: 970px
+    }
 }
 
 .group {
@@ -477,8 +485,6 @@ select {
 }
 
 .question-info {
-    padding-left: 25px;
-    padding-right: 25px;
     .question {
         font-weight: bold;
         font-size: 18px;
@@ -518,4 +524,20 @@ select {
         display: inline-block;
         width: 50%;
     }
+}
+
+.survey-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.survey-description {
+    font-size: 17px;
+    font-style: italic;
+    padding-bottom: 20px;
+}
+
+.component-question {
+    border-top: 1px solid $color-white-grey
 }

@@ -27,6 +27,7 @@ import {
   ADD_NEW_QUESTION,
   UPDATE_QUESTION,
   REMOVE_QUESTION,
+  UPDATE_QUESTION_TYPE
 } from "./actions";
 import axios from "axios";
 
@@ -61,11 +62,24 @@ export const submitResponse = (id: string) => {
 
 // ==================
 
-export const addNewQuestion = (questionIndex: number, questionType: any) => ({
-  questionIndex,
-  questionType,
-  type: ADD_NEW_QUESTION,
-});
+// export const addNewQuestion = (questionIndex: number, questionType: any) => ({
+//   questionIndex,
+//   questionType,
+//   type: ADD_NEW_QUESTION,
+// });
+
+export const addNewQuestion = (questionIndex: number) => (
+  dispatch: any,
+  getState: any,
+) => {
+  
+  const questionType = getState().stateStatus.selectedQuestionType;
+  dispatch({
+    questionIndex,
+    questionType,
+    type: ADD_NEW_QUESTION
+  })
+}
 
 export const removeQuestion = (questionIndex: number) => ({
   questionIndex,
@@ -148,3 +162,14 @@ export const saveFormToDb = () => async (dispatch: any, getState: any) => {
     type: "UPDATE_SUBMIT_STATUS",
   });
 };
+
+export const updateSurveyInfo = (info: any) => ({
+  type: UPDATE_INFO_SURVEY,
+  info
+})
+
+export const updateQuestionType = (questionType: any, questionIndex: number) => ({
+  type: UPDATE_QUESTION_TYPE,
+  questionType,
+  questionIndex
+})

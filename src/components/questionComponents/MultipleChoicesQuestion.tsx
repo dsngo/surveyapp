@@ -10,6 +10,7 @@ import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
 
 class MultipleChoicesQuestion extends React.Component<
     {
+        questionData: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -18,14 +19,11 @@ class MultipleChoicesQuestion extends React.Component<
     > {
     state: IMultipleChoices = {
         questionType: "multipleChoices",
-        question: "Do you like programming?",
-        description: "Your desire",
+        question: "",
+        description: "",
         answers: [{
             correct: false,
-            answer: "Yes. I really love programming."
-        }, {
-            correct: false,
-            answer: "No. I prefer traveling."
+            answer: ""
         }],
         completed: false
     };
@@ -57,19 +55,18 @@ class MultipleChoicesQuestion extends React.Component<
 
     renderCreateForm() {
         const {
-            props: { questionIndex, removeQuestion },
-            state: { question, answers, description },
+            props: { questionIndex, removeQuestion, questionData },
             handleChangeQuestion,
             handleChangeDescription,
             handleUpdateAnswer,
             handleAddAnswer,
             handleRemoveAnswer,
         } = this;
+        const { question, answers, description } = questionData;
+        
         return (
             <div>
-                <div className="delete-area" onClick={e => removeQuestion(questionIndex)}>
-                    <i className="fa fa-times" />
-                </div>
+                
                 <div className="padding-25-except-top input-option-create">
                     <TextField
                         name="questionText"
@@ -128,7 +125,7 @@ class MultipleChoicesQuestion extends React.Component<
     }
 
     renderClientForm() {
-        const { state: { question, description, answers } } = this;
+        const { question, description, answers } = this.props.questionData;
         return (
             <div className="input-option-create">
                 <div className="question-info">
@@ -159,7 +156,7 @@ class MultipleChoicesQuestion extends React.Component<
     render() {
 
         return (
-            <div>
+            <div className="question-component">
                 {
                     this.state.completed === false ? (
                         this.renderCreateForm()

@@ -29,6 +29,7 @@ const styles: { [name: string]: React.CSSProperties } = {
 
 class MultipleDropdownQuestion extends React.Component<
   {
+    questionData: any;
     questionIndex: number;
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },
@@ -104,7 +105,7 @@ class MultipleDropdownQuestion extends React.Component<
       checkBox,
     } = this;
     return (
-      <Paper zDepth={1} style={{ width: "90%", margin: "10px auto" }}>
+      <Paper zDepth={1} style={{ width: "90%", margin: "10px auto" }} className="question-component">
         <div style={{ padding: "0 24px" }}>
           <TextField
             name="questionText"

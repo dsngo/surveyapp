@@ -17,7 +17,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table";
 class PriorityQuestion extends React.Component<
   {
     questionIndex: number;
-    addNewQuestion: (questionIndex: number, questionType: any) => any;
+    questionData: any;
     removeQuestion: (questionIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },
@@ -25,30 +25,17 @@ class PriorityQuestion extends React.Component<
 > {
   state: IPriorityQuestion = {
     questionType: "priorityQuestion",
-    question: "Test",
-    description: "testing",
+    question: "",
+    description: "",
     answers: [
       {
         priority: 0,
-        answer: "asdsad"
-      },
-      {
-        priority: 0,
-        answer: "xcxzc"
+        answer: ""
       }
     ],
     additionalContents: [
-      {
-        description: "If your highest priority is c",
-        contents: [
-          {
-            question: "What will you do?",
-            answers: ""
-          }
-        ]
-      }
     ],
-    completed: true
+    completed: false
   };
   handleChangeQuestion = (newQuestion: string) => {
     this.setState(prevState => ({ ...prevState, question: newQuestion }));
@@ -182,10 +169,10 @@ class PriorityQuestion extends React.Component<
   }
   renderClientForm() {
     const {
-      props: { questionIndex, removeQuestion },
-      state: { question, description, answers, additionalContents },
+      props: { questionIndex, removeQuestion, questionData },
       updatePriority
     } = this;
+    const { question, description, answers, additionalContents } = questionData;
     const length: any = [];
     for (let i = 1; i <= answers.length; i++) {
       length.push(i);
@@ -199,7 +186,7 @@ class PriorityQuestion extends React.Component<
 
         <Table>
           <TableBody displayRowCheckbox={false}>
-            {answers.map((ans, answerIndex) => {
+            {answers.map((ans: any, answerIndex: any) => {
               return (
                 <TableRow key={answerIndex}>
                   <TableRowColumn className="col-sm-8">
@@ -223,12 +210,12 @@ class PriorityQuestion extends React.Component<
           </TableBody>
         </Table>
         <div className="additional-cotents-client">
-          {additionalContents.map((content, index) => {
+          {additionalContents.map((content: any, index: any) => {
             return (
               <div className="content">
                 <div className="content-description">{content.description}</div>
                 <div className="content-questions">
-                  {content.contents.map((question, indexQuestion) => {
+                  {content.contents.map((question: any, indexQuestion: any) => {
                     return (
                       <div>
                         <div className="content-question">
@@ -257,8 +244,7 @@ class PriorityQuestion extends React.Component<
   }
   renderFormCreate() {
     const {
-      props: { questionIndex, removeQuestion },
-      state: { question, answers, additionalContents },
+      props: { questionIndex, removeQuestion, questionData },
       handleChangeQuestion,
       handleUpdateAnswer,
       handleAddAnswer,
@@ -270,6 +256,10 @@ class PriorityQuestion extends React.Component<
       handleRemoveAdditionalContent,
       handleRemoveAdditionalContentQuestion
     } = this;
+    const { question, answers, additionalContents } = questionData;
+    console.log(questionData);
+    
+    
     return (
       <div className="input-option-create">
         <TextField
@@ -288,16 +278,6 @@ class PriorityQuestion extends React.Component<
 
             return (
               <div className="radio-answer" key={answerIndex}>
-                {answers.length > 1 && (
-                  <div>
-                    <div
-                      className="delete-area"
-                      onClick={() => handleRemoveAnswer(answerIndex)}
-                    >
-                      <i className="fa fa-times" />
-                    </div>
-                  </div>
-                )}
                 <div className="icon-radio clear-fix">
                   <i className="material-icons">equalizer</i>
                 </div>
@@ -342,7 +322,7 @@ class PriorityQuestion extends React.Component<
           />
         </div>
         <div className="additional-detail">
-          {additionalContents.map((content, contentIndex) => {
+          {additionalContents.map((content: any, contentIndex: any) => {
             return (
               <div className="additional-container" key={contentIndex}>
                 <div>
@@ -364,7 +344,7 @@ class PriorityQuestion extends React.Component<
                       e.target.value
                     )}
                 />
-                {content.contents.map((ctn, ctnQuestionIndex) => {
+                {content.contents.map((ctn: any, ctnQuestionIndex: any) => {
                   return (
                     <div>
                       <div className="additional-question-container">
@@ -414,7 +394,7 @@ class PriorityQuestion extends React.Component<
   }
   render() {
     return (
-        <div className="padding-bottom-25">
+        <div className="padding-bottom-25 question-component">
             {
                 this.state.completed === false ? (
                     this.renderFormCreate()
@@ -432,8 +412,6 @@ class PriorityQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-  addNewQuestion: (questionIndex: number, questionType: any) =>
-    dispatch(addNewQuestion(questionIndex, questionType)),
   removeQuestion: (questionIndex: number) =>
     dispatch(removeQuestion(questionIndex)),
   updateQuestion: (questionIndex: number, questionData: any) =>
