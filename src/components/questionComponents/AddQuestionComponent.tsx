@@ -43,6 +43,7 @@ class AddQuestionComponent extends React.Component<
     updateCurrentIndex: (currentIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
     questionData: any;
+    currentIndex: number;
   },
   { questionType: string }
 > {
@@ -56,8 +57,6 @@ class AddQuestionComponent extends React.Component<
   // handleChangeQuestionType = (questionType: string) => this.setState(prevState => ({ ...prevState, questionType }));
 
   handleChangeQuestionType = (questionType: string) => {
-    console.log(questionType);
-    
     const questionData = Templates[questionType];
     // this.setState(prevState => ({ ...prevState, questionType, questionData: questionData}));
     this.props.updateQuestion(this.props.questionIndex, questionData);
@@ -84,14 +83,16 @@ class AddQuestionComponent extends React.Component<
       state: {  openClosingDialog },
     } = this;
     const questionType = questionData.questionType;
-    console.log(questionType);
-    
+    let activeQuestiton = "component-question ";
+    activeQuestiton += this.props.currentIndex === questionIndex ? "active-area" : "";
     const actionsClosingDialog = [
       <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)} />,
       <FlatButton label="Submit" secondary onClick={() => removeQuestion(questionIndex)} />,
     ];
+    console.log(questionIndex);
+    
     return (
-      <div className="component-question" style={{ width: "90%", margin: "10px auto" }}>
+      <div className={ activeQuestiton } style={{ width: "90%", margin: "10px auto", paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
           Are you sure to delete this question?
         </Dialog>
@@ -118,6 +119,7 @@ class AddQuestionComponent extends React.Component<
 
 const mapStateToProps = (state: any) => ({
   selectedQuestionType: state.stateStatus.selectedQuestionType,
+  currentIndex: state.stateStatus.currentIndex
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
