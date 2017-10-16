@@ -40,6 +40,7 @@ export interface ICheckBox {
   question: string;
   description: string;
   answers: {
+    userInput: boolean,
     correct: boolean,
     text: string,
     choosen: boolean
