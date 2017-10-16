@@ -169,6 +169,7 @@ export const saveFormToDb = () => async (dispatch: any, getState: any) => {
 
 export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
   const clientSurveyData = getState().clientSurveyData;
+  
   const { data: { message: submitStatus } } = (await (clientSurveyId
     ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;

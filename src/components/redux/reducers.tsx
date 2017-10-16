@@ -36,6 +36,14 @@ const DEFAULT_STATE = {
     formId: "String",
     clientSurveyId: "String",
     author: { username: "daniel"},
+    clientInfo: {
+      firstName: "String",
+      lastName: "String",
+      email: "String",
+      phone: "123456",
+      address: "String",
+      gender: "String",
+    },
     contents: [
       {
         questionType: "longQuestion",
