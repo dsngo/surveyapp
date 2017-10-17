@@ -23,7 +23,7 @@ class CheckboxQuestion extends React.Component<
         answers: [{
             correct: false,
             text: "",
-            choosen: false
+            chosen: false
         }],
         completed: false
     };
@@ -45,12 +45,12 @@ class CheckboxQuestion extends React.Component<
     updateAnswer = (indexAnswer: number) => {
         this.setState(prevState => ({
             ...prevState, answers: prevState.answers.map((answer, index) => {
-                index === indexAnswer ? answer.choosen = !answer.choosen : ""; return answer;
+                index === indexAnswer ? answer.chosen = !answer.chosen : ""; return answer;
             })
         }));
     }
     handleAddAnswer = () =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push({ correct: false, text: "", choosen: false }) && prevState.answers }));
+        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push({ correct: false, text: "", chosen: false }) && prevState.answers }));
 
     renderClientForm = () => {
         const {

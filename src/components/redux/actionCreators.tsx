@@ -27,7 +27,9 @@ import {
   ADD_NEW_QUESTION,
   UPDATE_QUESTION,
   REMOVE_QUESTION,
-  UPDATE_QUESTION_TYPE
+  UPDATE_QUESTION_TYPE,
+  UPDATE_TEMP_SURVEY_ID,
+  GET_DATA_FROM_DB_BY_ID
 } from "./actions";
 import axios from "axios";
 
@@ -102,6 +104,22 @@ export const updateSelectedQuestionType = (questionType: string) => ({
   type: "UPDATE_SELECTED_QUESTION_TYPE",
 });
 
+export const updateSurveyInfo = (info: any) => ({
+  info,
+  type: UPDATE_INFO_SURVEY,
+})
+
+export const updateTempId = (id: string) => ({
+  id,
+  type: UPDATE_TEMP_SURVEY_ID
+})
+
+export const clearSubmitStatus = () => {
+  return ({
+    type: "CLEAR_SUBMIT_STATUS"
+  })
+} 
+
 export const updateSectionBreaks = (currentIndex: number, title: string, description: string, bigBreak: boolean) => (
   dispatch: any,
   getState: any,
@@ -123,6 +141,7 @@ export const updateSectionBreaks = (currentIndex: number, title: string, descrip
 // API REQUESTS
 export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
   const { data: recentForms, message: submitStatus } = (await axios.get(`${urlServer}/survey/recent-forms`)).data;
+  console.log(recentForms)
   dispatch({
     recentForms,
     type: "GET_RECENT_FORMS_FROM_DB",
@@ -133,16 +152,20 @@ export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: an
   });
 };
 
-export const getDataFromDb = (username = "Daniel") => async (dispatch: any, getState: any) => {
-  const { formId } = getState().surveyInfo;
+export const getDataFromDbById = (username = "Daniel") => async (dispatch: any, getState: any) => {
+  
+  const formId = getState().stateStatus.tempId;
   const { data: { contents: surveyContents, ...surveyInfo }, message: submitStatus } = (await axios.get(
     `${urlServer}/survey/${formId}`,
   )).data;
   if (surveyContents) {
+    console.log('xxx');
+    console.log(surveyContents);
+    
     dispatch({
       surveyContents,
       surveyInfo,
-      type: "GET_DATA_FROM_DB",
+      type: GET_DATA_FROM_DB_BY_ID,
     });
   }
   dispatch({
@@ -151,20 +174,28 @@ export const getDataFromDb = (username = "Daniel") => async (dispatch: any, getS
   });
 };
 
-export const saveFormToDb = () => async (dispatch: any, getState: any) => {
+
+export const saveFormToDb = (completed: boolean) => async (dispatch: any, getState: any) => {
   const contents = getState().surveyContents;
   const { formId, ...surveyInfo } = getState().surveyInfo;
-  const formData = { ...surveyInfo, contents };
-  const { data: { message: submitStatus } } = (await (formId
+  const formData = { ...surveyInfo, contents, completed };
+  const resSubmit = (await (formId
     ? axios.put(`${urlServer}/survey/${formId}`, formData)
     : axios.post(`${urlServer}/survey`, formData))).data;
-  dispatch({
-    type: "SAVE_FORM_TO_DB",
-  });
-  dispatch({
-    submitStatus,
-    type: "UPDATE_SUBMIT_STATUS",
-  });
+  const submitStatus = resSubmit.message;
+  const id = resSubmit.data._id;
+  console.log(resSubmit);
+  if (submitStatus) {
+    dispatch({
+      formId: id,
+      type: "SAVE_FORM_TO_DB",
+    });
+    dispatch({
+      submitStatus,
+      type: "UPDATE_SUBMIT_STATUS",
+    });
+  }
+  
 };
 
 export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
@@ -173,16 +204,14 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
   const { data: { message: submitStatus } } = (await (clientSurveyId
     ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;
-  dispatch({
-    type: "SAVE_SURVEY_TO_DB",
-  })
-  dispatch({
-    submitStatus,
-    type: "UPDATE_SUBMIT_STATUS",
-  });
+  if (submitStatus) {
+    dispatch({
+      type: "SAVE_SURVEY_TO_DB",
+    })
+    dispatch({
+      submitStatus,
+      type: "UPDATE_SUBMIT_STATUS",
+    });
+  }
+  
 };
-export const updateSurveyInfo = (info: any) => ({
-  info,
-  type: UPDATE_INFO_SURVEY,
-})
-

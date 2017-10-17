@@ -8,7 +8,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import { Tabs, Tab } from "material-ui/Tabs";
 import Settings from "./Settings";
 import SurveyInfo from "./questionComponents/SurveyInfo";
-import { saveFormToDb, clearSubmitStatus, getDataFromDbById } from "./redux/actionCreators";
+import { saveFormToDb, clearSubmitStatus } from "./redux/actionCreators";
 // Import question components
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
 import ShortQuestion from "./questionComponents/ShortQuestion";
@@ -19,8 +19,7 @@ import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestio
 import PriorityQuestion from "./questionComponents/PriorityQuestion";
 import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
 
-interface ISurveyFormProps {
-  surveyId: string;
+interface IClientSurveyProps {
   saveFormToDb: (completed: boolean) => any;
   clearSubmitStatus: () => any;
   surveyInfo: any;
@@ -31,13 +30,11 @@ interface ISurveyFormProps {
   saveSurvey: () => any;
   clearMessage: () => any;
   getSurveyById: (id: string) => any;
-  getDataFromDbById: () => any;
   clearSurvey: () => any;
   tempId: string;
-  match: any;
 }
 
-class SurveyForm extends React.Component<ISurveyFormProps> {
+class ClientSurvey extends React.Component<IClientSurveyProps> {
   static defaultProps = {
     surveyInfo: { formId: "123test" }
   };
@@ -48,8 +45,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     openSuccessModal: false,
     currentTab: "question",
     completed: false,
-    actionSave: false, // False: save, True: submit
-    tempIdState: ""
+    actionSave: false // False: save, True: submit
   };
 
   componentDidUpdate() {
@@ -59,15 +55,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
       this.tempLengthArea = sLen;
     }
     
-    if (this.state.tempIdState === "" && this.props.tempId) {
-
-    }
     
-  }
-  componentDidMount() {
-    if (this.props.tempId) {
-      this.props.getDataFromDbById();
-    }
   }
   handleChangeCurrentTab = (currentTab: any) =>
     this.setState(prevState => ({ ...prevState, currentTab }));
@@ -84,8 +72,6 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     ));
   }
   render() {
-    console.log(this.props.surveyContents);
-    
     if (this.props.submitStatus === "Success") {
       this.props.clearSubmitStatus();
       this.handleOpenSuccessModal(true);
@@ -99,8 +85,8 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
       />
     ];
     const actionsSuccessModal = [
-    <FlatButton label="Next" primary onClick={ () => this.handleOpenSuccessModal(false)} />,
-    <Link to="/"><FlatButton label="Back to index"  primary onClick={ () => this.handleOpenSuccessModal(false)}/></Link>
+    <Link to={ `/survey/${this.props.tempId}` } > <FlatButton label="Next" primary /></Link>,
+    <Link to="/"> <FlatButton label="Back to index" primary/></Link>
   ];
     return (
       <Scrollbars
@@ -188,7 +174,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     );
   }
 }
-// const SurveyForm: React.SFC<ISurveyForm> = props => {
+// const ClientSurvey: React.SFC<IClientSurvey> = props => {
 //     const { surveyData, updateInfoSurvey, saveSurvey } = props;
 
 // };
@@ -203,8 +189,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   saveFormToDb: (completed: boolean) => dispatch(saveFormToDb(completed)),
-  clearSubmitStatus: () => dispatch(clearSubmitStatus()),
-  getDataFromDbById: () => dispatch(getDataFromDbById())
+  clearSubmitStatus: () => dispatch(clearSubmitStatus())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SurveyForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ClientSurvey);

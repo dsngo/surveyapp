@@ -8,6 +8,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import NavBar from "./NavBar";
 import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
 import SurveyForm from "./SurveyForm";
+import Homepage from "./Homepage";
 
 export const App: React.SFC = () => (
     <Router>
@@ -16,11 +17,8 @@ export const App: React.SFC = () => (
                 <div>
                     <NavBar showSearch />
                     <Switch>
-                        {<Route exact path="/" component={SurveyForm} />}
-                        {/* <Route exact path="/" component={Menu} /> */}
-                        {/* <Route path="/newform" component={SurveyForm} /> */}
-                        {/* <Route path="/form/:id" component={FormSubmit} /> */}
-                        {/* <Route path="/editform/:id" component={SurveyForm} /> */}
+                        <Route exact path="/" component={Homepage} />
+                        <Route path="/survey" component={SurveyForm} />
                         <Route component={FoF} />
                     </Switch>
                 </div>

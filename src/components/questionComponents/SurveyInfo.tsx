@@ -6,11 +6,13 @@ import TextField from "material-ui/TextField";
 
 class SurveyInfo extends React.Component<{
   updateSurveyInfo: (info: any) => any;
+  info: any;
 }> {
   state = {
-    title: "Tst",
-    description: "asdasd",
-    completed: false
+    title: "",
+    description: "",
+    completed: false,
+    firstTime: true
   };
 
   handleChangeTitle = (title: string) =>
@@ -24,15 +26,6 @@ class SurveyInfo extends React.Component<{
       ...prevState,
       description: description
     }));
-
-  renderClientForm() {
-    return (
-      <div className="input-option-create">
-          <div className="survey-title">{this.state.title}</div>
-          <div className="survey-description">{this.state.description}</div>
-      </div>
-    );
-  }
 
   renderFromCreate() {
     return (
@@ -60,17 +53,28 @@ class SurveyInfo extends React.Component<{
     );
   }
   render() {
+    if (this.state.firstTime && this.props.info.title) {
+      this.setState(prevState => ({
+        ...prevState,
+        title: this.props.info.title,
+        description: this.props.info.description,
+        firstTime: false,
+      }))
+    }
     return (
       <div className="question-components">
-        {this.state.completed === false
-          ? this.renderFromCreate()
-          : this.renderClientForm()}
+           {this.renderFromCreate()}
       </div>
     );
   }
+  // componentWillMount() {
+  //   if (this.state.title === "") {
+  //     this.setState( prevState => ({ ...prevState, title: this.props.info.title, description: this.props.info.description}))
+  //   }
+  // }
   componentDidUpdate() {
     // return this.props.updateQuestion(this.props.questionIndex, this.state);
-    return this.props.updateSurveyInfo(this.state);
+    
   }
 }
 
@@ -78,4 +82,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   updateSurveyInfo: (info: any) => dispatch(updateSurveyInfo(info))
 });
 
-export default connect(null, mapDispatchToProps)(SurveyInfo);
+const mapStateToProps = (state: any) => ({
+  info: state.surveyInfo
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SurveyInfo);

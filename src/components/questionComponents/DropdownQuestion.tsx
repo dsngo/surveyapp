@@ -25,7 +25,7 @@ class DropdownQuestion extends React.Component<
         answers: [{
             correct: false,
             answer: "",
-            choosen: false
+            chosen: false
         }],
         completed: false
     };
@@ -34,7 +34,7 @@ class DropdownQuestion extends React.Component<
         for(let i = 0; i < this.state.answers.length; i++) {
             console.log(i);
             
-            if (this.state.answers[i].choosen === true) return i;
+            if (this.state.answers[i].chosen === true) return i;
         }
     }
 
@@ -46,7 +46,7 @@ class DropdownQuestion extends React.Component<
     handleRemoveAnswer = (answerIndex: number) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
 
-    handleUpdateAnswer = (answerIndex: number, newAnswer: { choosen: boolean, correct: boolean; answer: string }) =>
+    handleUpdateAnswer = (answerIndex: number, newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({
             ...prevState, answers: prevState.answers.map(
                 (ans: any, index) => { index === answerIndex ? ans.answer = newAnswer.answer : ""; return ans; }
@@ -55,11 +55,11 @@ class DropdownQuestion extends React.Component<
     handleChooseAnswer = (answerIndex: any) => {
         this.setState(prevState => ({
             ...prevState, answers: prevState.answers.map(
-                (ans: any, index: number) => {index === answerIndex ? ans.choosen = true : ans.choosen = false; return ans;}
+                (ans: any, index: number) => {index === answerIndex ? ans.chosen = true : ans.chosen = false; return ans;}
             )
         }))
     }
-    handleAddAnswer = (newAnswer: { choosen: boolean, correct: boolean; answer: string }) =>
+    handleAddAnswer = (newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
 
     renderClientForm() {
@@ -151,14 +151,14 @@ class DropdownQuestion extends React.Component<
                                             fullWidth
                                             value={answer.answer}
                                             onChange={(e: any) =>
-                                                handleUpdateAnswer(answerIndex, { choosen: false, correct: false, answer: e.target.value })}
+                                                handleUpdateAnswer(answerIndex, { chosen: false, correct: false, answer: e.target.value })}
                                         />
                                     </div>
                                 </div>
                             );
                         })}
                         <div className="radio-answer align-center">
-                            <FloatingActionButton mini onClick={e => handleAddAnswer({ choosen: false, correct: false, answer: "" })}>
+                            <FloatingActionButton mini onClick={e => handleAddAnswer({ chosen: false, correct: false, answer: "" })}>
                                 <ContentAdd />
                             </FloatingActionButton>
                         </div>

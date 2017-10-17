@@ -17,14 +17,14 @@ export interface IMultipleChoices {
   questionType: "multipleChoices";
   question: string;
   description: string;
-  answers: { choosen: boolean, correct: boolean; answer: string }[];
+  answers: { chosen: boolean, correct: boolean; answer: string }[];
 }
 export interface IDropdown {
   [key: string]: any;
   questionType: "dropdown";
   question: string;
   description: string;
-  answers: { choosen: boolean, correct: boolean; answer: string }[];
+  answers: { chosen: boolean, correct: boolean; answer: string }[];
 }
 export interface IMultipleDropdown {
   [key: string]: any;
@@ -40,10 +40,9 @@ export interface ICheckBox {
   question: string;
   description: string;
   answers: {
-    userInput: boolean,
     correct: boolean,
     text: string,
-    choosen: boolean
+    chosen: boolean
   }[];
 }
 export interface IPriorityQuestion {
