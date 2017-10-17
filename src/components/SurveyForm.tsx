@@ -23,10 +23,8 @@ interface ISurveyFormProps {
   surveyId: string;
   saveFormToDb: (completed: boolean) => any;
   clearSubmitStatus: () => any;
-  surveyInfo: any;
   surveyContents: any[];
-  currentIndex: number;
-  submitStatus: string;
+  // submitStatus: string;
   updateInfoSurvey: (field: string, value: string) => any;
   saveSurvey: () => any;
   clearMessage: () => any;
@@ -38,9 +36,6 @@ interface ISurveyFormProps {
 }
 
 class SurveyForm extends React.Component<ISurveyFormProps> {
-  static defaultProps = {
-    surveyInfo: { formId: "123test" }
-  };
   scrollBars: Scrollbars;
   tempLengthArea = 0;
   state = {
@@ -53,6 +48,8 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
   };
 
   componentDidUpdate() {
+    console.log('sss');
+    
     const sLen = this.props.surveyContents.length;
     if (sLen > this.tempLengthArea) {
       this.scrollBars.scrollToBottom();
@@ -84,12 +81,14 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     ));
   }
   render() {
+    console.log(this.props.tempId);
+    
     console.log(this.props.surveyContents);
     
-    if (this.props.submitStatus === "Success") {
-      this.props.clearSubmitStatus();
-      this.handleOpenSuccessModal(true);
-    }
+    // if (this.props.submitStatus === "Success") {
+    //   this.props.clearSubmitStatus();
+    //   this.handleOpenSuccessModal(true);
+    // }
     const actionsConfirmModal = [
       <FlatButton label="Cancel" primary />,
       <FlatButton
@@ -139,20 +138,6 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
                 </Tab>
               </Tabs>
             </div>
-            {this.props.surveyInfo.formId ? (
-              <div className="btn-preview-survey-container">
-                <Link to={`/form/${this.props.surveyInfo.formId}`}>
-                  <RaisedButton
-                    backgroundColor="#4CAF50"
-                    className="btn-save"
-                    label="Preview"
-                  />
-                </Link>
-              </div>
-            ) : (
-              <div />
-            )}
-
             {this.state.completed ? (
               <div />
             ) : (
@@ -176,11 +161,11 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
               </div>
             )}
 
-            {this.props.submitStatus ? (
+            {/* {this.props.submitStatus ? (
               <div className="error-message">{this.props.submitStatus}</div>
             ) : (
               <div />
-            )}
+            )} */}
           </div>
         </div>
         <Settings />
@@ -194,10 +179,8 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
 // };
 
 const mapStateToProps = (state: any) => ({
-  surveyInfo: state.surveyInfo,
-  surveyContents: state.surveyContents,
-  currentIndex: state.stateStatus.currentIndex,
-  submitStatus: state.stateStatus.submitStatus,
+  surveyContents: [...state.surveyContents],
+  // submitStatus: state.stateStatus.submitStatus,
   tempId: state.stateStatus.tempId
 });
 

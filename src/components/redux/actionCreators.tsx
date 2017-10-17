@@ -109,10 +109,14 @@ export const updateSurveyInfo = (info: any) => ({
   type: UPDATE_INFO_SURVEY,
 })
 
-export const updateTempId = (id: string) => ({
-  id,
-  type: UPDATE_TEMP_SURVEY_ID
-})
+export const updateTempId = (id: string) => {
+  console.log("XXX");
+  
+  return ({
+    id,
+    type: UPDATE_TEMP_SURVEY_ID
+  })
+} 
 
 export const clearSubmitStatus = () => {
   return ({
@@ -152,26 +156,30 @@ export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: an
   });
 };
 
-export const getDataFromDbById = (username = "Daniel") => async (dispatch: any, getState: any) => {
+export const getDataFromDbById = () => async (dispatch: any, getState: any) => {
   
   const formId = getState().stateStatus.tempId;
-  const { data: { contents: surveyContents, ...surveyInfo }, message: submitStatus } = (await axios.get(
+  const resData = (await axios.get(
     `${urlServer}/survey/${formId}`,
   )).data;
+  console.log(`test:${JSON.stringify(resData)}`);
+  console.log(resData);
+  
+  const { data: { contents: surveyContents, ...surveyInfo }, message: submitStatus } = resData;
+  console.log(JSON.stringify(surveyContents));
+  
   if (surveyContents) {
-    console.log('xxx');
     console.log(surveyContents);
-    
     dispatch({
       surveyContents,
       surveyInfo,
       type: GET_DATA_FROM_DB_BY_ID,
     });
   }
-  dispatch({
-    submitStatus,
-    type: "UPDATE_SUBMIT_STATUS",
-  });
+  // dispatch({
+  //   submitStatus,
+  //   type: "UPDATE_SUBMIT_STATUS",
+  // });
 };
 
 

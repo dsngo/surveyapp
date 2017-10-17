@@ -48,7 +48,7 @@ const DEFAULT_STATE = {
     contents: [
       {
         questionType: "longQuestion",
-        question: "",
+        question: "defaukt stqetasrfasdf",
         description: "",
         answers: [""],
       },
@@ -81,7 +81,7 @@ const surveyContents = (state = DEFAULT_STATE.surveyContents, action: any) =>
   (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex ? action.questionIndex : state.length , 0, { questionType: "shortQuestion", question: "", description: "", answers: []}), [...state])) ||
   (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
   (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
-  (action.type === GET_DATA_FROM_DB_BY_ID && action.surveyContents) ||
+  (action.type === GET_DATA_FROM_DB_BY_ID && [...state, ...action.surveyContents]) ||
   (action.type === "SAVE_FORM_TO_DB" && []) || [...state];
 
 const stateStatus = (state = {}, action: any) =>
