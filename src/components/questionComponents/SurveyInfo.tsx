@@ -74,7 +74,7 @@ class SurveyInfo extends React.Component<{
   // }
   componentDidUpdate() {
     // return this.props.updateQuestion(this.props.questionIndex, this.state);
-    
+    if (this.props.info.title !== this.state.title || this.props.info.description !== this.state.description) this.props.updateSurveyInfo(this.state);
   }
 }
 

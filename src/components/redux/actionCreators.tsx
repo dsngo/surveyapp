@@ -185,7 +185,9 @@ export const getDataFromDbById = () => async (dispatch: any, getState: any) => {
 
 export const saveFormToDb = (completed: boolean) => async (dispatch: any, getState: any) => {
   const contents = getState().surveyContents;
-  const { formId, ...surveyInfo } = getState().surveyInfo;
+  const { _id: formId, ...surveyInfo } = getState().surveyInfo;
+  console.log(getState().surveyInfo);
+  
   const formData = { ...surveyInfo, contents, completed };
   const resSubmit = (await (formId
     ? axios.put(`${urlServer}/survey/${formId}`, formData)
