@@ -7,19 +7,13 @@ import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
 import { Tabs, Tab } from "material-ui/Tabs";
 import Settings from "./Settings";
-import SurveyInfo from "./questionComponents/SurveyInfo";
-import { saveFormToDb, clearSubmitStatus } from "./redux/actionCreators";
+import SurveyInfo from "./clientSurvey/SurveyInfo";
+import { saveFormToDb, clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
 // Import question components
-import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
-import ShortQuestion from "./questionComponents/ShortQuestion";
-import CheckboxQuestion from "./questionComponents/CheckboxQuestion";
-import DropdownQuestion from "./questionComponents/DropdownQuestion";
-import LongQuestion from "./questionComponents/LongQuestion";
-import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestion";
-import PriorityQuestion from "./questionComponents/PriorityQuestion";
-import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
+import AddQuestionComponent from "./clientSurvey/AddQuestionComponent";
 
 interface IClientSurveyProps {
+  match: any;
   saveFormToDb: (completed: boolean) => any;
   clearSubmitStatus: () => any;
   surveyInfo: any;
@@ -27,6 +21,8 @@ interface IClientSurveyProps {
   currentIndex: number;
   submitStatus: string;
   updateInfoSurvey: (field: string, value: string) => any;
+  getDataFromDbById: (id: string) => any;
+  saveClientDataToDb: (clientSurveyId: string, completed: boolean) => any;
   saveSurvey: () => any;
   clearMessage: () => any;
   getSurveyById: (id: string) => any;
@@ -48,14 +44,16 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
     actionSave: false // False: save, True: submit
   };
 
+  componentDidMount() {
+    this.props.getDataFromDbById(this.props.match.params.id);
+  }
+
   componentDidUpdate() {
     const sLen = this.props.surveyContents.length;
     if (sLen > this.tempLengthArea) {
       this.scrollBars.scrollToBottom();
       this.tempLengthArea = sLen;
     }
-    
-    
   }
   handleChangeCurrentTab = (currentTab: any) =>
     this.setState(prevState => ({ ...prevState, currentTab }));
@@ -72,7 +70,7 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
     ));
   }
   render() {
-    if (this.props.submitStatus === "Success") {
+    if (this.props.submitStatus === "Create Client Survey Success") {
       this.props.clearSubmitStatus();
       this.handleOpenSuccessModal(true);
     }
@@ -81,7 +79,7 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
       <FlatButton
         label="Submit"
         secondary
-        onClick={() => this.props.saveFormToDb(this.state.actionSave)}
+        onClick={() => this.props.saveClientDataToDb("", true)}
       />
     ];
     const actionsSuccessModal = [
@@ -102,14 +100,14 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
           open={this.state.openConfirmModal}
           onRequestClose={() => this.handleOpenConfirmModal(false, false)}
         >
-          Are you sure you want to create this survey?
+          Are you sure to submit this response?
         </Dialog>
         <Dialog
           actions={actionsSuccessModal}
           open={this.state.openSuccessModal}
           onRequestClose={() => this.handleOpenSuccessModal(false)}
         >
-          Create survey successfully.
+          Submit successfully.
         </Dialog>
 
         <div className="row survey-form-create">
@@ -127,30 +125,14 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
             </div>
             {this.props.surveyInfo.formId ? (
               <div className="btn-preview-survey-container">
-                <Link to={`/form/${this.props.surveyInfo.formId}`}>
-                  <RaisedButton
-                    backgroundColor="#4CAF50"
-                    className="btn-save"
-                    label="Preview"
-                  />
-                </Link>
               </div>
             ) : (
               <div />
             )}
-
             {this.state.completed ? (
               <div />
             ) : (
               <div>
-                <div className="btn-save-survey-container">
-                  <RaisedButton
-                    backgroundColor="#4CAF50"
-                    className="btn-save"
-                    label="Save"
-                    onClick={() => this.handleOpenConfirmModal(true, false)}
-                  />
-                </div>
                 <div className="btn-submit-survey-container">
                   <RaisedButton
                     backgroundColor="#4CAF50"
@@ -169,7 +151,6 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
             )}
           </div>
         </div>
-        <Settings />
       </Scrollbars>
     );
   }
@@ -189,7 +170,9 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   saveFormToDb: (completed: boolean) => dispatch(saveFormToDb(completed)),
-  clearSubmitStatus: () => dispatch(clearSubmitStatus())
+  clearSubmitStatus: () => dispatch(clearSubmitStatus()),
+  getDataFromDbById: (id: string) => dispatch(getDataFromDbById(id)),
+  saveClientDataToDb: (clientSurveyId: string, completed: boolean) => dispatch(saveClientDataToDb(clientSurveyId, completed))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClientSurvey);

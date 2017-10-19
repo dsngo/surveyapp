@@ -47,6 +47,16 @@ class PriorityQuestion extends React.Component<
       })
     }));
   };
+  componentDidMount() {
+    this.setState(prevState => ({
+        ...prevState,
+        question: this.props.questionData.question,
+        description: this.props.questionData.description,
+        answers: this.props.questionData.answers,
+        additionalContents: this.props.questionData.additionalContents
+    }))
+}
+
   handleUpdateAnswerContent = (index: number, indexQuestion: number, value: string) => {
       this.setState( prevState => ({
           ...prevState,

@@ -29,6 +29,14 @@ class DropdownQuestion extends React.Component<
         }],
         completed: false
     };
+    componentDidMount() {
+        this.setState(prevState => ({
+            ...prevState,
+            question: this.props.questionData.question,
+            description: this.props.questionData.description
+        }))
+    }
+
 
     getCurrentSelection = () => {
         for(let i = 0; i < this.state.answers.length; i++) {

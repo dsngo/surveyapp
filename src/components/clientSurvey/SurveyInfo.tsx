@@ -5,11 +5,12 @@ import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
 
 class SurveyInfo extends React.Component<{
+  info: any;
   updateSurveyInfo: (info: any) => any;
 }> {
   state = {
-    title: "Tst",
-    description: "asdasd",
+    title: "",
+    description: "",
     completed: false
   };
 
@@ -29,14 +30,22 @@ class SurveyInfo extends React.Component<{
       </div>
     );
   }
+
   componentDidUpdate() {
-    // return this.props.updateQuestion(this.props.questionIndex, this.state);
-    return this.props.updateSurveyInfo(this.state);
+      this.setState(prevState => ({
+        ...prevState,
+        title: this.props.info.title,
+        description: this.props.info.description,
+      }))
   }
+
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
   updateSurveyInfo: (info: any) => dispatch(updateSurveyInfo(info))
 });
 
-export default connect(null, mapDispatchToProps)(SurveyInfo);
+const mapStateToProps = (state: any) => ({
+  info: state.surveyInfo
+})
+export default connect(mapStateToProps, mapDispatchToProps)(SurveyInfo);

@@ -110,8 +110,6 @@ export const updateSurveyInfo = (info: any) => ({
 })
 
 export const updateTempId = (id: string) => {
-  console.log("XXX");
-  
   return ({
     id,
     type: UPDATE_TEMP_SURVEY_ID
@@ -123,6 +121,12 @@ export const clearSubmitStatus = () => {
     type: "CLEAR_SUBMIT_STATUS"
   })
 } 
+
+export const clearSurveyData = () => {
+  return ({
+    type: CLEAR_SURVEY
+  })
+}
 
 export const updateSectionBreaks = (currentIndex: number, title: string, description: string, bigBreak: boolean) => (
   dispatch: any,
@@ -156,20 +160,12 @@ export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: an
   });
 };
 
-export const getDataFromDbById = () => async (dispatch: any, getState: any) => {
-  
-  const formId = getState().stateStatus.tempId;
+export const getDataFromDbById = (formId: string) => async (dispatch: any, getState: any) => {
   const resData = (await axios.get(
     `${urlServer}/survey/${formId}`,
   )).data;
-  console.log(`test:${JSON.stringify(resData)}`);
-  console.log(resData);
-  
   const { data: { contents: surveyContents, ...surveyInfo }, message: submitStatus } = resData;
-  console.log(JSON.stringify(surveyContents));
-  
   if (surveyContents) {
-    console.log(surveyContents);
     dispatch({
       surveyContents,
       surveyInfo,
@@ -186,15 +182,12 @@ export const getDataFromDbById = () => async (dispatch: any, getState: any) => {
 export const saveFormToDb = (completed: boolean) => async (dispatch: any, getState: any) => {
   const contents = getState().surveyContents;
   const { _id: formId, ...surveyInfo } = getState().surveyInfo;
-  console.log(getState().surveyInfo);
-  
   const formData = { ...surveyInfo, contents, completed };
   const resSubmit = (await (formId
     ? axios.put(`${urlServer}/survey/${formId}`, formData)
     : axios.post(`${urlServer}/survey`, formData))).data;
   const submitStatus = resSubmit.message;
   const id = resSubmit.data._id;
-  console.log(resSubmit);
   if (submitStatus) {
     dispatch({
       formId: id,
@@ -209,9 +202,14 @@ export const saveFormToDb = (completed: boolean) => async (dispatch: any, getSta
 };
 
 export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
-  const clientSurveyData = getState().clientSurveyData;
+  const clientSurveyData = {
+    contents: getState().surveyContents,
+    completed: true,
+    surveyId: getState().surveyInfo._id
+  }
+  console.log(clientSurveyData);
   
-  const { data: { message: submitStatus } } = (await (clientSurveyId
+  const { message: submitStatus } = (await (clientSurveyId
     ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;
   if (submitStatus) {
@@ -223,5 +221,4 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
       type: "UPDATE_SUBMIT_STATUS",
     });
   }
-  
 };

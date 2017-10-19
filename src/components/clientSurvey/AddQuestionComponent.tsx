@@ -63,6 +63,9 @@ class AddQuestionComponent extends React.Component<
     
   }
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
+    console.log(questionType);
+    console.log(this.props.questionData);
+    
     return (
       (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
       (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
@@ -92,24 +95,8 @@ class AddQuestionComponent extends React.Component<
     console.log(questionIndex);
     
     return (
-      <div className={ activeQuestiton } style={{ width: "90%", margin: "10px auto", paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
-        <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
-          Are you sure to delete this question?
-        </Dialog>
-        <IconButton
-          style={{ float: "right" }}
-          tooltip="Remove question box"
-          tooltipPosition="top-left"
-          onClick={() => handleOpenClosingDialog(true)}
-        >
-          <ContentClear />
-        </IconButton>
-        <div className="padding-25">
-          <SelectField fullWidth onChange={(e, i, p) => handleChangeQuestionType(p)} value={ questionType }>
-            {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
-          </SelectField>
-        </div>
-        <div >
+      <div style={{ width: "90%", margin: "10px auto", paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
+         <div >
           {handleCreateQuestion(questionType || selectedQuestionType, questionIndex)}
         </div>
       </div>

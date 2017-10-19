@@ -26,6 +26,14 @@ class LongQuestion extends React.Component<
   getAnswerString(answers: string[]) {
     return answers.join("\n");
   }
+  componentDidMount() {
+    this.setState(prevState => ({
+        ...prevState,
+        question: this.props.questionData.question,
+        description: this.props.questionData.description
+    }))
+}
+
 
   renderClientForm() {
     return (

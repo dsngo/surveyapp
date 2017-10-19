@@ -28,6 +28,14 @@ class MultipleChoicesQuestion extends React.Component<
         }],
         completed: false
     };
+    componentDidMount() {
+        this.setState(prevState => ({
+            ...prevState,
+            question: this.props.questionData.question,
+            description: this.props.questionData.description
+        }))
+    }
+
 
     handleChooseAnswer = (answerIndex: any) => {
         this.setState(prevState => ({

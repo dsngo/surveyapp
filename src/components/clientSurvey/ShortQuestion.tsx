@@ -27,12 +27,20 @@ class ShortQuestion extends React.Component<
         return answers.join("\n");
     }
 
+    componentDidMount() {
+        this.setState(prevState => ({
+            ...prevState,
+            question: this.props.questionData.question,
+            description: this.props.questionData.description
+        }))
+    }
+
     renderClientForm() {
         return (
             <div className="input-option-create">
-                <div className="question-info">
-                    <div className="question">{this.state.question}</div>
-                    <div className="description">{this.state.description}</div>
+                <div className="question-info question-client-survey">
+                    <div className="question">{this.props.questionData.question}</div>
+                    <div className="description">{this.props.questionData.description}</div>
                 </div>
                 <div className="">
                     <TextField

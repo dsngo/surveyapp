@@ -27,6 +27,15 @@ class CheckboxQuestion extends React.Component<
         }],
         completed: false
     };
+    componentDidMount() {
+        this.setState(prevState => ({
+            ...prevState,
+            question: this.props.questionData.question,
+            description: this.props.questionData.description,
+            answers: this.props.questionData.answers
+        }))
+    }
+
 
     updateAnswer = (indexAnswer: number) => {
         this.setState(prevState => ({
@@ -40,6 +49,8 @@ class CheckboxQuestion extends React.Component<
         const {
             props: { questionIndex, removeQuestion, questionData },
         } = this;
+        console.log(questionData);
+        
         const { question, answers, description } = questionData;
         
         return (

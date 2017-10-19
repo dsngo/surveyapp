@@ -29,7 +29,7 @@ interface ISurveyFormProps {
   saveSurvey: () => any;
   clearMessage: () => any;
   getSurveyById: (id: string) => any;
-  getDataFromDbById: () => any;
+  getDataFromDbById: (id: string) => any;
   clearSurvey: () => any;
   tempId: string;
   match: any;
@@ -60,7 +60,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
   }
   componentDidMount() {
     if (this.props.tempId) {
-      this.props.getDataFromDbById();
+      this.props.getDataFromDbById(this.props.tempId);
     }
   }
   handleChangeCurrentTab = (currentTab: any) =>
@@ -180,7 +180,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: any) => ({
   saveFormToDb: (completed: boolean) => dispatch(saveFormToDb(completed)),
   clearSubmitStatus: () => dispatch(clearSubmitStatus()),
-  getDataFromDbById: () => dispatch(getDataFromDbById())
+  getDataFromDbById: (id: string) => dispatch(getDataFromDbById(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SurveyForm);
