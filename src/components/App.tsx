@@ -9,6 +9,7 @@ import NavBar from "./NavBar";
 import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
 import SurveyForm from "./SurveyForm";
 import Homepage from "./Homepage";
+import ClientSurvey from "./ClientSurvey";
 
 export const App: React.SFC = () => (
     <Router>
@@ -18,6 +19,7 @@ export const App: React.SFC = () => (
                     <NavBar showSearch />
                     <Switch>
                         <Route exact path="/" component={Homepage} />
+                        <Route path="/survey/:id" component={ClientSurvey} />
                         <Route path="/survey" component={SurveyForm} />
                         <Route component={FoF} />
                     </Switch>

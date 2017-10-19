@@ -24,7 +24,7 @@ interface ISurveyFormProps {
   saveFormToDb: (completed: boolean) => any;
   clearSubmitStatus: () => any;
   surveyContents: any[];
-  // submitStatus: string;
+  submitStatus: string;
   updateInfoSurvey: (field: string, value: string) => any;
   saveSurvey: () => any;
   clearMessage: () => any;
@@ -48,8 +48,6 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
   };
 
   componentDidUpdate() {
-    console.log('sss');
-    
     const sLen = this.props.surveyContents.length;
     if (sLen > this.tempLengthArea) {
       this.scrollBars.scrollToBottom();
@@ -59,7 +57,6 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     if (this.state.tempIdState === "" && this.props.tempId) {
 
     }
-    
   }
   componentDidMount() {
     if (this.props.tempId) {
@@ -81,14 +78,10 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     ));
   }
   render() {
-    console.log(this.props.tempId);
-    
-    console.log(this.props.surveyContents);
-    
-    // if (this.props.submitStatus === "Success") {
-    //   this.props.clearSubmitStatus();
-    //   this.handleOpenSuccessModal(true);
-    // }
+    if (this.props.submitStatus === "Success") {
+      this.props.clearSubmitStatus();
+      this.handleOpenSuccessModal(true);
+    }
     const actionsConfirmModal = [
       <FlatButton label="Cancel" primary />,
       <FlatButton
@@ -180,7 +173,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
 
 const mapStateToProps = (state: any) => ({
   surveyContents: [...state.surveyContents],
-  // submitStatus: state.stateStatus.submitStatus,
+  submitStatus: state.stateStatus.submitStatus,
   tempId: state.stateStatus.tempId
 });
 

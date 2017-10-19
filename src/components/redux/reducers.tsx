@@ -82,7 +82,7 @@ const surveyContents = (state = DEFAULT_STATE.surveyContents, action: any) =>
   (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
   (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
-  (action.type === "SAVE_FORM_TO_DB" && []) || [...state];
+  (action.type === "SAVE_FORM_TO_DB" && []) || (console.log(action.type),console.log(state),[...state]);
 
 const stateStatus = (state = {}, action: any) =>
   (action.type === "UPDATE_CURRENT_INDEX" && { ...state, currentIndex: action.currentIndex }) ||

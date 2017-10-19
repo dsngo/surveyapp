@@ -4,6 +4,8 @@ import { IShortQuestion } from "../../types/customTypes";
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
 
+
+
 class SurveyInfo extends React.Component<{
   updateSurveyInfo: (info: any) => any;
   info: any;
@@ -26,7 +28,6 @@ class SurveyInfo extends React.Component<{
       ...prevState,
       description: description
     }));
-
   renderFromCreate() {
     return (
       <div>
@@ -53,14 +54,7 @@ class SurveyInfo extends React.Component<{
     );
   }
   render() {
-    if (this.state.firstTime && this.props.info.title) {
-      this.setState(prevState => ({
-        ...prevState,
-        title: this.props.info.title,
-        description: this.props.info.description,
-        firstTime: false,
-      }))
-    }
+    
     return (
       <div className="question-components">
            {this.renderFromCreate()}
@@ -73,8 +67,20 @@ class SurveyInfo extends React.Component<{
   //   }
   // }
   componentDidUpdate() {
+    if (this.state.firstTime && this.props.info.title) {
+      this.setState(prevState => ({
+        ...prevState,
+        title: this.props.info.title,
+        description: this.props.info.description,
+        firstTime: false,
+      }), () => {
+        
+      })
+    }
     // return this.props.updateQuestion(this.props.questionIndex, this.state);
-    if (this.props.info.title !== this.state.title || this.props.info.description !== this.state.description) this.props.updateSurveyInfo(this.state);
+    if (this.props.info.title !== this.state.title || this.props.info.description !== this.state.description) {
+      this.props.updateSurveyInfo(this.state);
+    } 
   }
 }
 

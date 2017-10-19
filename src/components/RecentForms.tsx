@@ -22,7 +22,7 @@ class RecentForms extends React.Component<IRecentForms> {
     renderTemplate() {
         return this.props.recentForms.map((form: any) => {
             return (
-                <Link className="col-sm-4 template-card-container" to={"/survey"} onClick={() => this.handleSurvey(form.formId)}>
+                <Link className="col-sm-4 template-card-container" to={ form.completed ? `/survey/${form.formId}` : "/survey"} onClick={() => this.handleSurvey(form.formId)}>
                     <div className="template-card">
                         <div className="template-card-thumbnail" />
                         <div className="template-name">{form.title}</div>
