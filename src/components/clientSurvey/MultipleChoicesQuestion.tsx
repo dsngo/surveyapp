@@ -32,7 +32,8 @@ class MultipleChoicesQuestion extends React.Component<
         this.setState(prevState => ({
             ...prevState,
             question: this.props.questionData.question,
-            description: this.props.questionData.description
+            description: this.props.questionData.description,
+            answers: this.props.questionData.answers
         }))
     }
 

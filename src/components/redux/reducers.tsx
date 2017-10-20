@@ -21,8 +21,8 @@ const DEFAULT_STATE = {
     isDeleted: false,
     completed: false,
     author: { username: "daniel" },
-    sectionBreaks: [{index: 1, title: "title section", description: "section desc", bigBreak: false}],
-    formId: "askjfdq23",
+    sectionBreaks: [{index: 1, title: "", description: "", bigBreak: false}],
+    formId: "",
   },
   surveyContents: [
     {
@@ -68,7 +68,7 @@ const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) =>
   (action.type === "GET_RECENT_FORMS_FROM_DB" && [...action.recentForms]) || [...state];
 
 const surveyInfo = (state = {}, action: any) =>
-  (action.type === CLEAR_SURVEY && {})||
+  (action.type === CLEAR_SURVEY && DEFAULT_STATE.surveyInfo)||
   (action.type === UPDATE_INFO_SURVEY && { ...state, title: action.info.title, description: action.info.description}) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && { ...action.surveyInfo }) ||
   (action.type === "SAVE_FORM_TO_DB" && { ...state }) ||
@@ -79,8 +79,8 @@ const clientSurveyData = (state = {}, action: any) =>
   (action.type === "SAVE_SURVEY_TO_DB" && { ...state }) || { ...state };
 
 const surveyContents = (state: any[], action: any) =>
-  (action.type === CLEAR_SURVEY && [])||
-  (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex ? action.questionIndex : state.length , 0, { questionType: "shortQuestion", question: "", description: "", answers: []}), [...state])) ||
+  (action.type === CLEAR_SURVEY && state.splice(0, state.length) && (console.log(state), [...state])) ||
+  (action.type === ADD_NEW_QUESTION && (state.splice(action.questionIndex ? action.questionIndex + 1 : state.length , 0, { questionType: "shortQuestion", question: "", description: "", answers: []}), [...state])) ||
   (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
   (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
@@ -90,6 +90,7 @@ const stateStatus = (state = {}, action: any) =>
   (action.type === "UPDATE_CURRENT_INDEX" && { ...state, currentIndex: action.currentIndex }) ||
   (action.type === "UPDATE_SUBMIT_STATUS" && { ...state, submitStatus: action.submitStatus }) ||
   (action.type === UPDATE_TEMP_SURVEY_ID && { ...state, tempId: action.id }) ||
+  (action.type === CLEAR_SURVEY && { ...state, tempId: ""}) ||
   (action.type === "CLEAR_SUBMIT_STATUS" && { ...state, submitStatus: ""}) ||
   (action.type === "UPDATE_SELECTED_QUESTION_TYPE" && { ...state, selectedQuestionType: action.questionType }) || { ...state };
 

@@ -149,7 +149,6 @@ export const updateSectionBreaks = (currentIndex: number, title: string, descrip
 // API REQUESTS
 export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
   const { data: recentForms, message: submitStatus } = (await axios.get(`${urlServer}/survey/recent-forms`)).data;
-  console.log(recentForms)
   dispatch({
     recentForms,
     type: "GET_RECENT_FORMS_FROM_DB",
@@ -207,8 +206,6 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
     completed: true,
     surveyId: getState().surveyInfo._id
   }
-  console.log(clientSurveyData);
-  
   const { message: submitStatus } = (await (clientSurveyId
     ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;

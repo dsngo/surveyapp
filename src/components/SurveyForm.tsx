@@ -78,6 +78,8 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
     ));
   }
   render() {
+    console.log(this.props.surveyContents);
+    
     if (this.props.submitStatus === "Success") {
       this.props.clearSubmitStatus();
       this.handleOpenSuccessModal(true);

@@ -35,7 +35,6 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
     surveyInfo: { formId: "123test" }
   };
   scrollBars: Scrollbars;
-  tempLengthArea = 0;
   state = {
     openConfirmModal: false,
     openSuccessModal: false,
@@ -48,13 +47,6 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
     this.props.getDataFromDbById(this.props.match.params.id);
   }
 
-  componentDidUpdate() {
-    const sLen = this.props.surveyContents.length;
-    if (sLen > this.tempLengthArea) {
-      this.scrollBars.scrollToBottom();
-      this.tempLengthArea = sLen;
-    }
-  }
   handleChangeCurrentTab = (currentTab: any) =>
     this.setState(prevState => ({ ...prevState, currentTab }));
 

@@ -32,11 +32,13 @@ class SurveyInfo extends React.Component<{
   }
 
   componentDidUpdate() {
-      this.setState(prevState => ({
-        ...prevState,
-        title: this.props.info.title,
-        description: this.props.info.description,
-      }))
+      if (this.state.title !== this.props.info.title || this.state.description !== this.props.info.description) {
+        this.setState(prevState => ({
+          ...prevState,
+          title: this.props.info.title,
+          description: this.props.info.description,
+        }))
+      }
   }
 
 }

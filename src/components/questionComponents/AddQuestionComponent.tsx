@@ -89,8 +89,6 @@ class AddQuestionComponent extends React.Component<
       <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)} />,
       <FlatButton label="Submit" secondary onClick={() => removeQuestion(questionIndex)} />,
     ];
-    console.log(questionIndex);
-    
     return (
       <div className={ activeQuestiton } style={{ width: "90%", margin: "10px auto", paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
