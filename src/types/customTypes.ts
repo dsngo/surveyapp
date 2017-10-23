@@ -32,7 +32,7 @@ export interface IMultipleDropdown {
   question: string;
   description: string;
   headers: { headerId: number; text: string; tooltip: string; answerOptions: string[] }[];
-  answers: { answerId: number; contents: { refId: number; textAnswer: string }[] }[];
+  answers: { answerId: number; contents: { refId: number; textAnswer: string, chosen: boolean }[] }[];
 }
 export interface ICheckBox {
   [key: string]: any;

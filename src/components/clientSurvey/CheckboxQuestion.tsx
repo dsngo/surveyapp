@@ -49,8 +49,6 @@ class CheckboxQuestion extends React.Component<
         const {
             props: { questionIndex, removeQuestion, questionData },
         } = this;
-        console.log(questionData);
-        
         const { question, answers, description } = questionData;
         
         return (
@@ -94,9 +92,6 @@ class CheckboxQuestion extends React.Component<
     }
 
     componentDidUpdate() {
-        console.log(this.props.questionIndex);
-        console.log(this.state);
-        
         return this.props.updateQuestion(this.props.questionIndex, this.state);
     }
 }

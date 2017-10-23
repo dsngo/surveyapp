@@ -63,9 +63,6 @@ class AddQuestionComponent extends React.Component<
     
   }
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
-    console.log(questionType);
-    console.log(this.props.questionData);
-    
     return (
       (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
       (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
@@ -92,10 +89,8 @@ class AddQuestionComponent extends React.Component<
       <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)} />,
       <FlatButton label="Submit" secondary onClick={() => removeQuestion(questionIndex)} />,
     ];
-    console.log(questionIndex);
-    
     return (
-      <div style={{ width: "90%", margin: "10px auto", paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
+      <div style={{ paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
          <div >
           {handleCreateQuestion(questionType || selectedQuestionType, questionIndex)}
         </div>

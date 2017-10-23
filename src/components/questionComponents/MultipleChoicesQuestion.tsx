@@ -125,44 +125,12 @@ class MultipleChoicesQuestion extends React.Component<
         )
     }
 
-    renderClientForm() {
-        const { question, description, answers } = this.props.questionData;
-        return (
-            <div className="input-option-create">
-                <div className="question-info">
-                    <div className="question">
-                        {question}
-                    </div>
-                    <div className="description">
-                        {description}
-                    </div>
-                </div>
-                <div className="padding-25">
-                    <RadioButtonGroup name="shipSpeed" defaultSelected="not_light" onChange={ (event: object, selected: string) => { this.handleChooseAnswer(selected)} }>
-                        {answers.map((answer: any, key: any) => {
-                            return (
-                                <RadioButton
-                                    key={key}
-                                    value={key}
-                                    label={answer.answer}
-                                />
-                            );
-                        })}
-                    </RadioButtonGroup>
-                </div>
-            </div>
-        )
-    }
     render() {
 
         return (
             <div className="question-component">
                 {
-                    this.state.completed === false ? (
-                        this.renderCreateForm()
-                    ) : (
-                            this.renderClientForm()
-                        )
+                    this.renderCreateForm()
                 }
             </div>
         );

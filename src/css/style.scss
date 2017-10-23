@@ -562,3 +562,15 @@ select {
 .question-client-survey {
     padding-top: 30px
 }
+
+.dropdown-multi {
+    margin: 5%;
+    border: 1px solid $color-white-grey;
+    padding: 15px;
+    .title {
+        text-align: center;
+        font-size: 17px;
+        font-weight: bold;
+        font-style: italic;
+    }
+}

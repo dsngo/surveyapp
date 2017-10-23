@@ -90,7 +90,7 @@ class AddQuestionComponent extends React.Component<
       <FlatButton label="Submit" secondary onClick={() => removeQuestion(questionIndex)} />,
     ];
     return (
-      <div className={ activeQuestiton } style={{ width: "90%", margin: "10px auto", paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
+      <div className={ activeQuestiton } style={{ paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
           Are you sure to delete this question?
         </Dialog>

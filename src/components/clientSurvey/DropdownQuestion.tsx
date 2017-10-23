@@ -41,8 +41,6 @@ class DropdownQuestion extends React.Component<
 
     getCurrentSelection = () => {
         for(let i = 0; i < this.state.answers.length; i++) {
-            console.log(i);
-            
             if (this.state.answers[i].chosen === true) return i;
         }
     }
