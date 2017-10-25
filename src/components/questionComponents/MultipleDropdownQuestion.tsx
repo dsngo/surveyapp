@@ -112,7 +112,10 @@ class MultipleDropdownQuestion extends React.Component<
       headers: prevState.headers.map(
         header =>
           header.headerId === indexDropdown
-            ? header.answerOptions.map((option, i) => i === indexOption ? newOption : option)
+            ? {
+                ...header,
+                answerOptions: header.answerOptions.map((option, i) => (i === indexOption ? newOption : option)),
+              }
             : header,
       ),
     }));
