@@ -29,9 +29,11 @@ import {
   REMOVE_QUESTION,
   UPDATE_QUESTION_TYPE,
   UPDATE_TEMP_SURVEY_ID,
-  GET_DATA_FROM_DB_BY_ID
+  GET_DATA_FROM_DB_BY_ID,
+  UPDATE_SELECTED_QUESTION_TYPE
 } from "./actions";
 import axios from "axios";
+import * as Templates from "../../types/questionTemplate";
 
 const config = require("../../config.json");
 const urlServer = config.URL_SERVER_API;
@@ -74,11 +76,18 @@ export const addNewQuestion = (questionIndex: number) => (
   dispatch: any,
   getState: any,
 ) => {
-  
   const questionType = getState().stateStatus.selectedQuestionType;
+  let template;
+  if (questionType) {
+    template = Templates[questionType];
+  } else {
+    template = Templates.shortQuestion;
+  }
+  const currentIndex = getState().stateStatus.currentIndex;
   dispatch({
-    questionIndex,
+    currentIndex: getState().stateStatus.currentIndex,
     questionType,
+    template,
     type: ADD_NEW_QUESTION
   })
 }
@@ -88,20 +97,22 @@ export const removeQuestion = (questionIndex: number) => ({
   type: REMOVE_QUESTION,
 });
 
-export const updateQuestion = (questionIndex: number, questionData: any) => ({
-  questionIndex,
-  questionData,
-  type: UPDATE_QUESTION,
-});
+export const updateQuestion = (questionIndex: number, questionData: any) => (dispatch: any, getState: any) => {
+  dispatch ({
+    questionIndex,
+    questionData,
+    type: UPDATE_QUESTION,
+  });
+  dispatch({
+    questionType: questionData.questionType,
+    type: UPDATE_SELECTED_QUESTION_TYPE
+  })
+}
+
 
 export const updateCurrentIndex = (currentIndex: number) => ({
   currentIndex,
   type: "UPDATE_CURRENT_INDEX",
-});
-
-export const updateSelectedQuestionType = (questionType: string) => ({
-  questionType,
-  type: "UPDATE_SELECTED_QUESTION_TYPE",
 });
 
 export const updateSurveyInfo = (info: any) => ({

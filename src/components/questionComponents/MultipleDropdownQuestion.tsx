@@ -128,9 +128,11 @@ class MultipleDropdownQuestion extends React.Component<
     this.setState(prevState => ({
       ...prevState,
       headers: prevState.headers.map((answer) => {
-        answer.headerId === indexDropdown ? answer.answerOptions.map((option, idxOption) => {
-          idxOption === indexOption ? option = text : ""; return option; 
-        }) : ""; console.log(answer); return answer;
+        answer.headerId === indexDropdown ? answer.answerOptions.map                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ((option, idxOption) => {
+          idxOption === indexOption ? option = text : ""; 
+          return option;
+        }) : "";
+        return answer;
       })
     }))
   } 
@@ -454,6 +456,8 @@ class MultipleDropdownQuestion extends React.Component<
   }
 
   componentDidUpdate() {
+    console.log(this.state);
+    
     return this.props.updateQuestion(this.props.questionIndex, this.state);
   }
 }
