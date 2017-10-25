@@ -106,7 +106,7 @@ class MultipleDropdownQuestion extends React.Component<
     }));
   };
 
-  handleUpdateDropdownOption = (indexDropdown: number, indexOption: number, newOption: string) => {
+  handleUpdateDropdownOption = (indexDropdown: number, indexOption: number, newOption: string) =>
     this.setState(prevState => ({
       ...prevState,
       headers: prevState.headers.map(
@@ -119,8 +119,7 @@ class MultipleDropdownQuestion extends React.Component<
             : header,
       ),
     }));
-  };
-
+    
   handleRemoveAnswer = (answerIndex: number) =>
     this.setState(prevState => ({
       ...prevState,
