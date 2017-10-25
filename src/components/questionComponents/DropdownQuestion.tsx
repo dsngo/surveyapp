@@ -8,6 +8,8 @@ import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
+import Checkbox from "material-ui/Checkbox";
+
 
 class DropdownQuestion extends React.Component<
     {
@@ -59,6 +61,15 @@ class DropdownQuestion extends React.Component<
             )
         }))
     }
+    handleUpdateCorrect = (answerIndex: number) => 
+    this.setState(prevState => ({
+        ...prevState,
+        answers: prevState.answers.map((answer, answerIdx) => {
+            answerIdx === answerIndex ? answer.correct = !answer.correct : "";
+            return answer;
+        })
+    }))
+    
     handleAddAnswer = (newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
 
@@ -141,10 +152,18 @@ class DropdownQuestion extends React.Component<
                                             </div>
                                         </div>
                                     )}
+                                    <div className="check-box">
+                                        <Checkbox
+                                            onCheck={e => {
+                                                this.handleUpdateCorrect(answerIndex);
+                                            }}
+                                            label={""}
+                                        />
+                                    </div>
                                     <div className="icon-radio clear-fix">
                                         <i className="material-icons">arrow_drop_down_circle</i>
                                     </div>
-                                    <div className="input-field input-text-radio input-option-create">
+                                    <div className="input-field input-text-radio">
                                         <TextField
                                             name="answerText"
                                             hintText="Add an answer here."
@@ -170,13 +189,7 @@ class DropdownQuestion extends React.Component<
     render() {
         return (
             <div className="question-component">
-                {
-                    this.state.completed === false ? (
-                        this.renderFormCreate()
-                    ) : (
-                            this.renderClientForm()
-                    )
-                }
+                {this.renderFormCreate()}
             </div>
         );
     }

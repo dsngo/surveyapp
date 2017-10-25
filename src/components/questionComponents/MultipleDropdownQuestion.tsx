@@ -106,31 +106,19 @@ class MultipleDropdownQuestion extends React.Component<
     }));
   };
 
-  handleUpdateDropdownOption = (indexDropdown: number, indexOption: number, newOption: string) => {
+  handleUpdateDropdownOption = (indexDropdown: number, indexOption: number, newOption: string) =>
     this.setState(prevState => ({
       ...prevState,
-<<<<<<< HEAD
-      headers: prevState.headers.map((answer) => {
-        answer.headerId === indexDropdown ? answer.answerOptions.map((option: any, idxOption: any) => {
-          idxOption === indexOption ? option = text : ""; 
-          return option;
-        }) : "";                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ((option, idxOption) => {
-        return answer;
-      })
-    })
-  }))
-  } 
-=======
       headers: prevState.headers.map(
         header =>
           header.headerId === indexDropdown
-            ? header.answerOptions.map((option, i) => i === indexOption ? newOption : option)
+            ? {
+                ...header,
+                answerOptions: header.answerOptions.map((option, i) => (i === indexOption ? newOption : option)),
+              }
             : header,
       ),
     }));
-  };
->>>>>>> 0d502500289cc96be73fa337e7fdabff842608b9
-
   handleRemoveAnswer = (answerIndex: number) =>
     this.setState(prevState => ({
       ...prevState,

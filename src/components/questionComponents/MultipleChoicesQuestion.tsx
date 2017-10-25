@@ -7,6 +7,8 @@ import TextField from "material-ui/TextField";
 import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import { RadioButton, RadioButtonGroup } from "material-ui/RadioButton";
+import Checkbox from "material-ui/Checkbox";
+
 
 class MultipleChoicesQuestion extends React.Component<
     {
@@ -50,6 +52,15 @@ class MultipleChoicesQuestion extends React.Component<
             )
         }))
     }
+
+    handleUpdateCorrect = (answerIndex: number) => 
+        this.setState(prevState => ({
+            ...prevState,
+            answers: prevState.answers.map((answer, answerIdx) => {
+                answerIdx === answerIndex ? answer.correct = !answer.correct : "";
+                return answer;
+            })
+        }))
         
     handleAddAnswer = (newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
@@ -64,6 +75,7 @@ class MultipleChoicesQuestion extends React.Component<
             handleRemoveAnswer,
         } = this;
         const { question, answers, description } = questionData;
+        console.log(this.state);
         
         return (
             <div>
@@ -98,10 +110,18 @@ class MultipleChoicesQuestion extends React.Component<
                                             </div>
                                         </div>
                                     )}
+                                    <div className="check-box">
+                                        <Checkbox
+                                            onCheck={e => {
+                                                this.handleUpdateCorrect(answerIndex);
+                                            }}
+                                            label={""}
+                                        />
+                                    </div>
                                     <div className="icon-radio clear-fix">
                                         <i className="material-icons">radio_button_checked</i>
                                     </div>
-                                    <div className="input-field input-text-radio input-option-create">
+                                    <div className="input-field input-text-radio">
                                         <TextField
                                             name="answerText"
                                             hintText="Add an answer here."

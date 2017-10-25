@@ -327,11 +327,15 @@ select {
       input {
           margin-left: 0 !important;
       }
+      .check-box {
+          display: inline-block;
+          width: 10%;
+      }
       .icon-radio {
           color: $color-light-grey;
           text-align: left;
           display: inline-block;
-          position: absolute;
+        //   position: absolute;
           top: 5px;
           left: -2px;
           width: 10%;
@@ -340,7 +344,7 @@ select {
           }
       }
       .input-text-radio {
-          width: 80%;
+          width: 70%;
           display: inline-block;
       }
   }

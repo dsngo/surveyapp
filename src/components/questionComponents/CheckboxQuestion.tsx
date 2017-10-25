@@ -51,7 +51,15 @@ class CheckboxQuestion extends React.Component<
     }
     handleAddAnswer = () =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push({ correct: false, text: "", chosen: false }) && prevState.answers }));
-
+    handleUpdateCorrect = (answerIndex: number) => 
+    this.setState(prevState => ({
+        ...prevState,
+        answers: prevState.answers.map((answer, answerIdx) => {
+            answerIdx === answerIndex ? answer.correct = !answer.correct : "";
+            return answer;
+        })
+    }))
+    
     renderClientForm = () => {
         const {
             props: { questionIndex, removeQuestion, questionData },
@@ -131,10 +139,18 @@ class CheckboxQuestion extends React.Component<
                                             </div>
                                         </div>
                                     )}
+                                    <div className="check-box">
+                                        <Checkbox
+                                            onCheck={e => {
+                                                this.handleUpdateCorrect(answerIndex);
+                                            }}
+                                            label={""}
+                                        />
+                                    </div>
                                     <div className="icon-radio clear-fix">
                                         <i className="material-icons">check_circle</i>
                                     </div>
-                                    <div className="input-field input-text-radio input-option-create">
+                                    <div className="input-field input-text-radio">
                                         <TextField
                                             name="answerText"
                                             hintText="Add an answer here."
