@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  Table,
-  TableBody,
-  TableFooter,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import { updateQuestion } from "../redux/actionCreators";
 import { IMultipleDropdown } from "../../types/customTypes";
 import { connect } from "react-redux";
@@ -22,17 +14,17 @@ import TextField from "material-ui/TextField";
 const styles: { [name: string]: React.CSSProperties } = {
   textQuestionColumn: {
     width: "40%",
-    textAlign: "center"
+    textAlign: "center",
   },
   optionAnswerFieldCoumn: {
     textAlign: "center",
     paddingLeft: "5px",
-    paddingRight: "5px"
+    paddingRight: "5px",
   },
   removeColumn: {
     width: "10%",
-    textAlight: "center"
-  }
+    textAlight: "center",
+  },
 };
 
 class MultipleDropdownQuestion extends React.Component<
@@ -54,14 +46,14 @@ class MultipleDropdownQuestion extends React.Component<
         headerId: 1,
         text: "Q2",
         tooltip: "Please choose one",
-        answerOptions: ["Not Interested", "Interested", "High Interested"]
+        answerOptions: ["Not Interested", "Interested", "High Interested"],
       },
       {
         headerId: 2,
         text: "Q3",
         tooltip: "Please choose one",
-        answerOptions: ["Unimportant", "Important", "Very Important"]
-      }
+        answerOptions: ["Unimportant", "Important", "Very Important"],
+      },
     ],
     answers: [
       {
@@ -69,64 +61,55 @@ class MultipleDropdownQuestion extends React.Component<
         contents: [
           { refId: 0, textAnswer: "", chosen: false },
           { refId: 1, textAnswer: "", chosen: false },
-          { refId: 2, textAnswer: "", chosen: false }
-        ]
+          { refId: 2, textAnswer: "", chosen: false },
+        ],
       },
       {
         answerId: 1,
         contents: [
           { refId: 0, textAnswer: "", chosen: false },
           { refId: 1, textAnswer: "", chosen: false },
-          { refId: 2, textAnswer: "", chosen: false }
-        ]
-      }
-    ]
+          { refId: 2, textAnswer: "", chosen: false },
+        ],
+      },
+    ],
   };
 
-  handleChangeQuestion = (newQuestion: string) =>
-    this.setState(prevState => ({ ...prevState, question: newQuestion }));
+  handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
   handleChangeDescription = (newDescription: string) =>
     this.setState(prevState => ({ ...prevState, description: newDescription }));
 
-  handleChangeHeader = (
-    headerId: number,
-    text: string,
-    tooltip: string,
-    answerOptions: string[]
-  ) =>
+  handleChangeHeader = (headerId: number, text: string, tooltip: string, answerOptions: string[]) =>
     this.setState(prevState => ({
       ...prevState,
-      headers: prevState.headers.map(
-        e =>
-          e.headerId === headerId
-            ? { headerId, text, tooltip, answerOptions }
-            : e
-      )
+      headers: prevState.headers.map(e => (e.headerId === headerId ? { headerId, text, tooltip, answerOptions } : e)),
     }));
 
   handleUpdateDescriptionDropdown = (indexDropdown: number, text: string) => {
     this.setState(prevState => ({
       ...prevState,
       headers: prevState.headers.map((header, indexHeader) => {
-        indexHeader === indexDropdown ? header.text = text : ""; return header;
-      })
-    }))
-  }
+        indexHeader === indexDropdown ? (header.text = text) : "";
+        return header;
+      }),
+    }));
+  };
 
   handleAddDropdownOption = (indexDropdown: number) => {
     this.setState(prevState => ({
       ...prevState,
-      headers: prevState.headers.map((answer) => {
+      headers: prevState.headers.map(answer => {
         answer.headerId === indexDropdown ? answer.answerOptions.push("") : "";
         return answer;
-      })
-    }))
-  }
+      }),
+    }));
+  };
 
-  handleUpdateDropdownOption = (indexDropdown: number, indexOption: number, text: string) => {
+  handleUpdateDropdownOption = (indexDropdown: number, indexOption: number, newOption: string) => {
     this.setState(prevState => ({
       ...prevState,
+<<<<<<< HEAD
       headers: prevState.headers.map((answer) => {
         answer.headerId === indexDropdown ? answer.answerOptions.map((option: any, idxOption: any) => {
           idxOption === indexOption ? option = text : ""; 
@@ -137,11 +120,21 @@ class MultipleDropdownQuestion extends React.Component<
     })
   }))
   } 
+=======
+      headers: prevState.headers.map(
+        header =>
+          header.headerId === indexDropdown
+            ? header.answerOptions.map((option, i) => i === indexOption ? newOption : option)
+            : header,
+      ),
+    }));
+  };
+>>>>>>> 0d502500289cc96be73fa337e7fdabff842608b9
 
   handleRemoveAnswer = (answerIndex: number) =>
     this.setState(prevState => ({
       ...prevState,
-      answers: prevState.answers.filter(e => e.answerId !== answerIndex)
+      answers: prevState.answers.filter(e => e.answerId !== answerIndex),
     }));
 
   handleUpdateAnswer = (answerId: number, refId: number, textAnswer: string) =>
@@ -152,13 +145,10 @@ class MultipleDropdownQuestion extends React.Component<
           answer.answerId === answerId
             ? {
                 answerId,
-                contents: answer.contents.map(
-                  content =>
-                    content.refId === refId ? { refId, textAnswer } : content
-                )
+                contents: answer.contents.map(content => (content.refId === refId ? { refId, textAnswer } : content)),
               }
-            : answer
-      )
+            : answer,
+      ),
     }));
 
   handleAddAnswer = () => {
@@ -171,12 +161,11 @@ class MultipleDropdownQuestion extends React.Component<
     }
     return this.setState(prevState => ({
       ...prevState,
-      answers: [...prevState.answers, { answerId, contents }]
+      answers: [...prevState.answers, { answerId, contents }],
     }));
   };
 
-  getHeaderAnswerOptions = (refId: number): string[] =>
-    this.state.headers.filter(e => e.headerId === refId)[0].answerOptions;
+  getHeaderAnswerOptions = (refId: number): string[] => this.state.headers.filter(e => e.headerId === refId)[0].answerOptions;
 
   renderFormCreate() {
     const {
@@ -188,7 +177,7 @@ class MultipleDropdownQuestion extends React.Component<
       handleAddAnswer,
       handleRemoveAnswer,
       getHeaderAnswerOptions,
-      checkBox
+      checkBox,
     } = this;
     const headerQ1Options = headers[1].answerOptions;
     const headerQ2Options = headers[2].answerOptions;
@@ -220,10 +209,7 @@ class MultipleDropdownQuestion extends React.Component<
               <div className="radio-answer" key={index}>
                 {answers.length > 1 && (
                   <div>
-                    <div
-                      className="delete-area"
-                      onClick={() => handleRemoveAnswer(index)}
-                    >
+                    <div className="delete-area" onClick={() => handleRemoveAnswer(index)}>
                       <i className="fa fa-times" />
                     </div>
                   </div>
@@ -237,8 +223,7 @@ class MultipleDropdownQuestion extends React.Component<
                     hintText="Add a question here."
                     fullWidth
                     value={answer.contents[0].textAnswer}
-                    onChange={(e: any) =>
-                      handleUpdateAnswer(answer.answerId, 0, e.target.value)}
+                    onChange={(e: any) => handleUpdateAnswer(answer.answerId, 0, e.target.value)}
                   />
                 </div>
               </div>
@@ -257,17 +242,14 @@ class MultipleDropdownQuestion extends React.Component<
             hintText="Description."
             fullWidth
             value={headers[1].text}
-            onChange={ (e: any) => this.handleUpdateDescriptionDropdown(1, e.target.value)}
+            onChange={(e: any) => this.handleUpdateDescriptionDropdown(1, e.target.value)}
           />
           {headerQ1Options.map((answer: any, answerIndex: number) => {
             return (
               <div className="radio-answer" key={answerIndex}>
                 {headerQ1Options.length > 1 && (
                   <div>
-                    <div
-                      className="delete-area"
-                      onClick={() => handleRemoveAnswer(answerIndex)}
-                    >
+                    <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
                       <i className="fa fa-times" />
                     </div>
                   </div>
@@ -281,8 +263,7 @@ class MultipleDropdownQuestion extends React.Component<
                     hintText="Add an answer here."
                     fullWidth
                     value={answer}
-                    onChange={ (e: any) => this.handleUpdateDropdownOption(1, answerIndex, e.target.value)}
-                    
+                    onChange={(e: any) => this.handleUpdateDropdownOption(1, answerIndex, e.target.value)}
                   />
                 </div>
               </div>
@@ -301,17 +282,14 @@ class MultipleDropdownQuestion extends React.Component<
             hintText="Description."
             fullWidth
             value={headers[2].text}
-            onChange={ (e: any) => this.handleUpdateDescriptionDropdown(2, e.target.value)}
+            onChange={(e: any) => this.handleUpdateDescriptionDropdown(2, e.target.value)}
           />
           {headerQ2Options.map((answer: any, answerIndex: number) => {
             return (
               <div className="radio-answer" key={answerIndex}>
                 {headerQ2Options.length > 1 && (
                   <div>
-                    <div
-                      className="delete-area"
-                      onClick={() => handleRemoveAnswer(answerIndex)}
-                    >
+                    <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
                       <i className="fa fa-times" />
                     </div>
                   </div>
@@ -325,19 +303,18 @@ class MultipleDropdownQuestion extends React.Component<
                     hintText="Add an answer here."
                     fullWidth
                     value={answer}
-                    onChange={ (e: any) => this.handleUpdateDropdownOption(2, answerIndex, e.target.value)}
+                    onChange={(e: any) => this.handleUpdateDropdownOption(2, answerIndex, e.target.value)}
                   />
                 </div>
               </div>
             );
           })}
           <div className="radio-answer align-center">
-          <FloatingActionButton mini onClick={e => this.handleAddDropdownOption(2)}>
+            <FloatingActionButton mini onClick={e => this.handleAddDropdownOption(2)}>
               <ContentAdd />
             </FloatingActionButton>
           </div>
         </div>
-        
       </div>
     );
   }
@@ -352,7 +329,7 @@ class MultipleDropdownQuestion extends React.Component<
       handleAddAnswer,
       handleRemoveAnswer,
       getHeaderAnswerOptions,
-      checkBox
+      checkBox,
     } = this;
     return (
       <Paper zDepth={1} className="question-component">
@@ -362,11 +339,7 @@ class MultipleDropdownQuestion extends React.Component<
               {headers.map((e, i) => (
                 <TableHeaderColumn
                   key={`header-${i}`}
-                  style={
-                    e.headerId === 0
-                      ? styles.textQuestionColumn
-                      : styles.optionAnswerFieldCoumn
-                  }
+                  style={e.headerId === 0 ? styles.textQuestionColumn : styles.optionAnswerFieldCoumn}
                   tooltip={e.tooltip}
                 >
                   {e.text}
@@ -383,21 +356,12 @@ class MultipleDropdownQuestion extends React.Component<
                 {answer.contents.map((content, i) => (
                   <TableRowColumn
                     key={`content-${i}`}
-                    style={
-                      content.refId === 0
-                        ? styles.textQuestionColumn
-                        : styles.optionAnswerFieldCoumn
-                    }
+                    style={content.refId === 0 ? styles.textQuestionColumn : styles.optionAnswerFieldCoumn}
                   >
                     {content.refId === 0 ? (
                       <TextField
                         value={content.textAnswer}
-                        onChange={(e: any) =>
-                          handleUpdateAnswer(
-                            answer.answerId,
-                            content.refId,
-                            e.target.value
-                          )}
+                        onChange={(e: any) => handleUpdateAnswer(answer.answerId, content.refId, e.target.value)}
                         multiLine
                         fullWidth
                         hintText="Additional Question"
@@ -407,26 +371,17 @@ class MultipleDropdownQuestion extends React.Component<
                         autoWidth={false}
                         style={{ width: "100%" }}
                         value={content.textAnswer}
-                        onChange={(e, i, p) =>
-                          handleUpdateAnswer(answer.answerId, content.refId, p)}
+                        onChange={(e, i, p) => handleUpdateAnswer(answer.answerId, content.refId, p)}
                       >
                         {getHeaderAnswerOptions(content.refId).map((e, i) => (
-                          <MenuItem
-                            key={`option-${i}`}
-                            value={e}
-                            primaryText={e}
-                          />
+                          <MenuItem key={`option-${i}`} value={e} primaryText={e} />
                         ))}
                       </DropDownMenu>
                     )}
                   </TableRowColumn>
                 ))}
                 <TableRowColumn style={styles.removeColumn}>
-                  <FloatingActionButton
-                    mini
-                    secondary
-                    onClick={e => handleRemoveAnswer(answer.answerId)}
-                  >
+                  <FloatingActionButton mini secondary onClick={e => handleRemoveAnswer(answer.answerId)}>
                     <ContentRemove />
                   </FloatingActionButton>
                 </TableRowColumn>
@@ -439,7 +394,7 @@ class MultipleDropdownQuestion extends React.Component<
                 style={{
                   textAlign: "center",
                   paddingBottom: "1em",
-                  height: "5em"
+                  height: "5em",
                 }}
               >
                 <FloatingActionButton mini onClick={e => handleAddAnswer()}>
@@ -458,14 +413,13 @@ class MultipleDropdownQuestion extends React.Component<
 
   componentDidUpdate() {
     console.log(this.state);
-    
+
     return this.props.updateQuestion(this.props.questionIndex, this.state);
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-  updateQuestion: (questionIndex: number, questionData: any) =>
-    dispatch(updateQuestion(questionIndex, questionData))
+  updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });
 
 export default connect(null, mapDispatchToProps)(MultipleDropdownQuestion);
