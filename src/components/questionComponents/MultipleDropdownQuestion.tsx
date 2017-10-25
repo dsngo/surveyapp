@@ -128,13 +128,14 @@ class MultipleDropdownQuestion extends React.Component<
     this.setState(prevState => ({
       ...prevState,
       headers: prevState.headers.map((answer) => {
-        answer.headerId === indexDropdown ? answer.answerOptions.map                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ((option, idxOption) => {
+        answer.headerId === indexDropdown ? answer.answerOptions.map((option: any, idxOption: any) => {
           idxOption === indexOption ? option = text : ""; 
           return option;
-        }) : "";
+        }) : "";                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ((option, idxOption) => {
         return answer;
       })
-    }))
+    })
+  }))
   } 
 
   handleRemoveAnswer = (answerIndex: number) =>
