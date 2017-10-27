@@ -85,9 +85,9 @@ export const addNewQuestion = (questionIndex: number) => (
   }
   const currentIndex = getState().stateStatus.currentIndex;
   dispatch({
-    currentIndex: getState().stateStatus.currentIndex,
     questionType,
     template,
+    currentIndex: getState().stateStatus.currentIndex,
     type: ADD_NEW_QUESTION
   })
 }
