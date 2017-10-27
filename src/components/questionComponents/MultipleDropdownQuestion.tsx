@@ -80,6 +80,14 @@ class MultipleDropdownQuestion extends React.Component<
   handleChangeDescription = (newDescription: string) =>
     this.setState(prevState => ({ ...prevState, description: newDescription }));
 
+  handleRemoveDropdownOption = (indexDropdown: number, indexOption: number) => 
+    this.setState(prevState => ({
+      ...prevState,
+      headers: prevState.headers.map((header) => {
+        header.headerId === indexDropdown ? header.answerOptions.splice(indexOption, 1) : "";
+        return header;
+      })
+    }))
   handleChangeHeader = (headerId: number, text: string, tooltip: string, answerOptions: string[]) =>
     this.setState(prevState => ({
       ...prevState,
@@ -236,8 +244,8 @@ class MultipleDropdownQuestion extends React.Component<
             return (
               <div className="radio-answer" key={answerIndex}>
                 {headerQ1Options.length > 1 && (
-                  <div>
-                    <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
+                  <div className="pos-relative">
+                    <div className="delete-area" onClick={() => this.handleRemoveDropdownOption(1, answerIndex)}>
                       <i className="fa fa-times" />
                     </div>
                   </div>
@@ -276,8 +284,8 @@ class MultipleDropdownQuestion extends React.Component<
             return (
               <div className="radio-answer" key={answerIndex}>
                 {headerQ2Options.length > 1 && (
-                  <div>
-                    <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
+                  <div className="pos-relative">
+                    <div className="delete-area" onClick={() => this.handleRemoveDropdownOption(2, answerIndex)}>
                       <i className="fa fa-times" />
                     </div>
                   </div>
