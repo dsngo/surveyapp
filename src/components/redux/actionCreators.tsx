@@ -1,36 +1,21 @@
 import {
-  ADD_AREA,
-  ADD_MULTIPLE_CHOICE,
-  CHANGE_QUESTION_DETAIL,
-  CHANGE_TYPE_ANSWER,
-  CHOOSE_AREA,
-  CLEAR_MESSAGE,
   CLEAR_SUBMIT_STATUS,
   CLEAR_SURVEY,
-  CREATE_SUCCESS,
-  DELETE_AREA,
-  DELETE_MULTIPLE_CHOICE,
-  DIVIDE_SECTION,
-  GET_RECENT_FORMS,
-  GET_RESPONSES,
-  GET_SURVEY,
-  GET_SURVEY_ERROR,
-  GET_SURVEY_SUCCESS,
-  INIT_SURVEY_QUESTION,
-  MISSING_INFO,
   SET_SEARCH_TERM,
-  SUBMIT_SUCCESS,
-  UPDATE_ANSWER_RESPONSE,
-  UPDATE_DESCRIPTION_AREA,
   UPDATE_INFO_SURVEY,
-  UPDATE_MULTIPLE_CHOICE,
   ADD_NEW_QUESTION,
   UPDATE_QUESTION,
   REMOVE_QUESTION,
   UPDATE_QUESTION_TYPE,
   UPDATE_TEMP_SURVEY_ID,
   GET_DATA_FROM_DB_BY_ID,
-  UPDATE_SELECTED_QUESTION_TYPE
+  UPDATE_SELECTED_QUESTION_TYPE,
+  UPDATE_CURRENT_INDEX,
+  UPDATE_SECTION_BREAK,
+  GET_RECENT_FORMS_FROM_DB,
+  UPDATE_SUBMIT_STATUS,
+  SAVE_FORM_TO_DB,
+  SAVE_SURVEY_TO_DB
 } from "./actions";
 import axios from "axios";
 import * as Templates from "../../types/questionTemplate";
@@ -43,34 +28,6 @@ export const setSearchTerm = (searchTerm: string) => ({
   searchTerm,
   type: SET_SEARCH_TERM,
 });
-
-// export const updateAnswer = (index: number, answer: string, multiAnswer: boolean) => ({
-//   index,
-//   answer,
-//   multiAnswer,
-//   type: UPDATE_ANSWER_RESPONSE,
-// });
-
-// export const submitResponse = (id: string) => {
-//   return async (dispatch: any, getState: any) => {
-//     const response = getState().surveyResponse;
-//     response.survey_id = id;
-//     const resSubmit = await axios.post(urlServer + "/client-survey", response);
-//     if (!resSubmit.data.code) {
-//       dispatch({
-//         type: SUBMIT_SUCCESS,
-//       });
-//     }
-//   };
-// };
-
-// ==================
-
-// export const addNewQuestion = (questionIndex: number, questionType: any) => ({
-//   questionIndex,
-//   questionType,
-//   type: ADD_NEW_QUESTION,
-// });
 
 export const addNewQuestion = (questionIndex: number) => (
   dispatch: any,
@@ -112,7 +69,7 @@ export const updateQuestion = (questionIndex: number, questionData: any) => (dis
 
 export const updateCurrentIndex = (currentIndex: number) => ({
   currentIndex,
-  type: "UPDATE_CURRENT_INDEX",
+  type: UPDATE_CURRENT_INDEX,
 });
 
 export const updateSurveyInfo = (info: any) => ({
@@ -129,7 +86,7 @@ export const updateTempId = (id: string) => {
 
 export const clearSubmitStatus = () => {
   return ({
-    type: "CLEAR_SUBMIT_STATUS"
+    type: CLEAR_SUBMIT_STATUS
   })
 } 
 
@@ -153,7 +110,7 @@ export const updateSectionBreaks = (currentIndex: number, title: string, descrip
   }
   dispatch({
     sectionBreaks,
-    type: "UPDATE_SECTION_BREAK",
+    type: UPDATE_SECTION_BREAK,
   });
 };
 
@@ -162,11 +119,11 @@ export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: an
   const { data: recentForms, message: submitStatus } = (await axios.get(`${urlServer}/survey/recent-forms`)).data;
   dispatch({
     recentForms,
-    type: "GET_RECENT_FORMS_FROM_DB",
+    type: GET_RECENT_FORMS_FROM_DB,
   });
   dispatch({
     submitStatus,
-    type: "UPDATE_SUBMIT_STATUS",
+    type: UPDATE_SUBMIT_STATUS,
   });
 };
 
@@ -182,10 +139,6 @@ export const getDataFromDbById = (formId: string) => async (dispatch: any, getSt
       type: GET_DATA_FROM_DB_BY_ID,
     });
   }
-  // dispatch({
-  //   submitStatus,
-  //   type: "UPDATE_SUBMIT_STATUS",
-  // });
 };
 
 
@@ -201,11 +154,11 @@ export const saveFormToDb = (completed: boolean) => async (dispatch: any, getSta
   if (submitStatus) {
     dispatch({
       formId: id,
-      type: "SAVE_FORM_TO_DB",
+      type: SAVE_FORM_TO_DB,
     });
     dispatch({
       submitStatus,
-      type: "UPDATE_SUBMIT_STATUS",
+      type: UPDATE_SUBMIT_STATUS,
     });
   }
   
@@ -222,11 +175,11 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;
   if (submitStatus) {
     dispatch({
-      type: "SAVE_SURVEY_TO_DB",
+      type: SAVE_SURVEY_TO_DB,
     })
     dispatch({
       submitStatus,
-      type: "UPDATE_SUBMIT_STATUS",
+      type: UPDATE_SUBMIT_STATUS,
     });
   }
 };
