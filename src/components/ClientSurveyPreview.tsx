@@ -47,8 +47,12 @@ class ClientSurveyPreview extends React.Component<IClientSurveyProps, {}> {
 
   handleOpenSuccessModal = (open: boolean) => this.setState(prevState => ({ ...prevState, openSuccessModal: open }));
 
+  renderForm = (editable: any) => {
+
+  }
   render() {
     const {
+      renderForm,
       handleOpenConfirmModal,
       handleOpenSuccessModal,
       props: { tempId, formId, submitStatus, clearSubmitStatus, saveClientDataToDb, completed },
@@ -85,7 +89,9 @@ class ClientSurveyPreview extends React.Component<IClientSurveyProps, {}> {
         <Dialog actions={actionsSuccessModal} open={openSuccessModal} onRequestClose={() => handleOpenSuccessModal(false)}>
           Submit successfully.
         </Dialog>
-        <div className="row survey-form-create">
+        {tempId && renderForm(formId)}
+        
+        {/* <div className="row survey-form-create">
           <div className="container survey-form" style={{ paddingTop: "15px" }}>
             {tempId && <div className="btn-preview-survey-container" />}
             {submitStatus && <div className="error-message">{submitStatus}</div>}
@@ -100,7 +106,7 @@ class ClientSurveyPreview extends React.Component<IClientSurveyProps, {}> {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
       </Scrollbars>
     );
   }
@@ -114,7 +120,6 @@ const mapStateToProps = (state: any) => ({
   clientInfo: state.clientSurveyData.clientInfo,
   clientSurveyContents: state.clientSurveyData.contents,
   submitStatus: state.stateStatus.submitStatus,
-  tempId: state.stateStatus.tempId,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
