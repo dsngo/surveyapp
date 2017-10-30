@@ -62,13 +62,13 @@ class DropdownQuestion extends React.Component<
         }))
     }
     handleUpdateCorrect = (answerIndex: number) => 
-    this.setState(prevState => ({
-        ...prevState,
-        answers: prevState.answers.map((answer, answerIdx) => {
-            answerIdx === answerIndex ? answer.correct = !answer.correct : "";
-            return answer;
-        })
-    }))
+        this.setState(prevState => ({
+            ...prevState,
+            answers: prevState.answers.map((answer, answerIdx) => {
+                answerIdx === answerIndex ? answer.correct = !answer.correct : "";
+                return answer;
+            })
+        }))
     
     handleAddAnswer = (newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));

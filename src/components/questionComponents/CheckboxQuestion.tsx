@@ -42,15 +42,10 @@ class CheckboxQuestion extends React.Component<
                 (ans: any, index) => { index === answerIndex ? ans.text = newAnswer : ""; return ans; }
             )
         }))
-    updateAnswer = (indexAnswer: number) => {
-        this.setState(prevState => ({
-            ...prevState, answers: prevState.answers.map((answer, index) => {
-                index === indexAnswer ? answer.chosen = !answer.chosen : ""; return answer;
-            })
-        }));
-    }
+
     handleAddAnswer = () =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push({ correct: false, text: "", chosen: false }) && prevState.answers }));
+
     handleUpdateCorrect = (answerIndex: number) => 
     this.setState(prevState => ({
         ...prevState,
@@ -60,6 +55,14 @@ class CheckboxQuestion extends React.Component<
         })
     }))
     
+    updateAnswer = (indexAnswer: number) => {
+        this.setState(prevState => ({
+            ...prevState, answers: prevState.answers.map((answer, index) => {
+                index === indexAnswer ? answer.chosen = !answer.chosen : ""; return answer;
+            })
+        }));
+    }
+
     renderClientForm = () => {
         const {
             props: { questionIndex, removeQuestion, questionData },
@@ -94,6 +97,14 @@ class CheckboxQuestion extends React.Component<
                 </div>
             </div>
         )
+    }
+    componentDidMount() {
+        this.setState(prevState => ({
+            ...prevState,
+            question: this.props.questionData.question,
+            description: this.props.questionData.description,
+            answers: this.props.questionData.answers
+        }))
     }
     renderCreateForm() {
         const {
@@ -194,9 +205,6 @@ class CheckboxQuestion extends React.Component<
     }
 
     componentDidUpdate() {
-        console.log(this.props.questionIndex);
-        console.log(this.state);
-        
         return this.props.updateQuestion(this.props.questionIndex, this.state);
     }
 }
