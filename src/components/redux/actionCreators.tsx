@@ -131,11 +131,12 @@ export const getDataFromDbById = (formId: string) => async (dispatch: any, getSt
   const resData = (await axios.get(
     `${urlServer}/survey/${formId}`,
   )).data;
-  const { data: { contents: surveyContents, ...surveyInfo }, message: submitStatus } = resData;
+  const { data: { contents: surveyContents, _id: surveyId, ...surveyInfo }, message: submitStatus } = resData;
   if (surveyContents) {
     dispatch({
       surveyContents,
       surveyInfo,
+      surveyId,
       type: GET_DATA_FROM_DB_BY_ID,
     });
   }

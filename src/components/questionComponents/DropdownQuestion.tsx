@@ -188,9 +188,9 @@ class DropdownQuestion extends React.Component<
     }
     render() {
         return (
-            <div className="question-component">
-                {this.renderFormCreate()}
-            </div>
+        <div className="question-component">
+            {this.state.completed !== true ? this.renderFormCreate() : this.renderClientForm()}
+        </div>
         );
     }
 

@@ -19,6 +19,7 @@ export const App: React.SFC = () => (
                     <NavBar showSearch />
                     <Switch>
                         <Route exact path="/" component={Homepage} />
+                        <Route path="/survey/preview" component={ClientSurvey} />
                         <Route path="/survey/:id" component={ClientSurvey} />
                         <Route path="/survey" component={SurveyForm} />
                         <Route component={FoF} />

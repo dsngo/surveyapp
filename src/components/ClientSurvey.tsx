@@ -28,6 +28,8 @@ interface IClientSurveyProps {
   getSurveyById: (id: string) => any;
   clearSurvey: () => any;
   tempId: string;
+  clientSurveyContents: any[];
+  test: any;
 }
 
 class ClientSurvey extends React.Component<IClientSurveyProps> {
@@ -44,7 +46,9 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
   };
 
   componentDidMount() {
-    this.props.getDataFromDbById(this.props.match.params.id);
+    if (this.props.match.params.id) {
+      this.props.getDataFromDbById(this.props.match.params.id);
+    }    
   }
 
   handleChangeCurrentTab = (currentTab: any) =>
@@ -57,8 +61,13 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
   renderQuestion() {
+    if (this.props.match.params.id && this.props.clientSurveyContents) {
+      return this.props.clientSurveyContents.map((content, index) => (
+        <AddQuestionComponent questionData={content} questionIndex={index} key={index} />
+      ));
+    }
     return this.props.surveyContents.map((content, index) => (
-      <AddQuestionComponent questionData={content} questionIndex={index} key={index} />
+      <AddQuestionComponent questionData={content} questionIndex={index} key={index} isPreview={ true }/>
     ));
   }
   render() {
@@ -153,11 +162,13 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
 // };
 
 const mapStateToProps = (state: any) => ({
+  test: state,
   surveyInfo: state.surveyInfo,
   surveyContents: state.surveyContents,
   currentIndex: state.stateStatus.currentIndex,
   submitStatus: state.stateStatus.submitStatus,
-  tempId: state.stateStatus.tempId
+  tempId: state.stateStatus.tempId,
+  clientSurveyContents: state.clientSurveyData.contents
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

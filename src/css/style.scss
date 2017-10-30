@@ -377,26 +377,22 @@ select {
 .btn-save-survey-container {
     position: fixed;
     right: 10%;
-    background-color: white;
-    box-shadow: -5px 0px 5px 0 #e0e0e0;
     bottom: 100px;
+    
+}
+.btn-preview-survey-container {
+    position: fixed;
+    right: 10%;
+    bottom: 150px;
 }
 
 .btn-submit-survey-container {
     position: fixed;
     right: 10%;
-    background-color: white;
-    box-shadow: -5px 0px 5px 0 #e0e0e0;
     bottom: 50px;
+    
 }
 
-.btn-preview-survey-container {
-    position: fixed;
-    right: 10%;
-    background-color: white;
-    box-shadow: -5px 0px 5px 0 #e0e0e0;
-    bottom: 100px;
-}
 
 .error-message {
     position: fixed;

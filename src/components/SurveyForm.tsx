@@ -137,6 +137,16 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
               <div />
             ) : (
               <div>
+                <div className="btn-preview-survey-container">
+                  <Link to="/survey/preview">
+                    <RaisedButton
+                      backgroundColor="#4CAF50"
+                      className="btn-save"
+                      label="Preview"
+                      onClick={() => this.handleOpenConfirmModal(true, false)}
+                    />
+                  </Link>
+                </div>
                 <div className="btn-save-survey-container">
                   <RaisedButton
                     backgroundColor="#4CAF50"

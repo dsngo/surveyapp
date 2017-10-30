@@ -94,7 +94,7 @@ const surveyInfo = (state = {}, action: any) =>
   (action.type === UPDATE_SECTION_BREAK && { ...state, sectionBreaks: action.sectionBreaks }) || { ...state };
 
 const clientSurveyData = (state = {}, action: any) =>
-  (action.type === GET_CLIENT_SURVEY_FROM_DB && { ...action.clientSurveyData }) ||
+  (action.type === GET_DATA_FROM_DB_BY_ID && { ...state, contents: action.surveyContents, formId: action.surveyId }) ||
   (action.type === SAVE_SURVEY_TO_DB && { ...state }) || { ...state };
 
 const surveyContents = (state: any[], action: any) =>
