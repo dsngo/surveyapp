@@ -18,42 +18,51 @@ interface ICICProps {
 
 const ClientInfoComponent: React.SFC<ICICProps> = props => {
   const { updateFirstName, updateLastName, updateEmail, updatePhone, updateAddress, updateGender, clientInfo } = props;
+  console.log(clientInfo.gender);
+  
   return (
-    <Paper>
+    <Paper className="info-client-survey">
       <TextField
         hintText="Enter your first name here"
         floatingLabelText="First Name"
         value={clientInfo.firstName || ""}
         onChange={(e: any) => updateFirstName(e.target.value)}
+        className="input-info-client"
       />
       <TextField
         hintText="Enter your last name here"
         floatingLabelText="Last Name"
         value={clientInfo.lastName || ""}
         onChange={(e: any) => updateLastName(e.target.value)}
+        className="input-info-client"
       />
       <TextField
         hintText="Enter your email here"
         floatingLabelText="Email"
         value={clientInfo.email || ""}
         onChange={(e: any) => updateEmail(e.target.value)}
+        className="input-info-client"
       />
       <TextField
         hintText="Enter your phone number here"
         floatingLabelText="Phone Number"
         value={clientInfo.phone || ""}
         onChange={(e: any) => updatePhone(e.target.value)}
+        className="input-info-client"
       />
       <TextField
         hintText="Enter your address here"
         floatingLabelText="Address"
         value={clientInfo.address || ""}
         onChange={(e: any) => updateAddress(e.target.value)}
+        className="input-info-client"
       />
       <SelectField
         floatingLabelText="Gender"
-        value={clientInfo.gender || "Please select"}
+        hintText="Input your gender"
+        value={clientInfo.gender || "Other"}
         onChange={(e, i, v) => updateGender(v)}
+        className="input-info-client"
       >
         <MenuItem value={"Male"} primaryText="Male" />
         <MenuItem value={"Female"} primaryText="Female" />

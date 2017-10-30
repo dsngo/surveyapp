@@ -11,6 +11,8 @@ import SurveyInfo from "./clientSurvey/SurveyInfo";
 import { saveFormToDb, clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
 // Import question components
 import AddQuestionComponent from "./clientSurvey/AddQuestionComponent";
+import ClientInfoComponent from "./clientSurvey/ClientInfoComponent";
+
 
 interface IClientSurveyProps {
   match: any;
@@ -119,7 +121,9 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
                 onChange={this.handleChangeCurrentTab}
               >
                 <Tab label="Form" value="question">
+
                   <SurveyInfo />
+                  <ClientInfoComponent />
                   {this.renderQuestion()}
                 </Tab>
               </Tabs>

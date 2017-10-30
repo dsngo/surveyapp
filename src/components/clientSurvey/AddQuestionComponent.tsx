@@ -17,6 +17,7 @@ import FlatButton from "material-ui/FlatButton";
 import { removeQuestion, updateCurrentIndex, updateQuestion } from "../redux/actionCreators";
 import SelectField from "material-ui/SelectField";
 import * as Templates from "../../types/questionTemplate";
+import ClientInfoComponent from "./ClientInfoComponent";
 
 const options = {
   "Long Question": "longQuestion",
