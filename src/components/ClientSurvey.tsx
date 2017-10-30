@@ -63,7 +63,7 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
   renderQuestion() {
     if (this.props.match.params.id && this.props.clientSurveyContents) {
       return this.props.clientSurveyContents.map((content, index) => (
-        <AddQuestionComponent questionData={content} questionIndex={index} key={index} />
+        <AddQuestionComponent questionData={content} questionIndex={index} key={index} isPreview={ false }/>
       ));
     }
     return this.props.surveyContents.map((content, index) => (

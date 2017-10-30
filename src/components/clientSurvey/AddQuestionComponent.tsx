@@ -44,6 +44,7 @@ class AddQuestionComponent extends React.Component<
     updateQuestion: (questionIndex: number, questionData: any) => any;
     questionData: any;
     currentIndex: number;
+    isPreview: Boolean;
   },
   { questionType: string }
 > {

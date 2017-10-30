@@ -5,7 +5,7 @@ import Scrollbars from "react-custom-scrollbars";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
-import { clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
+import { clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "../redux/actionCreators";
 import ClientSurveyRender from "./ClientSurveyRender";
 import MultipleChoicesQuestion from "./MultipleChoicesQuestion";
 import MultipleDropdownQuestion from "./MultipleDropdownQuestion";

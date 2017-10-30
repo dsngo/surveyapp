@@ -5,7 +5,7 @@ import Scrollbars from "react-custom-scrollbars";
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
-import { clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
+import { clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "../redux/actionCreators";
 import MultipleChoicesQuestion from "./MultipleChoicesQuestion";
 import MultipleDropdownQuestion from "./MultipleDropdownQuestion";
 import PriorityQuestion from "./PriorityQuestion";
@@ -13,17 +13,22 @@ import CheckboxQuestion from "./CheckboxQuestion";
 import ShortQuestion from "./ShortQuestion";
 import DropdownQuestion from "./DropdownQuestion";
 import LongQuestion from "./LongQuestion";
+import ClientInfoComponent from "./ClientInfoComponent";
 
 interface ICSRProps {
   surveyInfo: any;
   surveyContents: any[];
   formId?: string;
+  clearSubmitStatus: () => any,
+  getDataFromDbById: (id: string) => any,
+  saveClientDataToDb: (clientSurveyId: string, completed: boolean) => any,
 }
 
 const ClientSurveyRender: React.SFC<ICSRProps> = props => {
   const { surveyInfo, surveyContents, formId } = props;
   return (
     <div>
+      <ClientInfoComponent />
       {surveyContents.map(
         (e, i) =>
           (e.questionType === "longQuestion" && <LongQuestion {...{ questionIndex: i, questionData: e }} />) ||
@@ -131,10 +136,10 @@ const ClientSurveyRender: React.SFC<ICSRProps> = props => {
 //   submitStatus: state.stateStatus.submitStatus,
 // });
 
-// const mapDispatchToProps = (dispatch: any) => ({
-//   clearSubmitStatus: () => dispatch(clearSubmitStatus()),
-//   getDataFromDbById: (id: string) => dispatch(getDataFromDbById(id)),
-//   saveClientDataToDb: (clientSurveyId: string, completed: boolean) => dispatch(saveClientDataToDb(clientSurveyId, completed)),
-// });
+const mapDispatchToProps = (dispatch: any) => ({
+  clearSubmitStatus: () => dispatch(clearSubmitStatus()),
+  getDataFromDbById: (id: string) => dispatch(getDataFromDbById(id)),
+  saveClientDataToDb: (clientSurveyId: string, completed: boolean) => dispatch(saveClientDataToDb(clientSurveyId, completed)),
+});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(zzzzz);
+export default connect(null, mapDispatchToProps)(ClientSurveyRender);
