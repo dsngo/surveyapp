@@ -63,14 +63,15 @@ class AddQuestionComponent extends React.Component<
     
   }
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
+    const { questionData } = this.props;
     return (
-      (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
-      (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
-      (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
-      (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
-      (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
-      (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex, questionData: this.props.questionData }} />) ||
-      (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex, questionData: this.props.questionData }} />)
+      (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex, questionData }} />)
     );
   };
 
