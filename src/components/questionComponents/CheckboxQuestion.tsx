@@ -188,20 +188,11 @@ class CheckboxQuestion extends React.Component<
         );
     }
     render() {
-        if (this.state.completed !== true) return (
-            <div className="question-component">
-                {
-                    this.renderCreateForm()
-                }
-            </div>
-        )
         return (
-            <div className="question-component">
-                {
-                    this.renderClientForm()
-                }
-            </div>
-        )
+        <div className="question-component">
+            {this.state.completed !== true ? this.renderCreateForm() : this.renderClientForm()}
+        </div>
+        );
     }
 
     componentDidUpdate() {
