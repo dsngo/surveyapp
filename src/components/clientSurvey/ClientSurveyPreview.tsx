@@ -7,6 +7,11 @@ import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
 import { clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
 import ClientSurveyRender from "./ClientSurveyRender";
+import MultipleChoicesQuestion from "./MultipleChoicesQuestion";
+import MultipleDropdownQuestion from "./MultipleDropdownQuestion";
+import PriorityQuestion from "./PriorityQuestion";
+import CheckboxQuestion from "./CheckboxQuestion";
+import ShortQuestion from "./ShortQuestion";
 
 interface ICSPProps {
   surveyInfo: any;

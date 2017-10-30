@@ -6,7 +6,13 @@ import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
 import { clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
-
+import MultipleChoicesQuestion from "./MultipleChoicesQuestion";
+import MultipleDropdownQuestion from "./MultipleDropdownQuestion";
+import PriorityQuestion from "./PriorityQuestion";
+import CheckboxQuestion from "./CheckboxQuestion";
+import ShortQuestion from "./ShortQuestion";
+import DropdownQuestion from "./DropdownQuestion";
+import LongQuestion from "./LongQuestion";
 
 interface ICSRProps {
   surveyInfo: any;
@@ -16,9 +22,15 @@ interface ICSRProps {
 
 const ClientSurveyRender: React.SFC<ICSRProps> = props => {
   const {surveyInfo, surveyContents, formId} = props;
-  return (<div>
-    {surveyContents.map((e, i) => )}
-  </div>)
+  return surveyContents.map((e, i) => 
+  (e.questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
+  (e.questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||
+  (e.questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex, questionData }} />) ||
+  (e.questionType === "dropdown" && <DropdownQuestion {...{ questionIndex, questionData }} />) ||
+  (e.questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex, questionData }} />) ||
+  (e.questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex, questionData }} />) ||
+  (e.questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex, questionData }} />)
+);
 }
 
 // class zzzzz extends React.Component<ICSRProps, {}> {
