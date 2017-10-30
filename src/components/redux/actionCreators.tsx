@@ -183,3 +183,28 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
     });
   }
 };
+// ================ CLIENTSURVEY INFO
+export const updateFirstName = (firstName: string) => ({
+  firstName,
+  type: "UPDATE_FIRSTNAME",
+})
+export const updateLastName = (lastName: string) => ({
+  lastName,
+  type: "UPDATE_LASTNAME",
+})
+export const updateEmail = (email: string) => ({
+  email,
+  type: "UPDATE_EMAIL",
+})
+export const updatePhone = (phone: string) => ({
+  phone,
+  type: "UPDATE_PHONE",
+})
+export const updateAddress = (address: string) => ({
+  address,
+  type: "UPDATE_ADDRESS",
+})
+export const updateGender = (gender: string) => ({
+  gender,
+  type: "UPDATE_GENDER",
+})
