@@ -21,17 +21,22 @@ interface ICSRProps {
 }
 
 const ClientSurveyRender: React.SFC<ICSRProps> = props => {
-  const {surveyInfo, surveyContents, formId} = props;
-  return surveyContents.map((e, i) => 
-  (e.questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
-  (e.questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||
-  (e.questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex, questionData }} />) ||
-  (e.questionType === "dropdown" && <DropdownQuestion {...{ questionIndex, questionData }} />) ||
-  (e.questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex, questionData }} />) ||
-  (e.questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex, questionData }} />) ||
-  (e.questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex, questionData }} />)
-);
-}
+  const { surveyInfo, surveyContents, formId } = props;
+  return (
+    <div>
+      {surveyContents.map(
+        (e, i) =>
+          (e.questionType === "longQuestion" && <LongQuestion {...{ questionIndex: i, questionData: e }} />) ||
+          (e.questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex: i, questionData: e }} />) ||
+          (e.questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex: i, questionData: e }} />) ||
+          (e.questionType === "dropdown" && <DropdownQuestion {...{ questionIndex: i, questionData: e }} />) ||
+          (e.questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex: i, questionData: e }} />) ||
+          (e.questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex: i, questionData: e }} />) ||
+          (e.questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex: i, questionData: e }} />),
+      )}
+    </div>
+  );
+};
 
 // class zzzzz extends React.Component<ICSRProps, {}> {
 //   scrollBars: Scrollbars;
@@ -94,7 +99,7 @@ const ClientSurveyRender: React.SFC<ICSRProps> = props => {
 //           Submit successfully.
 //         </Dialog>
 //         {tempId && renderForm(formId)}
-        
+
 //         {/* <div className="row survey-form-create">
 //           <div className="container survey-form" style={{ paddingTop: "15px" }}>
 //             {tempId && <div className="btn-preview-survey-container" />}
