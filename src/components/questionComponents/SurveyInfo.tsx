@@ -20,13 +20,13 @@ class SurveyInfo extends React.Component<{
   handleChangeTitle = (title: string) =>
     this.setState(prevState => ({
       ...prevState,
-      title: title
+      title
     }));
 
   handleChangeDescription = (description: string) =>
     this.setState(prevState => ({
       ...prevState,
-      description: description
+      description
     }));
   renderFromCreate() {
     return (
