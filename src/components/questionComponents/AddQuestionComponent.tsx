@@ -59,8 +59,7 @@ class AddQuestionComponent extends React.Component<
   handleChangeQuestionType = (questionType: string) => {
     const questionData = Templates[questionType];
     // this.setState(prevState => ({ ...prevState, questionType, questionData: questionData}));
-    this.props.updateQuestion(this.props.questionIndex, questionData);
-    
+    this.props.updateQuestion(this.props.questionIndex, questionData);    
   }
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
     const { questionData } = this.props;
@@ -74,24 +73,29 @@ class AddQuestionComponent extends React.Component<
       (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex, questionData }} />)
     );
   };
+  handleRemoveQuestion = (questionIndex: number) => {
+    this.props.removeQuestion(questionIndex);
+    this.handleOpenClosingDialog(false);
+  }
 
   render() {
     const {
       handleCreateQuestion,
       handleChangeQuestionType,
       handleOpenClosingDialog,
-      props: { removeQuestion, questionIndex, selectedQuestionType, questionData },
+      handleRemoveQuestion,
+      props: { questionIndex, selectedQuestionType, questionData,updateCurrentIndex },
       state: {  openClosingDialog },
     } = this;
     const questionType = questionData.questionType;
     let activeQuestiton = "component-question ";
     activeQuestiton += this.props.currentIndex === questionIndex ? "active-area" : "";
     const actionsClosingDialog = [
-      <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)} />,
-      <FlatButton label="Submit" secondary onClick={() => removeQuestion(questionIndex)} />,
+      <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)}/>,
+      <FlatButton label="Submit" secondary onClick={() => handleRemoveQuestion(questionIndex)} />,
     ];
     return (
-      <div className={ activeQuestiton } style={{ paddingBottom: "40px" }} onClick={ e => this.props.updateCurrentIndex(questionIndex) }>
+      <div className={ activeQuestiton } style={{ paddingBottom: "40px" }} onClick={ e => updateCurrentIndex(questionIndex) }>
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
           Are you sure to delete this question?
         </Dialog>

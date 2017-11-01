@@ -77,17 +77,21 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
       <AddQuestionComponent questionData={content} questionIndex={index} />
     ));
   }
+  handleSaveFormToDb = (actionSave: boolean) => {
+    this.props.saveFormToDb(actionSave);
+    this.handleOpenConfirmModal(false, false);
+  }
   render() {
     if (this.props.submitStatus === "Success") {
       this.props.clearSubmitStatus();
       this.handleOpenSuccessModal(true);
     }
     const actionsConfirmModal = [
-      <FlatButton label="Cancel" primary />,
+      <FlatButton label="Cancel" primary onClick={()=> this.handleOpenConfirmModal(false, false)} />,
       <FlatButton
         label="Submit"
         secondary
-        onClick={() => this.props.saveFormToDb(this.state.actionSave)}
+        onClick={() => this.handleSaveFormToDb(this.state.actionSave)}
       />
     ];
     const actionsSuccessModal = [
