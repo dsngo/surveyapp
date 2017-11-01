@@ -34,13 +34,12 @@ export const addNewQuestion = (questionIndex: number) => (
   getState: any,
 ) => {
   const questionType = getState().stateStatus.selectedQuestionType;
-  let template;
-  if (questionType) {
-    template = Templates[questionType];
-  } else {
-    template = Templates.shortQuestion;
-  }
+  const template = questionType ? Templates[questionType] : Templates.shortQuestion;
   const currentIndex = getState().stateStatus.currentIndex;
+  console.log(template);
+  console.log(currentIndex);
+  
+  
   dispatch({
     questionType,
     template,
@@ -169,7 +168,8 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
   const clientSurveyData = {
     contents: getState().surveyContents,
     completed: true,
-    surveyId: getState().surveyInfo._id
+    surveyId: getState().surveyInfo._id,
+    clientInfo: getState().clientInfo
   }
   const { message: submitStatus } = (await (clientSurveyId
     ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)

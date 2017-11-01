@@ -103,11 +103,9 @@ const clientSurveyData = (state = { author: {}, clientInfo: {}, contents: [] }, 
   (action.type === "UPDATE_ADDRESS" && { ...state, clientInfo: { ...state.clientInfo, address: action.address } }) ||
   (action.type === "UPDATE_GENDER" && { ...state, clientInfo: { ...state.clientInfo, gender: action.gender } }) || { ...state };
 
-const surveyContents = (state: any[], action: any) =>
-  (action.type === CLEAR_SURVEY && state.splice(0, state.length) && (console.log(state), [...state])) ||
-  (action.type === ADD_NEW_QUESTION &&
-    (state.splice(action.currentIndex || action.currentIndex === 0 ? action.currentIndex : state.length, 0, action.template),
-    [...state])) ||
+const surveyContents = (state = [{}], action: any) =>
+  (action.type === CLEAR_SURVEY && (state.splice(0, state.length), [...state])) ||
+  (action.type === ADD_NEW_QUESTION && (state.splice(action.currentIndex || state.length, 0, action.template), [...state]))  ||
   (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
   (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
