@@ -6,7 +6,7 @@ interface ISettings {
   // addArea: (area: any) => string;
   selectedQuestionType: string;
   currentIndex: number;
-  addNewQuestion: (questionIndex: number) => any;
+  addNewQuestion: () => any;
   // surveyData: any[];
 }
 
@@ -32,7 +32,7 @@ const Settings: React.SFC<ISettings> = props => {
   return (
     <div className="menu-settings">
       <div>
-        <div className="settings-icon add-question" onClick={e => addNewQuestion(currentIndex)}>
+        <div className="settings-icon add-question" onClick={e => addNewQuestion()}>
           <i className="fa fa-plus-circle" />
         </div>
       </div>
@@ -68,7 +68,7 @@ const mapStateToProps = (state: any) => ({
 
 const mapDispatchToProps = (dispatch: any) => ({
   // addArea: (area: any) => dispatch(addArea(area)),
-  addNewQuestion: (questionIndex: number) => dispatch(addNewQuestion(questionIndex)),
+  addNewQuestion: () => dispatch(addNewQuestion()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

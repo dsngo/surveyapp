@@ -29,21 +29,22 @@ export const setSearchTerm = (searchTerm: string) => ({
   type: SET_SEARCH_TERM,
 });
 
-export const addNewQuestion = (questionIndex: number) => (
+export const addNewQuestion = () => (
   dispatch: any,
   getState: any,
 ) => {
-  const questionType = getState().stateStatus.selectedQuestionType;
-  const template = questionType ? Templates[questionType] : Templates.shortQuestion;
-  const currentIndex = getState().stateStatus.currentIndex;
+  const {selectedQuestionType, currentIndex} = getState().stateStatus;
+  // const questionType = getState().stateStatus.selectedQuestionType;
+  // const currentIndex = getState().stateStatus.currentIndex;
+  const template = Templates[selectedQuestionType || "shortQuestion"];
   console.log(template);
   console.log(currentIndex);
   
   
   dispatch({
-    questionType,
+    questionType:selectedQuestionType,
     template,
-    currentIndex: getState().stateStatus.currentIndex,
+    currentIndex,
     type: ADD_NEW_QUESTION
   })
 }
