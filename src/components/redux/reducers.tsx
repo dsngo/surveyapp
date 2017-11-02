@@ -105,9 +105,9 @@ const clientSurveyData = (state = { author: {}, clientInfo: {}, contents: [] }, 
 
 const surveyContents = (state = [{}], action: any) =>
   (action.type === CLEAR_SURVEY && (state.splice(0, state.length), [...state])) ||
-  (action.type === ADD_NEW_QUESTION && (state.splice(action.currentIndex || state.length, 0, action.template), [...state]))  ||
-  (action.type === REMOVE_QUESTION && (state.splice(action.questionIndex, 1), [...state])) ||
-  (action.type === UPDATE_QUESTION && (state.splice(action.questionIndex, 1, action.questionData), [...state])) ||
+  (action.type === ADD_NEW_QUESTION && addNewQuestionReducer(state, action.currentIndex, action.template))  ||
+  (action.type === REMOVE_QUESTION && removeQuestionReducer(state, action.questionIndex)) ||
+  (action.type === UPDATE_QUESTION && updateQuestionData(state, action.questionIndex, action.questionData)) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
   (action.type === SAVE_FORM_TO_DB && []) ||
   (state || []);
@@ -128,3 +128,24 @@ export const rootReducer = combineReducers({
   surveyContents,
   stateStatus,
 });
+
+function addNewQuestionReducer(state: any, currentIndex: any, template: any) {
+  // console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
+  const newState = [...state];
+  newState.splice(currentIndex + 1 || newState.length, 0, template);
+  // console.log(newState); // tslint:disable-line
+  return newState;
+}
+
+function removeQuestionReducer(state: any, questionIndex: any) {
+  const newState = [...state];
+  newState.splice(questionIndex, 1);
+  console.log(newState); // tslint:disable-line
+  return newState;
+}
+
+function updateQuestionData(state: any, questionIndex: any, questionData: any) {
+  const newState = [...state];
+  newState.splice(questionIndex, 1, questionData);
+  return newState;
+}

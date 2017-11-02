@@ -95,7 +95,7 @@ class AddQuestionComponent extends React.Component<
       <FlatButton label="Submit" secondary onClick={() => handleRemoveQuestion(questionIndex)} />,
     ];
     return (
-      <div className={ activeQuestiton } style={{ paddingBottom: "40px" }} onClick={ e => updateCurrentIndex(questionIndex) }>
+      <div className={ activeQuestiton } id={`${questionIndex}`} style={{ paddingBottom: "40px" }} onClick={ e => updateCurrentIndex(questionIndex) }>
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
           Are you sure to delete this question?
         </Dialog>

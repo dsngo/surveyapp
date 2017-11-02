@@ -72,9 +72,9 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
   handleOpenSuccessModal = (open: boolean) =>
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
-  renderQuestion() {
+  renderQuestion = () => {
     return this.props.surveyContents.map((content, index) => (
-      <AddQuestionComponent questionData={content} questionIndex={index} />
+      <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
     ));
   }
   handleSaveFormToDb = (actionSave: boolean) => {
@@ -167,12 +167,6 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
                 </div>
               </div>
             )}
-
-            {/* {this.props.submitStatus ? (
-              <div className="error-message">{this.props.submitStatus}</div>
-            ) : (
-              <div />
-            )} */}
           </div>
         </div>
         <Settings />
@@ -186,7 +180,7 @@ class SurveyForm extends React.Component<ISurveyFormProps> {
 // };
 
 const mapStateToProps = (state: any) => ({
-  surveyContents: [...state.surveyContents],
+  surveyContents: state.surveyContents,
   submitStatus: state.stateStatus.submitStatus,
   tempId: state.stateStatus.tempId
 });

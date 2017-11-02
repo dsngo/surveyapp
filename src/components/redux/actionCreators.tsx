@@ -34,17 +34,11 @@ export const addNewQuestion = () => (
   getState: any,
 ) => {
   const {selectedQuestionType, currentIndex} = getState().stateStatus;
-  // const questionType = getState().stateStatus.selectedQuestionType;
-  // const currentIndex = getState().stateStatus.currentIndex;
-  const template = Templates[selectedQuestionType || "shortQuestion"];
-  console.log(template);
-  console.log(currentIndex);
-  
-  
+  const template = {...Templates[selectedQuestionType || "shortQuestion"]};
   dispatch({
-    questionType:selectedQuestionType,
     template,
     currentIndex,
+    questionType:selectedQuestionType,
     type: ADD_NEW_QUESTION
   })
 }
