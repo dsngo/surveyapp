@@ -112,7 +112,7 @@ const surveyContents = (state = [{}], action: any) =>
   (action.type === SAVE_FORM_TO_DB && []) ||
   (state || []);
 
-const stateStatus = (state = { seletedQuestionType: "" }, action: any) =>
+const stateStatus = (state = {}, action: any) =>
   (action.type === UPDATE_CURRENT_INDEX && { ...state, currentIndex: action.currentIndex }) ||
   (action.type === UPDATE_SUBMIT_STATUS && { ...state, submitStatus: action.submitStatus }) ||
   (action.type === UPDATE_TEMP_SURVEY_ID && { ...state, tempId: action.id }) ||
@@ -130,10 +130,11 @@ export const rootReducer = combineReducers({
 });
 
 function addNewQuestionReducer(state: any, currentIndex: any, template: any) {
-  // console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
+  console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
   const newState = [...state];
   newState.splice(currentIndex + 1 || newState.length, 0, template);
-  // console.log(newState); // tslint:disable-line
+  console.log(newState);
+  // console.log(newState); // tslint:disable-lineư
   return newState;
 }
 

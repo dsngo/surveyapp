@@ -70,6 +70,8 @@ class ShortQuestion extends React.Component<
         );
     }
     componentDidUpdate() {
+        console.log('update');
+        console.log(this.state);
         return this.props.updateQuestion(this.props.questionIndex, this.state);
     }
 }

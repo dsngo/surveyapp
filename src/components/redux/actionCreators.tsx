@@ -38,7 +38,7 @@ export const addNewQuestion = () => (
   dispatch({
     template,
     currentIndex,
-    questionType:selectedQuestionType,
+    questionType: selectedQuestionType,
     type: ADD_NEW_QUESTION
   })
 }

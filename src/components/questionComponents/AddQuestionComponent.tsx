@@ -58,7 +58,7 @@ class AddQuestionComponent extends React.Component<
 
   handleChangeQuestionType = (questionType: string) => {
     const questionData = Templates[questionType];
-    // this.setState(prevState => ({ ...prevState, questionType, questionData: questionData}));
+    console.log('aaa')
     this.props.updateQuestion(this.props.questionIndex, questionData);    
   }
   handleCreateQuestion = (questionType: string, questionIndex: number) => {

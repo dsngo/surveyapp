@@ -21,6 +21,9 @@ class ShortQuestion extends React.Component<
         completed: false
     };
 
+    constructor(props: any) {
+        super(props);
+    }
     handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
 
     handleChangeDescription = (newDescription: string) =>
@@ -105,8 +108,11 @@ class ShortQuestion extends React.Component<
         );
     }
     componentDidUpdate() {
+        console.log(this.state);
+        console.log(this.props.questionIndex)
         return this.props.updateQuestion(this.props.questionIndex, this.state);
     }
+
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
