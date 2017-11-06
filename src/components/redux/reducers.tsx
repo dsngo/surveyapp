@@ -131,17 +131,10 @@ export const rootReducer = combineReducers({
 
 function addNewQuestionReducer(state: any, currentIndex: any, template: any) {
   console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
-<<<<<<< HEAD
   const newTemplate = {...template};
   const newState = [...state];
   newState.splice(currentIndex + 1 || newState.length, 0, template);
   console.log(newState); // tslint:disable-line
-=======
-  const newState = [...state];
-  newState.splice(currentIndex + 1 || newState.length, 0, template);
-  console.log(newState);
-  // console.log(newState); // tslint:disable-lineư
->>>>>>> 3d8958fe46e2bf1809928967051cfcdc3eee0700
   return newState;
 }
 
