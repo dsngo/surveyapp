@@ -52,10 +52,6 @@ class SurveyForm extends React.Component<ISurveyFormProps,{}> {
       this.scrollBars.scrollToBottom();
       this.tempLengthArea = sLen;
     }
-    
-    if (this.state.tempIdState === "" && this.props.tempId) {
-
-    }
   }
   componentDidMount() {
     if (this.props.tempId) {
@@ -72,7 +68,11 @@ class SurveyForm extends React.Component<ISurveyFormProps,{}> {
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
   renderQuestion = () => {
+<<<<<<< HEAD
     console.log(`hello`); // tslint:disable-line
+=======
+    console.log(this.props.surveyContents[1]);
+>>>>>>> 3d8958fe46e2bf1809928967051cfcdc3eee0700
     return this.props.surveyContents.map((content, index) => (
       <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
     ));

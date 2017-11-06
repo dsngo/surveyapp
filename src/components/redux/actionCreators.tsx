@@ -44,9 +44,15 @@ export const addNewQuestion = () => (dispatch: any, getState: any) => {
     template,
     currentIndex,
     questionType: selectedQuestionType,
+<<<<<<< HEAD
     type: ADD_NEW_QUESTION,
   });
 };
+=======
+    type: ADD_NEW_QUESTION
+  })
+}
+>>>>>>> 3d8958fe46e2bf1809928967051cfcdc3eee0700
 
 export const removeQuestion = (questionIndex: number) => ({
   questionIndex,
