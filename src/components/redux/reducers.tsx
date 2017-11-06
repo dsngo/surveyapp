@@ -130,10 +130,11 @@ export const rootReducer = combineReducers({
 });
 
 function addNewQuestionReducer(state: any, currentIndex: any, template: any) {
-  // console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
+  console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
+  const newTemplate = {...template};
   const newState = [...state];
   newState.splice(currentIndex + 1 || newState.length, 0, template);
-  // console.log(newState); // tslint:disable-line
+  console.log(newState); // tslint:disable-line
   return newState;
 }
 
