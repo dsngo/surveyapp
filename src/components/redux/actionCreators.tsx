@@ -15,7 +15,7 @@ import {
   GET_RECENT_FORMS_FROM_DB,
   UPDATE_SUBMIT_STATUS,
   SAVE_FORM_TO_DB,
-  SAVE_SURVEY_TO_DB
+  SAVE_SURVEY_TO_DB,
 } from "./actions";
 import axios from "axios";
 import * as Templates from "../../types/questionTemplate";
@@ -29,12 +29,17 @@ export const setSearchTerm = (searchTerm: string) => ({
   type: SET_SEARCH_TERM,
 });
 
-export const addNewQuestion = () => (
-  dispatch: any,
-  getState: any,
-) => {
-  const {selectedQuestionType, currentIndex} = getState().stateStatus;
-  const template = {...Templates[selectedQuestionType || "shortQuestion"]};
+export const addNewQuestion = () => (dispatch: any, getState: any) => {
+  const { selectedQuestionType, currentIndex } = getState().stateStatus;
+  const template = {
+    questionType: "multipleChoices",
+    question: "",
+    description: "",
+    answers: [{
+        correct: false,
+        answer: ""
+    }]
+  };
   dispatch({
     template,
     currentIndex,
@@ -49,17 +54,16 @@ export const removeQuestion = (questionIndex: number) => ({
 });
 
 export const updateQuestion = (questionIndex: number, questionData: any) => (dispatch: any, getState: any) => {
-  dispatch ({
+  dispatch({
     questionIndex,
     questionData,
     type: UPDATE_QUESTION,
   });
   dispatch({
     questionType: questionData.questionType,
-    type: UPDATE_SELECTED_QUESTION_TYPE
-  })
-}
-
+    type: UPDATE_SELECTED_QUESTION_TYPE,
+  });
+};
 
 export const updateCurrentIndex = (currentIndex: number) => ({
   currentIndex,
@@ -69,26 +73,26 @@ export const updateCurrentIndex = (currentIndex: number) => ({
 export const updateSurveyInfo = (info: any) => ({
   info,
   type: UPDATE_INFO_SURVEY,
-})
+});
 
 export const updateTempId = (id: string) => {
-  return ({
+  return {
     id,
-    type: UPDATE_TEMP_SURVEY_ID
-  })
-} 
+    type: UPDATE_TEMP_SURVEY_ID,
+  };
+};
 
 export const clearSubmitStatus = () => {
-  return ({
-    type: CLEAR_SUBMIT_STATUS
-  })
-} 
+  return {
+    type: CLEAR_SUBMIT_STATUS,
+  };
+};
 
 export const clearSurveyData = () => {
-  return ({
-    type: CLEAR_SURVEY
-  })
-}
+  return {
+    type: CLEAR_SURVEY,
+  };
+};
 
 export const updateSectionBreaks = (currentIndex: number, title: string, description: string, bigBreak: boolean) => (
   dispatch: any,
@@ -122,9 +126,7 @@ export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: an
 };
 
 export const getDataFromDbById = (formId: string) => async (dispatch: any, getState: any) => {
-  const resData = (await axios.get(
-    `${urlServer}/survey/${formId}`,
-  )).data;
+  const resData = (await axios.get(`${urlServer}/survey/${formId}`)).data;
   const { data: { contents: surveyContents, _id: surveyId, ...surveyInfo }, message: submitStatus } = resData;
   if (surveyContents) {
     dispatch({
@@ -135,7 +137,6 @@ export const getDataFromDbById = (formId: string) => async (dispatch: any, getSt
     });
   }
 };
-
 
 export const saveFormToDb = (completed: boolean) => async (dispatch: any, getState: any) => {
   const contents = getState().surveyContents;
@@ -156,7 +157,6 @@ export const saveFormToDb = (completed: boolean) => async (dispatch: any, getSta
       type: UPDATE_SUBMIT_STATUS,
     });
   }
-  
 };
 
 export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
@@ -164,15 +164,15 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
     contents: getState().surveyContents,
     completed: true,
     surveyId: getState().surveyInfo._id,
-    clientInfo: getState().clientInfo
-  }
+    clientInfo: getState().clientInfo,
+  };
   const { message: submitStatus } = (await (clientSurveyId
     ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;
   if (submitStatus) {
     dispatch({
       type: SAVE_SURVEY_TO_DB,
-    })
+    });
     dispatch({
       submitStatus,
       type: UPDATE_SUBMIT_STATUS,
@@ -183,24 +183,24 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
 export const updateFirstName = (firstName: string) => ({
   firstName,
   type: "UPDATE_FIRSTNAME",
-})
+});
 export const updateLastName = (lastName: string) => ({
   lastName,
   type: "UPDATE_LASTNAME",
-})
+});
 export const updateEmail = (email: string) => ({
   email,
   type: "UPDATE_EMAIL",
-})
+});
 export const updatePhone = (phone: string) => ({
   phone,
   type: "UPDATE_PHONE",
-})
+});
 export const updateAddress = (address: string) => ({
   address,
   type: "UPDATE_ADDRESS",
-})
+});
 export const updateGender = (gender: string) => ({
   gender,
   type: "UPDATE_GENDER",
-})
+});

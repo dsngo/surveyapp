@@ -5,6 +5,7 @@ export interface ILongQuestion {
   description: string;
   answers: string[];
 }
+
 export interface IShortQuestion {
   [key: string]: any;
   questionType: "shortQuestion";
@@ -12,6 +13,7 @@ export interface IShortQuestion {
   description: string;
   answers: string[];
 }
+
 export interface IMultipleChoices {
   [key: string]: any;
   questionType: "multipleChoices";
@@ -19,6 +21,7 @@ export interface IMultipleChoices {
   description: string;
   answers: { chosen: boolean, correct: boolean; answer: string }[];
 }
+
 export interface IDropdown {
   [key: string]: any;
   questionType: "dropdown";
@@ -26,6 +29,7 @@ export interface IDropdown {
   description: string;
   answers: { chosen: boolean, correct: boolean; answer: string }[];
 }
+
 export interface IMultipleDropdown {
   [key: string]: any;
   questionType: "multipleDropdown";
@@ -34,6 +38,7 @@ export interface IMultipleDropdown {
   headers: { headerId: number; text: string; tooltip: string; answerOptions: string[] }[];
   answers: { answerId: number; contents: { refId: number; textAnswer: string, chosen: boolean }[] }[];
 }
+
 export interface ICheckBox {
   [key: string]: any;
   questionType: "checkbox";
@@ -45,6 +50,7 @@ export interface ICheckBox {
     chosen: boolean
   }[];
 }
+
 export interface IPriorityQuestion {
   [key: string]: any;
   questionType: "priorityQuestion";

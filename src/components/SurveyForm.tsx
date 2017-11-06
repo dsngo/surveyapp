@@ -20,22 +20,21 @@ import PriorityQuestion from "./questionComponents/PriorityQuestion";
 import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
 
 interface ISurveyFormProps {
+  tempId: string;
   surveyId: string;
-  saveFormToDb: (completed: boolean) => any;
-  clearSubmitStatus: () => any;
   surveyContents: any[];
   submitStatus: string;
+  saveFormToDb: (completed: boolean) => any;
+  clearSubmitStatus: () => any;
   updateInfoSurvey: (field: string, value: string) => any;
   saveSurvey: () => any;
   clearMessage: () => any;
   getSurveyById: (id: string) => any;
   getDataFromDbById: (id: string) => any;
   clearSurvey: () => any;
-  tempId: string;
-  match: any;
 }
 
-class SurveyForm extends React.Component<ISurveyFormProps> {
+class SurveyForm extends React.Component<ISurveyFormProps,{}> {
   scrollBars: Scrollbars;
   tempLengthArea = 0;
   state = {
