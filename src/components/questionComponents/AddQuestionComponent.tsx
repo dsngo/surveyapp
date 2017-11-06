@@ -37,32 +37,25 @@ for (const [key, val] of Object.entries(options)) {
 
 class AddQuestionComponent extends React.Component<
   {
-    selectedQuestionType: string;
     questionIndex: number;
+    currentIndex: number;
     removeQuestion: (questionIndex: number) => any;
     updateCurrentIndex: (currentIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
-    questionData: any;
-    currentIndex: number;
   },
-  { questionType: string }
+  {}
 > {
   state = {
     questionType: "",
     openClosingDialog: false,
-    questionData: {}
+    questionData: {},
   };
 
   handleOpenClosingDialog = (openClosingDialog: boolean) => this.setState(prevState => ({ ...prevState, openClosingDialog }));
-  // handleChangeQuestionType = (questionType: string) => this.setState(prevState => ({ ...prevState, questionType }));
 
-  handleChangeQuestionType = (questionType: string) => {
-    const questionData = Templates[questionType];
-    console.log('aaa')
-    this.props.updateQuestion(this.props.questionIndex, questionData);    
-  }
+  handleChangeQuestionType = (questionType: string) => this.setState(prevState => ({ ...prevState, questionType }));
+
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
-    const { questionData } = this.props;
     return (
       (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
       (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||
@@ -76,7 +69,7 @@ class AddQuestionComponent extends React.Component<
   handleRemoveQuestion = (questionIndex: number) => {
     this.props.removeQuestion(questionIndex);
     this.handleOpenClosingDialog(false);
-  }
+  };
 
   render() {
     const {
@@ -84,18 +77,22 @@ class AddQuestionComponent extends React.Component<
       handleChangeQuestionType,
       handleOpenClosingDialog,
       handleRemoveQuestion,
-      props: { questionIndex, selectedQuestionType, questionData,updateCurrentIndex },
-      state: {  openClosingDialog },
+      props: { questionIndex, updateCurrentIndex },
+      state: { openClosingDialog, questionType },
     } = this;
-    const questionType = questionData.questionType;
     let activeQuestiton = "component-question ";
     activeQuestiton += this.props.currentIndex === questionIndex ? "active-area" : "";
     const actionsClosingDialog = [
-      <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)}/>,
+      <FlatButton label="Cancel" primary onClick={() => handleOpenClosingDialog(false)} />,
       <FlatButton label="Submit" secondary onClick={() => handleRemoveQuestion(questionIndex)} />,
     ];
     return (
-      <div className={ activeQuestiton } id={`${questionIndex}`} style={{ paddingBottom: "40px" }} onClick={ e => updateCurrentIndex(questionIndex) }>
+      <div
+        className={activeQuestiton}
+        id={`${questionIndex}`}
+        style={{ paddingBottom: "40px" }}
+        onClick={e => updateCurrentIndex(questionIndex)}
+      >
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
           Are you sure to delete this question?
         </Dialog>
@@ -108,13 +105,11 @@ class AddQuestionComponent extends React.Component<
           <ContentClear />
         </IconButton>
         <div className="padding-25">
-          <SelectField fullWidth onChange={(e, i, p) => handleChangeQuestionType(p)} value={ questionType }>
+          <SelectField fullWidth onChange={(e, i, p) => handleChangeQuestionType(p)} value={questionType}>
             {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
           </SelectField>
         </div>
-        <div >
-          {handleCreateQuestion(questionType || selectedQuestionType, questionIndex)}
-        </div>
+        <div>{handleCreateQuestion(questionType, questionIndex)}</div>
       </div>
     );
   }
@@ -122,13 +117,13 @@ class AddQuestionComponent extends React.Component<
 
 const mapStateToProps = (state: any) => ({
   selectedQuestionType: state.stateStatus.selectedQuestionType,
-  currentIndex: state.stateStatus.currentIndex
+  currentIndex: state.stateStatus.currentIndex,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
   removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
   updateCurrentIndex: (currentIndex: number) => dispatch(updateCurrentIndex(currentIndex)),
-  updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData))
+  updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddQuestionComponent);
