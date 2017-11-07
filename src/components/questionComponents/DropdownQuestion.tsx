@@ -13,7 +13,7 @@ import Checkbox from "material-ui/Checkbox";
 
 class DropdownQuestion extends React.Component<
     {
-        questionData: any;
+        questionData?: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;

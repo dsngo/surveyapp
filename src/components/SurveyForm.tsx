@@ -41,25 +41,24 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     openConfirmModal: false,
     openSuccessModal: false,
     actionSave: false, // False: save, True: submit
-    suveyContents: [],
+    surveyContents: [],
   };
 
-  // componentDidUpdate() {
+  // componentDidUpdate() {r
   //   const sLen = this.props.surveyContents.length;
   //   if (sLen > this.tempLengthArea) {
   //     this.scrollBars.scrollToBottom();
   //     this.tempLengthArea = sLen;
   //   }
   // }
-  componentWillMount() {
-    if (this.props.tempId) {
-      this.props.getDataFromDbById(this.props.tempId);
-    }
-  }
-
-  componentDidMount() {
+  componentWillRecieveProps() {
     if (this.props.surveyContents) {
       this.setState(prevState => ({ ...prevState, surveyContents: this.props.surveyContents }));
+    }
+  }
+  componentDidMount() {
+    if (this.props.tempId) {
+      this.props.getDataFromDbById(this.props.tempId);
     }
   }
 
@@ -70,7 +69,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
   renderQuestion = () => {
-    return this.props.surveyContents.map((content, index) => (
+    return this.state.surveyContents.map((content, index) => (
       <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
     ));
   };
@@ -79,18 +78,26 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     this.handleOpenConfirmModal(false, false);
   };
   render() {
-    if (this.props.submitStatus === "Success") {
-      this.props.clearSubmitStatus();
-      this.handleOpenSuccessModal(true);
+    const {
+      handleOpenConfirmModal,
+      handleOpenSuccessModal,
+      handleSaveFormToDb,
+      props: { submitStatus, tempId, clearSubmitStatus },
+      state: { surveyContents, openConfirmModal, openSuccessModal, actionSave },
+    } = this;
+
+    if (submitStatus === "Success") {
+      clearSubmitStatus();
+      handleOpenSuccessModal(true);
     }
     const actionsConfirmModal = [
-      <FlatButton label="Cancel" primary onClick={() => this.handleOpenConfirmModal(false, false)} />,
-      <FlatButton label="Submit" secondary onClick={() => this.handleSaveFormToDb(this.state.actionSave)} />,
+      <FlatButton label="Cancel" primary onClick={() => handleOpenConfirmModal(false, false)} />,
+      <FlatButton label="Submit" secondary onClick={() => handleSaveFormToDb(actionSave)} />,
     ];
     const actionsSuccessModal = [
-      <FlatButton label="Next" primary onClick={() => this.handleOpenSuccessModal(false)} />,
+      <FlatButton label="Next" primary onClick={() => handleOpenSuccessModal(false)} />,
       <Link to="/">
-        <FlatButton label="Back to index" primary onClick={() => this.handleOpenSuccessModal(false)} />
+        <FlatButton label="Back to index" primary onClick={() => handleOpenSuccessModal(false)} />
       </Link>,
     ];
     return (
@@ -102,21 +109,12 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
         style={{ height: "calc(100vh - 65px)", width: "100%" }}
         autoHide
       >
-        <Dialog
-          actions={actionsConfirmModal}
-          open={this.state.openConfirmModal}
-          onRequestClose={() => this.handleOpenConfirmModal(false, false)}
-        >
+        <Dialog actions={actionsConfirmModal} open={openConfirmModal} onRequestClose={() => handleOpenConfirmModal(false, false)}>
           Are you sure you want to create this survey?
         </Dialog>
-        <Dialog
-          actions={actionsSuccessModal}
-          open={this.state.openSuccessModal}
-          onRequestClose={() => this.handleOpenSuccessModal(false)}
-        >
+        <Dialog actions={actionsSuccessModal} open={openSuccessModal} onRequestClose={() => handleOpenSuccessModal(false)}>
           Create survey successfully.
         </Dialog>
-
         <div className="row survey-form-create">
           <div className="container survey-form" style={{ paddingTop: "15px" }}>
             <div className="form-create clear-fix">
@@ -134,7 +132,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
                     backgroundColor="#4CAF50"
                     className="btn-save"
                     label="Preview"
-                    onClick={() => this.handleOpenConfirmModal(true, false)}
+                    onClick={() => handleOpenConfirmModal(true, false)}
                   />
                 </Link>
               </div>
@@ -143,7 +141,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
                   backgroundColor="#4CAF50"
                   className="btn-save"
                   label="Save"
-                  onClick={() => this.handleOpenConfirmModal(true, false)}
+                  onClick={() => handleOpenConfirmModal(true, false)}
                 />
               </div>
               <div className="btn-submit-survey-container">
@@ -151,7 +149,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
                   backgroundColor="#4CAF50"
                   className="btn-save"
                   label="Submit"
-                  onClick={() => this.handleOpenConfirmModal(true, true)}
+                  onClick={() => handleOpenConfirmModal(true, true)}
                 />
               </div>
             </div>

@@ -6,7 +6,7 @@ import TextField from "material-ui/TextField";
 
 class ShortQuestion extends React.Component<
     {
-        questionData: any;
+        questionData?: any;
         questionIndex: number;
         removeQuestion: (questionIndex: number) => any;
         updateQuestion: (questionIndex: number, questionData: any) => any;

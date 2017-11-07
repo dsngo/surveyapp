@@ -17,7 +17,7 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table";
 class PriorityQuestion extends React.Component<
   {
     questionIndex: number;
-    questionData: any;
+    questionData?: any;
     removeQuestion: (questionIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },
