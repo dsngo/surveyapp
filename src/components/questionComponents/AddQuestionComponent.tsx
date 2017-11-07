@@ -39,6 +39,8 @@ class AddQuestionComponent extends React.Component<
   {
     questionIndex: number;
     currentIndex: number;
+    selectedQuestionType: string;
+    questionData: any;
     removeQuestion: (questionIndex: number) => any;
     updateCurrentIndex: (currentIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
@@ -56,6 +58,7 @@ class AddQuestionComponent extends React.Component<
   handleChangeQuestionType = (questionType: string) => this.setState(prevState => ({ ...prevState, questionType }));
 
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
+    const {questionData} = this.props;
     return (
       (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
       (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||

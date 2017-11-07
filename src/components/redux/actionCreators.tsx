@@ -33,7 +33,7 @@ export const addNewQuestion = () => (dispatch: any, getState: any) => {
   const { selectedQuestionType, currentIndex } = getState().stateStatus;
   dispatch({
     currentIndex,
-    questionType: selectedQuestionType,
+    questionType: selectedQuestionType || "shortQuestion",
     type: ADD_NEW_QUESTION,
   });
 };
