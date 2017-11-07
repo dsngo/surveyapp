@@ -31,22 +31,12 @@ export const setSearchTerm = (searchTerm: string) => ({
 
 export const addNewQuestion = () => (dispatch: any, getState: any) => {
   const { selectedQuestionType, currentIndex } = getState().stateStatus;
-  const template = {
-    questionType: "multipleChoices",
-    question: "",
-    description: "",
-    answers: [{
-        correct: false,
-        answer: ""
-    }]
-  };
   dispatch({
-    template,
     currentIndex,
     questionType: selectedQuestionType,
-    type: ADD_NEW_QUESTION
-  })
-}
+    type: ADD_NEW_QUESTION,
+  });
+};
 
 export const removeQuestion = (questionIndex: number) => ({
   questionIndex,
