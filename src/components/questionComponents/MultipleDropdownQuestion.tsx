@@ -29,7 +29,7 @@ const styles: { [name: string]: React.CSSProperties } = {
 
 class MultipleDropdownQuestion extends React.Component<
   {
-    questionData?: any;
+    questionData: any;
     questionIndex: number;
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },

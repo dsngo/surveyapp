@@ -44,14 +44,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     surveyContents: [],
   };
 
-  // componentDidUpdate() {r
-  //   const sLen = this.props.surveyContents.length;
-  //   if (sLen > this.tempLengthArea) {
-  //     this.scrollBars.scrollToBottom();
-  //     this.tempLengthArea = sLen;
-  //   }
-  // }
-  componentWillRecieveProps() {
+  componentWillReceiveProps() {
     if (this.props.surveyContents) {
       this.setState(prevState => ({ ...prevState, surveyContents: this.props.surveyContents }));
     }

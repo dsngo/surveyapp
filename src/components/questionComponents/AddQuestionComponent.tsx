@@ -58,14 +58,15 @@ class AddQuestionComponent extends React.Component<
   handleChangeQuestionType = (questionType: string) => this.setState(prevState => ({ ...prevState, questionType }));
 
   handleCreateQuestion = (questionType: string, questionIndex: number) => {
+    const {questionData} = this.props;
     return (
-      (questionType === "longQuestion" && <LongQuestion {...{ questionIndex }} />) ||
-      (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex }} />) ||
-      (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex }} />) ||
-      (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex }} />) ||
-      (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex }} />) ||
-      (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex }} />) ||
-      (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex }} />)
+      (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "checkbox" && <CheckboxQuestion {...{ questionIndex, questionData }} />) ||
+      (questionType === "priorityQuestion" && <PriorityQuestion {...{ questionIndex, questionData }} />)
     );
   };
   handleRemoveQuestion = (questionIndex: number) => {
