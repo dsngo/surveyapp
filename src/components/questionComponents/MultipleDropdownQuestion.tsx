@@ -408,8 +408,6 @@ class MultipleDropdownQuestion extends React.Component<
   }
 
   componentDidUpdate() {
-    console.log(this.state);
-
     return this.props.updateQuestion(this.props.questionIndex, this.state);
   }
 }

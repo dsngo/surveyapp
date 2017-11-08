@@ -32,37 +32,7 @@ class LongQuestion extends React.Component<
     return answers.join("\n");
   }
 
-  renderClientForm() {
-    return (
-      <div>
-        <div className="question-info">
-          <div className="question">{this.state.question}</div>
-          <div className="description">{this.state.description}</div>
-        </div>
-        <div className="padding-25-except-top">
-          <TextField
-            name="answerText"
-            hintText="Put your answer here"
-            multiLine
-            fullWidth
-            rows={4}
-            value={this.getAnswerString(this.state.answers)}
-            onChange={(e: any) => this.handleUpdateAnswer(e.target.value)}
-            floatingLabelText="Answer"
-          />
-        </div>
-      </div>
-    )
-  }
-
-  renderFormCreate() {
-    const {
-      props: { questionIndex, removeQuestion, questionData },
-      handleChangeQuestion,
-      handleChangeDescription,
-    } = this;
-    const { question, answers, description } = questionData;
-    return (  
+  renderFormCreate = (question: string, description: string, questionIndex: number, answers: any) => (
       <div>
         <div className="input-option-create padding-bottom-25">
           <TextField
@@ -71,7 +41,7 @@ class LongQuestion extends React.Component<
             multiLine
             fullWidth
             value={question}
-            onChange={(e: any) => handleChangeQuestion(e.target.value)}
+            onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
             floatingLabelText={`Question ${questionIndex + 1}`}
           />
           <TextField
@@ -80,35 +50,30 @@ class LongQuestion extends React.Component<
             multiLine
             fullWidth
             value={description}
-            onChange={(e: any) => handleChangeDescription(e.target.value)}
+            onChange={(e: any) => this.handleChangeDescription(e.target.value)}
             floatingLabelText={"Question description"}
           />
         </div>
       </div>
     )
-  }
-
-  render() {
-    const {
-      props: { questionIndex, removeQuestion },
-      state: { question, answers, description },
-      handleUpdateAnswer,
-      getAnswerString,
-    } = this;
-    if (this.state.completed === false) return (
+    
+    render() {
+      const {
+          props: { 
+              questionIndex, 
+              removeQuestion, 
+              questionData: { 
+                  question, 
+                  answers, 
+                  description
+              } 
+          }
+      } = this;
+      return (
       <div className="question-component">
-        {
-          this.renderFormCreate()
-        }
+          {this.renderFormCreate(question, description, questionIndex, answers)}
       </div>
-    )
-    return (
-      <div className="question-component">
-        {
-          this.renderClientForm()
-        }
-      </div>
-    );
+      );
   }
 
   componentDidUpdate() {

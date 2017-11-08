@@ -167,244 +167,157 @@ class PriorityQuestion extends React.Component<
           })
       }))
   }
-  renderClientForm() {
-    const {
-      props: { questionIndex, removeQuestion, questionData },
-      updatePriority
-    } = this;
-    const { question, description, answers, additionalContents } = questionData;
-    const length: any = [];
-    for (let i = 1; i <= answers.length; i++) {
-      length.push(i);
-    }
-    return (
-      <div className="input-option-create">
-        <div className="question-info">
-          <div className="question">{question}</div>
-          <div className="description">{description}</div>
-        </div>
+ 
+  renderFormCreate = (question: string, description: string, questionIndex: number, answers: any, additionalContents: any) => (
+    <div className="input-option-create">
+      <TextField
+        name="questionText"
+        hintText="Priority question"
+        multiLine
+        fullWidth
+        rows={2}
+        value={question}
+        onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
+        floatingLabelText={`Question ${questionIndex + 1}`}
+      />
+      <div className="clear-fix multiple-answer">
+        {answers.map((answer: any, answerIndex: number) => {
+          console.log(answer);
 
-        <Table>
-          <TableBody displayRowCheckbox={false}>
-            {answers.map((ans: any, answerIndex: any) => {
-              return (
-                <TableRow key={answerIndex}>
-                  <TableRowColumn className="col-sm-8">
-                    {ans.answer}
-                  </TableRowColumn>
-                  <TableRowColumn className="col-sm-4">
-                    <SelectField
-                      fullWidth
-                      value={ans.priority}
-                      onChange={(event: object, key: number, payload: any) =>
-                        updatePriority(answerIndex, payload)}
-                    >
-                      {length.map((temp: any) => (
-                        <MenuItem value={temp} primaryText={temp} key={temp} />
-                      ))}
-                    </SelectField>
-                  </TableRowColumn>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-        <div className="additional-cotents-client">
-          {additionalContents.map((content: any, index: any) => {
-            return (
-              <div className="content">
-                <div className="content-description">{content.description}</div>
-                <div className="content-questions">
-                  {content.contents.map((question: any, indexQuestion: any) => {
-                    return (
-                      <div>
-                        <div className="content-question">
-                          {question.question}
-                        </div>
-                        <div className="content-answer">
-                          <TextField
-                            name="answerText"
-                            hintText="Add an answer here."
-                            value={question.answers}
-                            fullWidth
-                            onChange={(e: any) =>
-                              this.handleUpdateAnswerContent(index, indexQuestion, e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+          return (
+            <div className="radio-answer" key={answerIndex}>
+              <div className="icon-radio clear-fix">
+                <i className="material-icons">equalizer</i>
               </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-  renderFormCreate() {
-    const {
-      props: { questionIndex, removeQuestion, questionData },
-      handleChangeQuestion,
-      handleUpdateAnswer,
-      handleAddAnswer,
-      handleRemoveAnswer,
-      handleAddAdditionalContent,
-      handleUpdateAndditionalContentDesciption,
-      handleAddQuestionAdditionContent,
-      handleUpdateAdditionQuestion,
-      handleRemoveAdditionalContent,
-      handleRemoveAdditionalContentQuestion
-    } = this;
-    const { question, answers, additionalContents } = questionData;
-    console.log(questionData);
-    
-    
-    return (
-      <div className="input-option-create">
-        <TextField
-          name="questionText"
-          hintText="Priority question"
-          multiLine
-          fullWidth
-          rows={2}
-          value={question}
-          onChange={(e: any) => handleChangeQuestion(e.target.value)}
-          floatingLabelText={`Question ${questionIndex + 1}`}
-        />
-        <div className="clear-fix multiple-answer">
-          {answers.map((answer: any, answerIndex: number) => {
-            console.log(answer);
-
-            return (
-              <div className="radio-answer" key={answerIndex}>
-                <div className="icon-radio clear-fix">
-                  <i className="material-icons">equalizer</i>
-                </div>
-                <div className="input-field input-text-radio input-option-create">
-                  <TextField
-                    name="answerText"
-                    hintText="Add an answer here."
-                    fullWidth
-                    value={answer.answer}
-                    onChange={(e: any) =>
-                      handleUpdateAnswer(answerIndex, {
-                        priority: 0,
-                        answer: e.target.value
-                      })}
-                  />
-                </div>
-              </div>
-            );
-          })}
-          <div className="radio-answer align-center">
-            <FloatingActionButton
-              mini
-              onClick={e => handleAddAnswer({ priority: 0, answer: "" })}
-            >
-              <ContentAdd />
-            </FloatingActionButton>
-          </div>
-          <RaisedButton
-            label="Additional Content"
-            primary={true}
-            onClick={e =>
-              handleAddAdditionalContent({
-                description: "",
-                contents: [
-                  {
-                    contentQuestionId: "",
-                    question: "",
-                    answers: ""
-                  }
-                ]
-              })}
-          />
-        </div>
-        <div className="additional-detail">
-          {additionalContents.map((content: any, contentIndex: any) => {
-            return (
-              <div className="additional-container" key={contentIndex}>
-                <div>
-                  <div
-                    className="delete-area"
-                    onClick={() => handleRemoveAdditionalContent(contentIndex)}
-                  >
-                    <i className="fa fa-times" />
-                  </div>
-                </div>
+              <div className="input-field input-text-radio input-option-create">
                 <TextField
                   name="answerText"
-                  hintText="Add description here."
+                  hintText="Add an answer here."
                   fullWidth
-                  value={content.description}
+                  value={answer.answer}
                   onChange={(e: any) =>
-                    handleUpdateAndditionalContentDesciption(
-                      contentIndex,
-                      e.target.value
-                    )}
+                    this.handleUpdateAnswer(answerIndex, {
+                      priority: 0,
+                      answer: e.target.value
+                    })}
                 />
-                {content.contents.map((ctn: any, ctnQuestionIndex: any) => {
-                  return (
-                    <div>
-                      <div className="additional-question-container">
-                        <div
-                          className="delete-area"
-                          onClick={() =>
-                            handleRemoveAdditionalContentQuestion(
-                              contentIndex,
-                              ctnQuestionIndex
-                            )}
-                        >
-                          <i className="fa fa-times" />
-                        </div>
-                      </div>
-                      <TextField
-                        name="answerText"
-                        hintText="Add a question here."
-                        fullWidth
-                        value={ctn.question}
-                        onChange={(e: any) =>
-                          handleUpdateAdditionQuestion(
-                            contentIndex,
-                            ctnQuestionIndex,
-                            e.target.value
-                          )}
-                      />
-                    </div>
-                  );
-                })}
-                <div className="align-center">
-                  <RaisedButton
-                    label="Add question"
-                    primary={true}
-                    onClick={e =>
-                      handleAddQuestionAdditionContent(contentIndex, {
-                        question: "",
-                        answers: ""
-                      })}
-                  />
+              </div>
+            </div>
+          );
+        })}
+        <div className="radio-answer align-center">
+          <FloatingActionButton
+            mini
+            onClick={e => this.handleAddAnswer({ priority: 0, answer: "" })}
+          >
+            <ContentAdd />
+          </FloatingActionButton>
+        </div>
+        <RaisedButton
+          label="Additional Content"
+          primary={true}
+          onClick={e =>
+            this.handleAddAdditionalContent({
+              description: "",
+              contents: [
+                {
+                  contentQuestionId: "",
+                  question: "",
+                  answers: ""
+                }
+              ]
+            })}
+        />
+      </div>
+      <div className="additional-detail">
+        {additionalContents.map((content: any, contentIndex: any) => {
+          return (
+            <div className="additional-container" key={contentIndex}>
+              <div>
+                <div
+                  className="delete-area"
+                  onClick={() => this.handleRemoveAdditionalContent(contentIndex)}
+                >
+                  <i className="fa fa-times" />
                 </div>
               </div>
-            );
-          })}
-        </div>
+              <TextField
+                name="answerText"
+                hintText="Add description here."
+                fullWidth
+                value={content.description}
+                onChange={(e: any) =>
+                  this.handleUpdateAndditionalContentDesciption(
+                    contentIndex,
+                    e.target.value
+                  )}
+              />
+              {content.contents.map((ctn: any, ctnQuestionIndex: any) => {
+                return (
+                  <div>
+                    <div className="additional-question-container">
+                      <div
+                        className="delete-area"
+                        onClick={() =>
+                          this.handleRemoveAdditionalContentQuestion(
+                            contentIndex,
+                            ctnQuestionIndex
+                          )}
+                      >
+                        <i className="fa fa-times" />
+                      </div>
+                    </div>
+                    <TextField
+                      name="answerText"
+                      hintText="Add a question here."
+                      fullWidth
+                      value={ctn.question}
+                      onChange={(e: any) =>
+                        this.handleUpdateAdditionQuestion(
+                          contentIndex,
+                          ctnQuestionIndex,
+                          e.target.value
+                        )}
+                    />
+                  </div>
+                );
+              })}
+              <div className="align-center">
+                <RaisedButton
+                  label="Add question"
+                  primary={true}
+                  onClick={e =>
+                    this.handleAddQuestionAdditionContent(contentIndex, {
+                      question: "",
+                      answers: ""
+                    })}
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
-    );
-  }
+    </div>
+  );
   render() {
+    const {
+        props: { 
+            questionIndex, 
+            removeQuestion, 
+            questionData: { 
+                question, 
+                answers, 
+                description,
+                additionalContents
+            } 
+        }
+    } = this;
     return (
-        <div className="padding-bottom-25 question-component">
-            {
-                this.state.completed === false ? (
-                    this.renderFormCreate()
-                ) : (
-                    this.renderClientForm()
-                )
-            }
-        </div>
-    )
-  }
+    <div className="question-component">
+        {this.renderFormCreate(question, description, questionIndex, answers, additionalContents)}
+    </div>
+    );
+}
 
   componentDidUpdate() {
     return this.props.updateQuestion(this.props.questionIndex, this.state);

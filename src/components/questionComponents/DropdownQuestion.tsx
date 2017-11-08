@@ -34,8 +34,6 @@ class DropdownQuestion extends React.Component<
 
     getCurrentSelection = () => {
         for(let i = 0; i < this.state.answers.length; i++) {
-            console.log(i);
-            
             if (this.state.answers[i].chosen === true) return i;
         }
     }
@@ -73,54 +71,7 @@ class DropdownQuestion extends React.Component<
     handleAddAnswer = (newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
 
-    renderClientForm() {
-        const { question, description, answers } = this.props.questionData;
-        return (
-            <div className="input-option-create">
-                <div className="question-info">
-                    <div className="question">
-                        {question}
-                    </div>
-                    <div className="description">
-                        {description}
-                    </div>
-                </div>
-                <div className="padding-25">
-                    <SelectField
-                            floatingLabelText="Answer"
-                            fullWidth={true}
-                            value={ this.getCurrentSelection() }
-                            onChange={(event: object, key: number, payload: any) => {
-                                this.handleChooseAnswer(payload);
-                            }}
-                            className="mui-select"
-                        >
-                            {answers.map((answer: any, key: any) => {
-                                return (
-                                    <MenuItem value={key} label={answer.answer} key={key}>
-                                        {" "}
-                                        {answer.answer}
-                                        {" "}
-                                    </MenuItem>
-                                );
-                            })}
-                    </SelectField>
-                </div>
-            </div>
-        )
-    }
-    renderFormCreate() {
-        const {
-            props: { questionIndex, removeQuestion },
-            handleChangeQuestion,
-            handleChangeDescription,
-            handleUpdateAnswer,
-            handleAddAnswer,
-            handleRemoveAnswer,
-        } = this;
-        const { question, description, answers } = this.props.questionData;
-        
-        return (
+    renderFormCreate = (question: string, description: string, questionIndex: number, answers: any) => (
             <div>
                 <div className="padding-25-except-top input-option-create">
                     <TextField
@@ -129,7 +80,7 @@ class DropdownQuestion extends React.Component<
                         multiLine
                         fullWidth
                         value={question}
-                        onChange={(e: any) => handleChangeQuestion(e.target.value)}
+                        onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
                         floatingLabelText={`Question ${questionIndex + 1}`}
                     />
                     <TextField
@@ -138,7 +89,7 @@ class DropdownQuestion extends React.Component<
                         multiLine
                         fullWidth
                         value={description}
-                        onChange={(e: any) => handleChangeDescription(e.target.value)}
+                        onChange={(e: any) => this.handleChangeDescription(e.target.value)}
                         floatingLabelText={"Question description"}
                     />
                     <div className="clear-fix multiple-answer">
@@ -147,7 +98,7 @@ class DropdownQuestion extends React.Component<
                                 <div className="radio-answer" key={answerIndex}>
                                     {answers.length > 1 && (
                                         <div>
-                                            <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
+                                            <div className="delete-area" onClick={() => this.handleRemoveAnswer(answerIndex)}>
                                                 <i className="fa fa-times" />
                                             </div>
                                         </div>
@@ -170,14 +121,14 @@ class DropdownQuestion extends React.Component<
                                             fullWidth
                                             value={answer.answer}
                                             onChange={(e: any) =>
-                                                handleUpdateAnswer(answerIndex, { chosen: false, correct: false, answer: e.target.value })}
+                                                this.handleUpdateAnswer(answerIndex, { chosen: false, correct: false, answer: e.target.value })}
                                         />
                                     </div>
                                 </div>
                             );
                         })}
                         <div className="radio-answer align-center">
-                            <FloatingActionButton mini onClick={e => handleAddAnswer({ chosen: false, correct: false, answer: "" })}>
+                            <FloatingActionButton mini onClick={e => this.handleAddAnswer({ chosen: false, correct: false, answer: "" })}>
                                 <ContentAdd />
                             </FloatingActionButton>
                         </div>
@@ -185,11 +136,22 @@ class DropdownQuestion extends React.Component<
                 </div>
             </div>
         )
-    }
+        
     render() {
+        const {
+            props: { 
+                questionIndex, 
+                removeQuestion, 
+                questionData: { 
+                    question, 
+                    answers, 
+                    description
+                } 
+            }
+        } = this;
         return (
         <div className="question-component">
-            {this.state.completed !== true ? this.renderFormCreate() : this.renderClientForm()}
+            {this.renderFormCreate(question, description, questionIndex, answers)}
         </div>
         );
     }

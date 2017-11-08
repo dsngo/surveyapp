@@ -65,94 +65,89 @@ class MultipleChoicesQuestion extends React.Component<
     handleAddAnswer = (newAnswer: { chosen: boolean, correct: boolean; answer: string }) =>
         this.setState(prevState => ({ ...prevState, answers: prevState.answers.push(newAnswer) && prevState.answers }));
 
-    renderCreateForm() {
-        const {
-            props: { questionIndex, removeQuestion, questionData },
-            handleChangeQuestion,
-            handleChangeDescription,
-            handleUpdateAnswer,
-            handleAddAnswer,
-            handleRemoveAnswer,
-        } = this;
-        const { question, answers, description } = questionData;
-        console.log(this.state);
-        
-        return (
-            <div>
-                
-                <div className="padding-25-except-top input-option-create">
-                    <TextField
-                        name="questionText"
-                        hintText="Multiple choices question"
-                        multiLine
-                        fullWidth
-                        value={question}
-                        onChange={(e: any) => handleChangeQuestion(e.target.value)}
-                        floatingLabelText={`Question ${questionIndex + 1}`}
-                    />
-                    <TextField
-                        name="questionDescription"
-                        hintText="Extra Description"
-                        multiLine
-                        fullWidth
-                        value={description}
-                        onChange={(e: any) => handleChangeDescription(e.target.value)}
-                        floatingLabelText={"Question description"}
-                    />
-                    <div className="clear-fix multiple-answer">
-                        {answers.map((answer: any, answerIndex: number) => {
-                            return (
-                                <div className="radio-answer" key={answerIndex}>
-                                    {answers.length > 1 && (
-                                        <div>
-                                            <div className="delete-area" onClick={() => handleRemoveAnswer(answerIndex)}>
-                                                <i className="fa fa-times" />
-                                            </div>
+    renderFormCreate = (question: string, description: string, questionIndex: number, answers: any) => (
+        <div>
+            
+            <div className="padding-25-except-top input-option-create">
+                <TextField
+                    name="questionText"
+                    hintText="Multiple choices question"
+                    multiLine
+                    fullWidth
+                    value={question}
+                    onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
+                    floatingLabelText={`Question ${questionIndex + 1}`}
+                />
+                <TextField
+                    name="questionDescription"
+                    hintText="Extra Description"
+                    multiLine
+                    fullWidth
+                    value={description}
+                    onChange={(e: any) => this.handleChangeDescription(e.target.value)}
+                    floatingLabelText={"Question description"}
+                />
+                <div className="clear-fix multiple-answer">
+                    {answers.map((answer: any, answerIndex: number) => {
+                        return (
+                            <div className="radio-answer" key={answerIndex}>
+                                {answers.length > 1 && (
+                                    <div>
+                                        <div className="delete-area" onClick={() => this.handleRemoveAnswer(answerIndex)}>
+                                            <i className="fa fa-times" />
                                         </div>
-                                    )}
-                                    <div className="check-box">
-                                        <Checkbox
-                                            onCheck={e => {
-                                                this.handleUpdateCorrect(answerIndex);
-                                            }}
-                                            label={""}
-                                        />
                                     </div>
-                                    <div className="icon-radio clear-fix">
-                                        <i className="material-icons">radio_button_checked</i>
-                                    </div>
-                                    <div className="input-field input-text-radio">
-                                        <TextField
-                                            name="answerText"
-                                            hintText="Add an answer here."
-                                            fullWidth
-                                            value={answer.answer}
-                                            onChange={(e: any) =>
-                                                handleUpdateAnswer(answerIndex, { chosen: false, correct: false, answer: e.target.value })}
-                                        />
-                                    </div>
+                                )}
+                                <div className="check-box">
+                                    <Checkbox
+                                        onCheck={e => {
+                                            this.handleUpdateCorrect(answerIndex);
+                                        }}
+                                        label={""}
+                                    />
                                 </div>
-                            );
-                        })}
-                        <div className="radio-answer align-center">
-                            <FloatingActionButton mini onClick={e => handleAddAnswer({ chosen: false, correct: false, answer: "" })}>
-                                <ContentAdd />
-                            </FloatingActionButton>
-                        </div>
+                                <div className="icon-radio clear-fix">
+                                    <i className="material-icons">radio_button_checked</i>
+                                </div>
+                                <div className="input-field input-text-radio">
+                                    <TextField
+                                        name="answerText"
+                                        hintText="Add an answer here."
+                                        fullWidth
+                                        value={answer.answer}
+                                        onChange={(e: any) =>
+                                            this.handleUpdateAnswer(answerIndex, { chosen: false, correct: false, answer: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                        );
+                    })}
+                    <div className="radio-answer align-center">
+                        <FloatingActionButton mini onClick={e => this.handleAddAnswer({ chosen: false, correct: false, answer: "" })}>
+                            <ContentAdd />
+                        </FloatingActionButton>
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
 
     render() {
-
+        const {
+            props: { 
+                questionIndex, 
+                removeQuestion, 
+                questionData: { 
+                    question, 
+                    answers, 
+                    description
+                } 
+            }
+        } = this;
         return (
-            <div className="question-component">
-                {
-                    this.renderCreateForm()
-                }
-            </div>
+        <div className="question-component">
+            {this.renderFormCreate(question, description, questionIndex, answers)}
+        </div>
         );
     }
 
