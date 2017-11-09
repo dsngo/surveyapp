@@ -103,9 +103,9 @@ const clientSurveyData = (state = { author: {}, clientInfo: {}, contents: [] }, 
   (action.type === "UPDATE_ADDRESS" && { ...state, clientInfo: { ...state.clientInfo, address: action.address } }) ||
   (action.type === "UPDATE_GENDER" && { ...state, clientInfo: { ...state.clientInfo, gender: action.gender } }) || { ...state };
 
-const surveyContents = (state = [{}], action: any) =>
+const surveyContents = (state = [], action: any) =>
   (action.type === CLEAR_SURVEY && (state.splice(0, state.length), [...state])) ||
-  (action.type === ADD_NEW_QUESTION && addNewQuestionReducer(state, action.currentIndex, action.template))  ||
+  (action.type === ADD_NEW_QUESTION && addNewQuestionReducer(state, action.currentIndex, Templates.shortQuestion))  ||
   (action.type === REMOVE_QUESTION && removeQuestionReducer(state, action.questionIndex)) ||
   (action.type === UPDATE_QUESTION && updateQuestionData(state, action.questionIndex, action.questionData)) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
@@ -134,14 +134,14 @@ function addNewQuestionReducer(state: any, currentIndex: any, template: any) {
   const newTemplate = {...template};
   const newState = [...state];
   newState.splice(currentIndex + 1 || newState.length, 0, template);
-  console.log(newState); // tslint:disable-line
+  // console.log(newState); // tslint:disable-line
   return newState;
 }
 
 function removeQuestionReducer(state: any, questionIndex: any) {
   const newState = [...state];
   newState.splice(questionIndex, 1);
-  console.log(newState); // tslint:disable-line
+  // console.log(newState); // tslint:disable-line
   return newState;
 }
 

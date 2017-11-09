@@ -44,9 +44,9 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     surveyContents: [],
   };
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps: any) {
     if (this.props.surveyContents) {
-      this.setState(prevState => ({ ...prevState, surveyContents: this.props.surveyContents }));
+      this.setState(prevState => ({ ...prevState, surveyContents: nextProps.surveyContents }));
     }
   }
   componentDidMount() {
@@ -62,6 +62,8 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
   renderQuestion = () => {
+    console.log(this.state.surveyContents);
+    
     return this.state.surveyContents.map((content, index) => (
       <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
     ));

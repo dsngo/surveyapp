@@ -83,6 +83,8 @@ class AddQuestionComponent extends React.Component<
       props: { questionIndex, updateCurrentIndex },
       state: { openClosingDialog, questionType },
     } = this;
+    console.log('ques component');
+    
     let activeQuestiton = "component-question ";
     activeQuestiton += this.props.currentIndex === questionIndex ? "active-area" : "";
     const actionsClosingDialog = [
