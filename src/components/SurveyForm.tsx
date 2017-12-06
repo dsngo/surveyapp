@@ -11,7 +11,6 @@ import SurveyInfo from "./questionComponents/SurveyInfo";
 import { saveFormToDb, clearSubmitStatus, getDataFromDbById } from "./redux/actionCreators";
 // Import question components
 import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
-import ShortQuestion from "./questionComponents/ShortQuestion";
 import CheckboxQuestion from "./questionComponents/CheckboxQuestion";
 import DropdownQuestion from "./questionComponents/DropdownQuestion";
 import LongQuestion from "./questionComponents/LongQuestion";
@@ -46,6 +45,8 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
 
   // Life Cycle Methods
   componentWillReceiveProps(nextProps: any) {
+    console.log(this.props.surveyContents); // tslint:disable-line
+    console.log(nextProps); // tslint:disable-line
     if (this.props.surveyContents) {
       this.setState(prevState => ({ ...prevState, surveyContents: nextProps.surveyContents }));
     }

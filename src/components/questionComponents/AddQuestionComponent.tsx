@@ -8,7 +8,6 @@ import MultipleChoicesQuestion from "./MultipleChoicesQuestion";
 import MultipleDropdownQuestion from "./MultipleDropdownQuestion";
 import PriorityQuestion from "./PriorityQuestion";
 import CheckboxQuestion from "./CheckboxQuestion";
-import ShortQuestion from "./ShortQuestion";
 import DropDownMenu from "material-ui/DropDownMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
@@ -60,7 +59,6 @@ class AddQuestionComponent extends React.Component<
     const {questionData} = this.props;
     return (
       (questionType === "longQuestion" && <LongQuestion {...{ questionIndex, questionData }} />) ||
-      (questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex, questionData }} />) ||
       (questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex, questionData }} />) ||
       (questionType === "dropdown" && <DropdownQuestion {...{ questionIndex, questionData }} />) ||
       (questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex, questionData }} />) ||

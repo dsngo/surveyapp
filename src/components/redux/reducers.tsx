@@ -132,6 +132,7 @@ export const rootReducer = combineReducers({
 function addNewQuestionReducer(state: any, currentIndex: number, template: any) {
   const newState = [...state];
   newState.splice(currentIndex || 0, 0, template);
+  console.log(newState);
   return newState;
 }
 

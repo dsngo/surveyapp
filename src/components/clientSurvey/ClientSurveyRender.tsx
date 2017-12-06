@@ -10,7 +10,6 @@ import MultipleChoicesQuestion from "./MultipleChoicesQuestion";
 import MultipleDropdownQuestion from "./MultipleDropdownQuestion";
 import PriorityQuestion from "./PriorityQuestion";
 import CheckboxQuestion from "./CheckboxQuestion";
-import ShortQuestion from "./ShortQuestion";
 import DropdownQuestion from "./DropdownQuestion";
 import LongQuestion from "./LongQuestion";
 import ClientInfoComponent from "./ClientInfoComponent";
@@ -32,7 +31,6 @@ const ClientSurveyRender: React.SFC<ICSRProps> = props => {
       {surveyContents.map(
         (e, i) =>
           (e.questionType === "longQuestion" && <LongQuestion {...{ questionIndex: i, questionData: e }} />) ||
-          (e.questionType === "shortQuestion" && <ShortQuestion {...{ questionIndex: i, questionData: e }} />) ||
           (e.questionType === "multipleChoices" && <MultipleChoicesQuestion {...{ questionIndex: i, questionData: e }} />) ||
           (e.questionType === "dropdown" && <DropdownQuestion {...{ questionIndex: i, questionData: e }} />) ||
           (e.questionType === "multipleDropdown" && <MultipleDropdownQuestion {...{ questionIndex: i, questionData: e }} />) ||
