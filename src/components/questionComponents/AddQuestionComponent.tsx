@@ -20,7 +20,6 @@ import * as Templates from "../../types/questionTemplate";
 
 const options = {
   "Long Question": "longQuestion",
-  "Short Question": "shortQuestion",
   "Multiple Choices Question": "multipleChoices",
   "Dropdown Question": "dropdown",
   "Multiple Dropdown Question": "multipleDropdown",
@@ -83,8 +82,8 @@ class AddQuestionComponent extends React.Component<
       props: { questionIndex, updateCurrentIndex },
       state: { openClosingDialog, questionType },
     } = this;
-    console.log('ques component');
     
+    const renderTemplate = questionType || "multipleChoices";
     let activeQuestiton = "component-question ";
     activeQuestiton += this.props.currentIndex === questionIndex ? "active-area" : "";
     const actionsClosingDialog = [
@@ -99,7 +98,7 @@ class AddQuestionComponent extends React.Component<
         onClick={e => updateCurrentIndex(questionIndex)}
       >
         <Dialog actions={actionsClosingDialog} open={openClosingDialog} onRequestClose={() => handleOpenClosingDialog(false)}>
-          Are you sure to delete this question?
+          Are you sure you want to delete this question?
         </Dialog>
         <IconButton
           style={{ float: "right" }}
@@ -110,11 +109,11 @@ class AddQuestionComponent extends React.Component<
           <ContentClear />
         </IconButton>
         <div className="padding-25">
-          <SelectField fullWidth onChange={(e, i, p) => handleChangeQuestionType(p)} value={questionType}>
+          <SelectField fullWidth onChange={(e, i, p) => handleChangeQuestionType(p)} value={renderTemplate}>
             {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
           </SelectField>
         </div>
-        <div>{handleCreateQuestion(questionType, questionIndex)}</div>
+        <div>{handleCreateQuestion(renderTemplate, questionIndex)}</div>
       </div>
     );
   }

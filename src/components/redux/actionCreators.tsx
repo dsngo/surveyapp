@@ -18,7 +18,7 @@ import {
   SAVE_SURVEY_TO_DB,
 } from "./actions";
 import axios from "axios";
-import * as Templates from "../../types/questionTemplate";
+// import * as Templates from "../../types/questionTemplate";
 
 const config = require("../../config.json");
 const urlServer = config.URL_SERVER_API;
@@ -29,11 +29,11 @@ export const setSearchTerm = (searchTerm: string) => ({
   type: SET_SEARCH_TERM,
 });
 
-export const addNewQuestion = () => (dispatch: any, getState: any) => {
-  const { selectedQuestionType, currentIndex } = getState().stateStatus;
+export const addNewQuestion = (currentIndex: number, template: any) => (dispatch: any) => {
   dispatch({
     currentIndex,
-    questionType: selectedQuestionType || "shortQuestion",
+    template,
+    // questionType: "multipleChoices",
     type: ADD_NEW_QUESTION,
   });
 };

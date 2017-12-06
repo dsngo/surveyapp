@@ -44,6 +44,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     surveyContents: [],
   };
 
+  // Life Cycle Methods
   componentWillReceiveProps(nextProps: any) {
     if (this.props.surveyContents) {
       this.setState(prevState => ({ ...prevState, surveyContents: nextProps.surveyContents }));
@@ -55,23 +56,25 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     }
   }
 
+  // Action Methods
   handleOpenConfirmModal = (open: boolean, completed: boolean) =>
     this.setState(prevState => ({ ...prevState, openConfirmModal: open, actionSave: completed }));
 
   handleOpenSuccessModal = (open: boolean) =>
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
-  renderQuestion = () => {
-    console.log(this.state.surveyContents);
-    
-    return this.state.surveyContents.map((content, index) => (
-      <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
-    ));
-  };
   handleSaveFormToDb = (actionSave: boolean) => {
     this.props.saveFormToDb(actionSave);
     this.handleOpenConfirmModal(false, false);
   };
+
+  // Render Methods
+  renderQuestion = () => {
+     return this.state.surveyContents.map((content, index) => (
+      <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
+    ));
+  };
+
   render() {
     const {
       handleOpenConfirmModal,
@@ -95,6 +98,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
         <FlatButton label="Back to index" primary onClick={() => handleOpenSuccessModal(false)} />
       </Link>,
     ];
+
     return (
       <Scrollbars
         id="scroll-survey-form"

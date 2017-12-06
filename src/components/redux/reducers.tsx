@@ -28,7 +28,7 @@ import {
   // IShortQuestion,
   ISurveyFormFromDatabase,
 } from "../../types/customTypes";
-import * as Templates from "../../types/questionTemplate";
+// import * as Templates from "../../types/questionTemplate";
 import { combineReducers } from "redux";
 
 const DEFAULT_STATE = {
@@ -105,7 +105,7 @@ const clientSurveyData = (state = { author: {}, clientInfo: {}, contents: [] }, 
 
 const surveyContents = (state = [], action: any) =>
   (action.type === CLEAR_SURVEY && (state.splice(0, state.length), [...state])) ||
-  (action.type === ADD_NEW_QUESTION && addNewQuestionReducer(state, action.currentIndex, Templates.shortQuestion))  ||
+  (action.type === ADD_NEW_QUESTION && addNewQuestionReducer(state, action.currentIndex, action.template))  ||
   (action.type === REMOVE_QUESTION && removeQuestionReducer(state, action.questionIndex)) ||
   (action.type === UPDATE_QUESTION && updateQuestionData(state, action.questionIndex, action.questionData)) ||
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
@@ -129,12 +129,9 @@ export const rootReducer = combineReducers({
   stateStatus,
 });
 
-function addNewQuestionReducer(state: any, currentIndex: any, template: any) {
-  console.log(`index: ${currentIndex} state: ${JSON.stringify(state)}`);
-  const newTemplate = {...template};
+function addNewQuestionReducer(state: any, currentIndex: number, template: any) {
   const newState = [...state];
-  newState.splice(currentIndex + 1 || newState.length, 0, template);
-  // console.log(newState); // tslint:disable-line
+  newState.splice(currentIndex || 0, 0, template);
   return newState;
 }
 
