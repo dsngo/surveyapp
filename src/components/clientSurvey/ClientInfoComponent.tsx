@@ -18,10 +18,9 @@ interface ICICProps {
 
 const ClientInfoComponent: React.SFC<ICICProps> = props => {
   const { updateFirstName, updateLastName, updateEmail, updatePhone, updateAddress, updateGender, clientInfo } = props;
-  console.log(clientInfo.gender);
-  
   return (
-    <Paper className="info-client-survey">
+    <Paper className="info-client-survey" zDepth={1}>
+      <div className="info-section">
       <TextField
         hintText="Enter your first name here"
         floatingLabelText="First Name"
@@ -29,6 +28,8 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         onChange={(e: any) => updateFirstName(e.target.value)}
         className="input-info-client"
       />
+      </div>
+      <div className="info-section">
       <TextField
         hintText="Enter your last name here"
         floatingLabelText="Last Name"
@@ -36,6 +37,8 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         onChange={(e: any) => updateLastName(e.target.value)}
         className="input-info-client"
       />
+      </div>
+      <div className="info-section">
       <TextField
         hintText="Enter your email here"
         floatingLabelText="Email"
@@ -43,6 +46,8 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         onChange={(e: any) => updateEmail(e.target.value)}
         className="input-info-client"
       />
+      </div>
+      <div className="info-section">
       <TextField
         hintText="Enter your phone number here"
         floatingLabelText="Phone Number"
@@ -50,6 +55,8 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         onChange={(e: any) => updatePhone(e.target.value)}
         className="input-info-client"
       />
+      </div>
+      <div className="info-section">
       <TextField
         hintText="Enter your address here"
         floatingLabelText="Address"
@@ -57,6 +64,8 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         onChange={(e: any) => updateAddress(e.target.value)}
         className="input-info-client"
       />
+      </div>
+      <div className="info-section">
       <SelectField
         floatingLabelText="Gender"
         hintText="Input your gender"
@@ -68,6 +77,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         <MenuItem value={"Female"} primaryText="Female" />
         <MenuItem value={"Other"} primaryText="Other" />
       </SelectField>
+      </div>
     </Paper>
   );
 };

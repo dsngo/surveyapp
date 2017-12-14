@@ -558,12 +558,14 @@ select {
     font-size: 20px;
     font-weight: bold;
     margin-top: 20px;
+    text-align: center;
 }
 
 .survey-description {
     font-size: 17px;
     font-style: italic;
     padding-bottom: 20px;
+    text-align: center;
 }
 
 .component-question {
@@ -591,9 +593,15 @@ select {
 }
 
 .info-client-survey {
-    padding: 10%;
 }
 
+.info-section {
+    width: 50%;
+    padding: 10px;
+    float: left;
+}
 .input-info-client {
-    width: 50% !important;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 95%;
 }
