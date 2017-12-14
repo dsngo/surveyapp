@@ -1,6 +1,7 @@
 export interface ILongQuestion {
   [key: string]: any;
   questionType: "longQuestion";
+  questionId?: number;
   position?: number;
   question: string;
   description: string;
@@ -10,6 +11,7 @@ export interface ILongQuestion {
 export interface IMultipleChoices {
   [key: string]: any;
   questionType: "multipleChoices";
+  questionId?: number;
   position?: number;
   question: string;
   description: string;
@@ -19,6 +21,7 @@ export interface IMultipleChoices {
 export interface IDropdown {
   [key: string]: any;
   questionType: "dropdown";
+  questionId?: number;  
   position?: number;
   question: string;
   description: string;
@@ -28,6 +31,7 @@ export interface IDropdown {
 export interface IMultipleDropdown {
   [key: string]: any;
   questionType: "multipleDropdown";
+  questionId?: number;  
   position?: number;
   question: string;
   description: string;
@@ -38,6 +42,7 @@ export interface IMultipleDropdown {
 export interface ICheckBox {
   [key: string]: any;
   questionType: "checkbox";
+  questionId?: number;  
   position?: number;
   question: string;
   description: string;
@@ -48,16 +53,17 @@ export interface ICheckBox {
   }[];
 }
 
-export interface IPriorityQuestion {
+export interface IPriority {
   [key: string]: any;
   questionType: "priorityQuestion";
+  questionId?: number;  
   position?: number;
   question: string;
   description: string;
-  answers: { priority: number; answer: string }[];
+  answers: { priority: number; text: string }[];
   additionalContents: {
     description: string;
-    contents: { question: string; answers: string }[];
+    entries: { question: string; answers: string }[];
   }[];
 }
 
@@ -65,7 +71,7 @@ export interface ISurveyFormFromDatabase {
   [key: string]: any;
   title: string;
   description: string;
-  contents: (ILongQuestion | IMultipleChoices | IMultipleDropdown | ICheckBox | IDropdown | IPriorityQuestion)[];
+  contents: (ILongQuestion | IMultipleChoices | IMultipleDropdown | ICheckBox | IDropdown | IPriority)[];
   author: { username: string };
   isDeleted: boolean;
   completed: boolean;

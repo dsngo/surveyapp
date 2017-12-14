@@ -1,10 +1,6 @@
 import * as React from "react";
-import {
-  addNewQuestion,
-  removeQuestion,
-  updateQuestion
-} from "../redux/actionCreators";
-import { IPriorityQuestion } from "../../types/customTypes";
+import { addQuestion, removeQuestion, updateQuestion } from "../redux/actionCreators";
+import { IPriority } from "../../types/customTypes";
 import { connect } from "react-redux";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
@@ -16,159 +12,88 @@ import { Table, TableBody, TableRow, TableRowColumn } from "material-ui/Table";
 
 class PriorityQuestion extends React.Component<
   {
-    questionIndex: number;
     questionData: any;
-    removeQuestion: (questionIndex: number) => any;
-    updateQuestion: (questionIndex: number, questionData: any) => any;
+    handleUpdateQuestion: (questionId: number, questionData: any) => any;
   },
-  IPriorityQuestion
+  {}
 > {
-  state: IPriorityQuestion = {
-    questionType: "priorityQuestion",
+  state = {
     question: "",
     description: "",
     answers: [
       {
         priority: 0,
-        answer: ""
-      }
+        text: "",
+      },
     ],
-    additionalContents: [
-    ],
-    completed: false
+    additionalContents: [],
   };
-  handleChangeQuestion = (newQuestion: string) => {
-    this.setState(prevState => ({ ...prevState, question: newQuestion }));
-  };
-  handleRemoveAnswer = (answerIndex: number) => {
-    this.setState(prevState => ({
+  // Methods
+  handleUpdateQuestion = (newQuestion: string) => this.setState((prevState: any) => ({ ...prevState, question: newQuestion }));
+  // =============================
+  handleUpdateDescription = (newDescription: string) =>
+    this.setState((prevState: any) => ({ ...prevState, description: newDescription }));
+  // =============================
+  handleUpdateAnswer = (answerIndex: number, answerKey: string, updatedValue: any) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      answers: prevState.answers.splice(answerIndex, 1) && prevState.answers
+      answers: prevState.answers.map(
+        (ansObj: any, i: number) => (i === answerIndex ? { ...ansObj, [answerKey]: updatedValue } : ansObj),
+      ),
     }));
-  };
-  handleRemoveAdditionalContent = (contentIndex: number) => {
-    this.setState(prevState => ({
+  handleAddAnswer = (newAnswer: { priority: number; answer: string }) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      additionalContents:
-        prevState.additionalContents.splice(contentIndex, 1) &&
-        prevState.additionalContents
+      answers: [...prevState.answers, newAnswer],
     }));
-  };
-  handleUpdateAnswer = (
-    answerIndex: number,
-    newAnswer: { priority: number; answer: string }
-  ) => {
-    this.setState(prevState => ({
+  handleRemoveAnswer = (answerIndex: number) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      answers: prevState.answers.map((ans: any, index) => {
-        index === answerIndex ? (ans.answer = newAnswer.answer) : "";
-        return ans;
-      })
+      answers: prevState.answers.filter((e: any, i: number) => i !== answerIndex),
     }));
-  };
-  handleAddAnswer = (newAnswer: { priority: number; answer: string }) => {
-    this.setState(prevState => ({
+  // =============================
+  handleUpdateAdditionalContent = (contentIndex: number, contentKey: string, value: any) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      answers: prevState.answers.push(newAnswer) && prevState.answers
+      additionalContents: prevState.additionalContents.map(
+        (e: any, i: number) => (i === contentIndex ? { ...e, [contentKey]: value } : e),
+      ),
     }));
-  };
-  handleAddAdditionalContent = (newAdditionalContent: {
-    description: string;
-    contents: {
-      contentQuestionId: string;
-      question: string;
-      answers: string;
-    }[];
-  }) => {
-    this.setState(prevState => ({
+  handleAddAdditionalContent = (newContent = { description: "", entries: [{ question: "", answer: "" }] }) =>
+    this.setState((prevState: any) => ({ ...prevState, additionalContents: [...prevState.additionalContents, newContent] }));
+  handleRemoveAdditionalContent = (contentIndex: number) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      additionalContents:
-        prevState.additionalContents.push(newAdditionalContent) &&
-        prevState.additionalContents
+      additionalContents: prevState.additionalContents.filter((e: any, i: number) => i !== contentIndex),
     }));
-  };
-  handleUpdateAndditionalContentDesciption = (
-    contentIndex: number,
-    value: string
-  ) => {
-    this.setState(prevState => ({
+  // =============================
+  handleUpdateEntry = (contentId: number, entryId: number, entryKey: string, entryValue: string) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      additionalContents: prevState.additionalContents.map((elm, index) => {
-        index === contentIndex ? (elm.description = value) : "";
-        return elm;
-      })
+      additionalContents: prevState.additionalContents.map(
+        (c: any, i: number) =>
+          i === contentId
+            ? c.map((entry: any, eId: number) => (eId === entryId ? { ...entry, [entryKey]: entryValue } : entry))
+            : c,
+      ),
     }));
-  };
-  handleAddQuestionAdditionContent = (
-    contentIndex: number,
-    newQuestion: { question: string; answers: string }
-  ) => {
-    this.setState(prevState => ({
+  handleAddEntry = (contentId: number, newEntry = { question: "", answers: "" }) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      additionalContents: prevState.additionalContents.map((elm, index) => {
-        index === contentIndex ? elm.contents.push(newQuestion) : "";
-        return elm;
-      })
+      additionalContents: prevState.additionalContents.map(
+        (c: any, i: number) => (i === contentId ? { ...c, entries: [...c.entries, newEntry] } : c),
+      ),
     }));
-  };
-  handleUpdateAdditionQuestion = (
-    contentIndex: number,
-    contentQuestionIndex: number,
-    value: string
-  ) => {
-    this.setState(prevState => ({
+  handleRemoveEntry = (contentId: number, entryId: number) =>
+    this.setState((prevState: any) => ({
       ...prevState,
-      additionalContents: prevState.additionalContents.map((elm, index) => {
-        index === contentIndex
-          ? elm.contents.map((elmContent, elmContentIndex) => {
-              contentQuestionIndex === elmContentIndex
-                ? (elmContent.question = value)
-                : "";
-              return elmContent;
-            })
-          : "";
-        return elm;
-      })
+      additionalContents: prevState.additionalContents.map(
+        (c: any, i: number) => (i === contentId ? { ...c, entries: c.entries.filter((e: any, i: number) => i !== entryId) } : c),
+      ),
     }));
-  };
+  // =============================  
 
-  handleRemoveAdditionalContentQuestion = (
-    contentIndex: number,
-    questionIndex: number
-  ) => {
-    this.setState(prevState => ({
-      ...prevState,
-      additionalContents:
-        prevState.additionalContents.map((content, contentIdx) => {
-          contentIdx === contentIndex
-            ? content.contents.splice(contentIdx, 1)
-            : "";
-          return content;
-        }) && prevState.additionalContents
-    }));
-  };
-
-  updatePriority = (indexAnswer: number, value: any) => {
-    this.setState(prevState => ({
-      ...prevState,
-      answers: prevState.answers.map((ans, index) => {
-        index === indexAnswer ? (ans.priority = value) : "";
-        return ans;
-      })
-    }));
-  };
-  handleUpdateAnswerContent = (index: number, indexQuestion: number, value: string) => {
-      this.setState( prevState => ({
-          ...prevState,
-          additionalContents: prevState.additionalContents.map((additionalContent: any, indexContent: number) => {
-            index === indexContent ? additionalContent.contents.map((contentQuestion: any, indexContentQuestion: number) => {
-                indexContentQuestion === indexQuestion ? contentQuestion.answers = value: ""; return contentQuestion;
-            }) : ""; return additionalContent;
-          })
-      }))
-  }
- 
-  renderFormCreate = (question: string, description: string, questionIndex: number, answers: any, additionalContents: any) => (
+  renderFormCreate = (question: string, description: string, answers: any, additionalContents: any) => (
     <div className="input-option-create">
       <TextField
         name="questionText"
@@ -177,8 +102,8 @@ class PriorityQuestion extends React.Component<
         fullWidth
         rows={2}
         value={question}
-        onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
-        floatingLabelText={`Question ${questionIndex + 1}`}
+        onChange={(e: any) => this.handleUpdateQuestion(e.target.value)}
+        floatingLabelText="Question"
       />
       <div className="clear-fix multiple-answer">
         {answers.map((answer: any, answerIndex: number) => {
@@ -195,49 +120,25 @@ class PriorityQuestion extends React.Component<
                   hintText="Add an answer here."
                   fullWidth
                   value={answer.answer}
-                  onChange={(e: any) =>
-                    this.handleUpdateAnswer(answerIndex, {
-                      priority: 0,
-                      answer: e.target.value
-                    })}
+                  onChange={(e: any) => this.handleUpdateAnswer(answerIndex, "text", e.target.value)}
                 />
               </div>
             </div>
           );
         })}
         <div className="radio-answer align-center">
-          <FloatingActionButton
-            mini
-            onClick={e => this.handleAddAnswer({ priority: 0, answer: "" })}
-          >
+          <FloatingActionButton mini onClick={e => this.handleAddAnswer({ priority: 0, answer: "" })}>
             <ContentAdd />
           </FloatingActionButton>
         </div>
-        <RaisedButton
-          label="Additional Content"
-          primary={true}
-          onClick={e =>
-            this.handleAddAdditionalContent({
-              description: "",
-              contents: [
-                {
-                  contentQuestionId: "",
-                  question: "",
-                  answers: ""
-                }
-              ]
-            })}
-        />
+        <RaisedButton label="Additional Content" primary={true} onClick={e => this.handleAddAdditionalContent()} />
       </div>
       <div className="additional-detail">
         {additionalContents.map((content: any, contentIndex: any) => {
           return (
             <div className="additional-container" key={contentIndex}>
               <div>
-                <div
-                  className="delete-area"
-                  onClick={() => this.handleRemoveAdditionalContent(contentIndex)}
-                >
+                <div className="delete-area" onClick={() => this.handleRemoveAdditionalContent(contentIndex)}>
                   <i className="fa fa-times" />
                 </div>
               </div>
@@ -246,11 +147,7 @@ class PriorityQuestion extends React.Component<
                 hintText="Add description here."
                 fullWidth
                 value={content.description}
-                onChange={(e: any) =>
-                  this.handleUpdateAndditionalContentDesciption(
-                    contentIndex,
-                    e.target.value
-                  )}
+                onChange={(e: any) => this.handleUpdateAdditionalContent(contentIndex, "description", e.target.value)}
               />
               {content.contents.map((ctn: any, ctnQuestionIndex: any) => {
                 return (
@@ -258,11 +155,7 @@ class PriorityQuestion extends React.Component<
                     <div className="additional-question-container">
                       <div
                         className="delete-area"
-                        onClick={() =>
-                          this.handleRemoveAdditionalContentQuestion(
-                            contentIndex,
-                            ctnQuestionIndex
-                          )}
+                        onClick={() => this.handleRemoveEntry(contentIndex, ctnQuestionIndex)}
                       >
                         <i className="fa fa-times" />
                       </div>
@@ -272,12 +165,7 @@ class PriorityQuestion extends React.Component<
                       hintText="Add a question here."
                       fullWidth
                       value={ctn.question}
-                      onChange={(e: any) =>
-                        this.handleUpdateAdditionQuestion(
-                          contentIndex,
-                          ctnQuestionIndex,
-                          e.target.value
-                        )}
+                      onChange={(e: any) => this.handleUpdateEntry(contentIndex, ctnQuestionIndex, "question", e.target.value)}
                     />
                   </div>
                 );
@@ -287,10 +175,8 @@ class PriorityQuestion extends React.Component<
                   label="Add question"
                   primary={true}
                   onClick={e =>
-                    this.handleAddQuestionAdditionContent(contentIndex, {
-                      question: "",
-                      answers: ""
-                    })}
+                    this.handleAddEntry(contentIndex)
+                  }
                 />
               </div>
             </div>
@@ -301,34 +187,29 @@ class PriorityQuestion extends React.Component<
   );
   render() {
     const {
-        props: { 
-            questionIndex, 
-            removeQuestion, 
-            questionData: { 
-                question, 
-                answers, 
-                description,
-                additionalContents
-            } 
-        }
+      props: { questionData: { question, answers, description, additionalContents } },
     } = this;
     return (
-    <div className="question-component">
-        {this.renderFormCreate(question, description, questionIndex, answers, additionalContents)}
-    </div>
+      <div className="question-component">
+        {this.renderFormCreate(question, description, answers, additionalContents)}
+      </div>
     );
-}
+  }
 
   componentDidUpdate() {
-    return this.props.updateQuestion(this.props.questionIndex, this.state);
+    const { question, answers, description, additionalContents } = this.state;
+    const { questionType, questionId, position, completed } = this.props.questionData;
+    const questionData: IPriority = {
+      position,
+      questionType,
+      questionId,
+      question,
+      answers,
+      description,
+      additionalContents,
+    };
+    return this.props.handleUpdateQuestion(questionId, questionData);
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  removeQuestion: (questionIndex: number) =>
-    dispatch(removeQuestion(questionIndex)),
-  updateQuestion: (questionIndex: number, questionData: any) =>
-    dispatch(updateQuestion(questionIndex, questionData))
-});
-
-export default connect(null, mapDispatchToProps)(PriorityQuestion);
+export default PriorityQuestion;

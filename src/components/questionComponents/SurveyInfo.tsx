@@ -3,31 +3,13 @@ import { removeQuestion, updateQuestion, updateSurveyInfo } from "../redux/actio
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
 
-
-
 class SurveyInfo extends React.Component<{
-  updateSurveyInfo: (info: any) => any;
-  info: any;
+  title: string;
+  description: string;
+  updateSurveyInfo: (infoKey: string, value: any) => any;
 }> {
-  state = {
-    title: "",
-    description: "",
-    completed: false,
-    firstTime: true
-  };
-
-  handleChangeTitle = (title: string) =>
-    this.setState(prevState => ({
-      ...prevState,
-      title
-    }));
-
-  handleChangeDescription = (description: string) =>
-    this.setState(prevState => ({
-      ...prevState,
-      description
-    }));
-  renderFromCreate() {
+  renderFormCreate = () => {
+    const { updateSurveyInfo, title, description } = this.props;
     return (
       <div>
         <div className="padding-25-except-top input-option-create">
@@ -35,8 +17,8 @@ class SurveyInfo extends React.Component<{
             name="surveyTitle"
             hintText="Title"
             fullWidth
-            value={this.state.title}
-            onChange={(e: any) => this.handleChangeTitle(e.target.value)}
+            value={this.props.title}
+            onChange={(e: any) => updateSurveyInfo("title", e.target.value)}
             floatingLabelText="Title"
           />
           <TextField
@@ -44,51 +26,25 @@ class SurveyInfo extends React.Component<{
             hintText="Description"
             multiLine
             fullWidth
-            value={this.state.description}
-            onChange={(e: any) => this.handleChangeDescription(e.target.value)}
+            value={this.props.description}
+            onChange={(e: any) => updateSurveyInfo("description", e.target.value)}
             floatingLabelText="Description"
           />
         </div>
       </div>
     );
-  }
+  };
   render() {
-    
-    return (
-      <div className="question-components">
-           {this.renderFromCreate()}
-      </div>
-    );
-  }
-  // componentWillMount() {
-  //   if (this.state.title === "") {
-  //     this.setState( prevState => ({ ...prevState, title: this.props.info.title, description: this.props.info.description}))
-  //   }
-  // }
-  componentDidUpdate() {
-    if (this.state.firstTime && this.props.info.title) {
-      this.setState(prevState => ({
-        ...prevState,
-        title: this.props.info.title,
-        description: this.props.info.description,
-        firstTime: false,
-      }), () => {
-        
-      })
-    }
-    // return this.props.updateQuestion(this.props.questionIndex, this.state);
-    if (this.props.info.title !== this.state.title || this.props.info.description !== this.state.description) {
-      this.props.updateSurveyInfo(this.state);
-    } 
+    return <div className="question-components">{this.renderFormCreate()}</div>;
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  updateSurveyInfo: (info: any) => dispatch(updateSurveyInfo(info))
+const mapStateToProps = (state: any) => ({
+  title: state.surveyInfo.title,
+  description: state.surveyInfo.description,
 });
 
-const mapStateToProps = (state: any) => ({
-  info: state.surveyInfo
-})
-
+const mapDispatchToProps = (dispatch: any) => ({
+  updateSurveyInfo: (infoKey: string, value: any) => dispatch(updateSurveyInfo(infoKey, value)),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(SurveyInfo);

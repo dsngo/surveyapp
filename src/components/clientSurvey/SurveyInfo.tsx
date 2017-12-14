@@ -5,7 +5,7 @@ import TextField from "material-ui/TextField";
 
 class SurveyInfo extends React.Component<{
   info: any;
-  updateSurveyInfo: (info: any) => any;
+  updateSurveyInfo: (infoKey: any, value: any) => any;
 }> {
   state = {
     title: "",
@@ -43,7 +43,7 @@ class SurveyInfo extends React.Component<{
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-  updateSurveyInfo: (info: any) => dispatch(updateSurveyInfo(info))
+  updateSurveyInfo: (infoKey: any, value: any) => dispatch(updateSurveyInfo(infoKey, value))
 });
 
 const mapStateToProps = (state: any) => ({

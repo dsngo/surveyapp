@@ -2,8 +2,8 @@ import {
   CLEAR_SUBMIT_STATUS,
   CLEAR_SURVEY,
   SET_SEARCH_TERM,
-  UPDATE_INFO_SURVEY,
-  ADD_NEW_QUESTION,
+  UPDATE_SURVEY_INFO,
+  ADD_QUESTION,
   UPDATE_QUESTION,
   REMOVE_QUESTION,
   UPDATE_QUESTION_TYPE,
@@ -24,85 +24,7 @@ const config = require("../../config.json");
 const urlServer = config.URL_SERVER_API;
 const clearMsgTimeout = config.CLEAR_MESSAGE_TIME;
 
-export const setSearchTerm = (searchTerm: string) => ({
-  searchTerm,
-  type: SET_SEARCH_TERM,
-});
-
-export const addNewQuestion = (currentIndex: number, template: any) => (dispatch: any) => {
-  dispatch({
-    currentIndex,
-    template,
-    // questionType: "multipleChoices",
-    type: ADD_NEW_QUESTION,
-  });
-};
-
-export const removeQuestion = (questionIndex: number) => ({
-  questionIndex,
-  type: REMOVE_QUESTION,
-});
-
-export const updateQuestion = (questionIndex: number, questionData: any) => (dispatch: any, getState: any) => {
-  dispatch({
-    questionIndex,
-    questionData,
-    type: UPDATE_QUESTION,
-  });
-  dispatch({
-    questionType: questionData.questionType,
-    type: UPDATE_SELECTED_QUESTION_TYPE,
-  });
-};
-
-export const updateCurrentIndex = (currentIndex: number) => ({
-  currentIndex,
-  type: UPDATE_CURRENT_INDEX,
-});
-
-export const updateSurveyInfo = (info: any) => ({
-  info,
-  type: UPDATE_INFO_SURVEY,
-});
-
-export const updateTempId = (id: string) => {
-  return {
-    id,
-    type: UPDATE_TEMP_SURVEY_ID,
-  };
-};
-
-export const clearSubmitStatus = () => {
-  return {
-    type: CLEAR_SUBMIT_STATUS,
-  };
-};
-
-export const clearSurveyData = () => {
-  return {
-    type: CLEAR_SURVEY,
-  };
-};
-
-export const updateSectionBreaks = (currentIndex: number, title: string, description: string, bigBreak: boolean) => (
-  dispatch: any,
-  getState: any,
-) => {
-  const { sectionBreaks } = getState().surveyInfo;
-  const test = sectionBreaks.findIndex((e: any) => e.index === currentIndex);
-  const section = { title, description, bigBreak, index: currentIndex };
-  if (test > 0) {
-    sectionBreaks[test] = section;
-  } else {
-    sectionBreaks.push(section);
-  }
-  dispatch({
-    sectionBreaks,
-    type: UPDATE_SECTION_BREAK,
-  });
-};
-
-// API REQUESTS
+// ================= API REQUESTS
 export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
   const { data: recentForms, message: submitStatus } = (await axios.get(`${urlServer}/survey/recent-forms`)).data;
   dispatch({
@@ -125,9 +47,9 @@ export const getDataFromDbById = (formId: string) => async (dispatch: any, getSt
       surveyId,
       type: GET_DATA_FROM_DB_BY_ID,
     });
+    return surveyContents;
   }
 };
-
 export const saveFormToDb = (completed: boolean) => async (dispatch: any, getState: any) => {
   const contents = getState().surveyContents;
   const { _id: formId, ...surveyInfo } = getState().surveyInfo;
@@ -148,7 +70,6 @@ export const saveFormToDb = (completed: boolean) => async (dispatch: any, getSta
     });
   }
 };
-
 export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
   const clientSurveyData = {
     contents: getState().surveyContents,
@@ -169,28 +90,102 @@ export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean)
     });
   }
 };
-// ================ CLIENTSURVEY INFO
-export const updateFirstName = (firstName: string) => ({
-  firstName,
-  type: "UPDATE_FIRSTNAME",
+
+// ================= SEARCH FUNCTION
+export const setSearchTerm = (searchTerm: string) => ({
+  searchTerm,
+  type: SET_SEARCH_TERM,
 });
-export const updateLastName = (lastName: string) => ({
-  lastName,
-  type: "UPDATE_LASTNAME",
+
+// ================= RESTFUL QUESTION FUNCTIONS
+//// UTILITIES ===
+export const updateSurveyInfo = (infoKey: string, value: any) => ({
+  infoKey,
+  value,
+  type: UPDATE_SURVEY_INFO,
 });
-export const updateEmail = (email: string) => ({
-  email,
-  type: "UPDATE_EMAIL",
+export const updateQuestionDetail = (questionId: number, detailKey: string, value: any) => ({
+  questionId,
+  detailKey,
+  value,
+  type: "UPDATE_QUESTION_DETAIL",
 });
-export const updatePhone = (phone: string) => ({
-  phone,
-  type: "UPDATE_PHONE",
+export const clearSurveyData = () => ({
+  type: CLEAR_SURVEY,
 });
-export const updateAddress = (address: string) => ({
-  address,
-  type: "UPDATE_ADDRESS",
+
+//// SECTION BREAK ===
+export const addSectionBreak = (questionId: number, title = "", description = "", bigBreak = false) => ({
+  questionId,
+  title,
+  description,
+  bigBreak,
+  type: "ADD_SECTION_BREAK",
 });
-export const updateGender = (gender: string) => ({
-  gender,
-  type: "UPDATE_GENDER",
+export const removeSectionBreak = (questionId: number) => ({
+  questionId,
+  type: "REMOVE_SECTION_BREAK",
+});
+export const updateSectionBreak = (questionId: number, sectionKey: string, value: any) => ({
+  questionId,
+  sectionKey,
+  value,
+  type: UPDATE_SECTION_BREAK,
+});
+
+//// QUESTION ===
+export const addQuestion = (currentId: number, template: any) => ({
+  currentId,
+  template,
+  type: ADD_QUESTION,
+});
+export const removeQuestion = (questionId: number) => ({
+  questionId,
+  type: REMOVE_QUESTION,
+});
+export const updateQuestion = (questionId: number, questionData: any) => ({
+  questionId,
+  questionData,
+  type: UPDATE_QUESTION,
+});
+
+//// ANSWER ===
+export const addAnswer = (questionId: number, newAnswer: any) => ({
+  questionId,
+  newAnswer,
+  type: "ADD_ANSWER",
+});
+export const updateAnswer = (questionId: number, answerId: number, answerKey: string, value: any) => ({
+  type: "UPDATE_ANSWER",
+  questionId,
+  answerId,
+  answerKey,
+  value,
+});
+export const removeAnswer = (questionId: number, answerId: number) => ({
+  type: "REMOVE_ANSWER",
+  answerId,
+});
+const toggleAnswerChecker = (questionId: number, answerId: number, answerKey: string) => ({
+  questionId,
+  answerId,
+  answerKey,
+  type: "TOGGLE_ANSWER_CHECKER",
+});
+
+// ================= UPDATE STATE STATUS
+export const updateStateStatus = (statusKey: string, value: any) => ({
+  statusKey,
+  value,
+  type: "UPDATE_STATE_STATUS",
+});
+export const clearSubmitStatus = () => ({
+  type: CLEAR_SUBMIT_STATUS,
+});
+
+// ================= CLIENTSURVEY INFO
+export const updateClientSurveyInfo = (infoKey: string, value: any) => ({
+  infoKey,
+  value,
+  type: "UPDATE_CLIENT_INFO",
 });

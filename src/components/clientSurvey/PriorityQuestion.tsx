@@ -1,10 +1,6 @@
 import * as React from "react";
-import {
-  addNewQuestion,
-  removeQuestion,
-  updateQuestion
-} from "../redux/actionCreators";
-import { IPriorityQuestion } from "../../types/customTypes";
+import { addQuestion, removeQuestion, updateQuestion } from "../redux/actionCreators";
+import { IPriority } from "../../types/customTypes";
 import { connect } from "react-redux";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
@@ -21,21 +17,20 @@ class PriorityQuestion extends React.Component<
     removeQuestion: (questionIndex: number) => any;
     updateQuestion: (questionIndex: number, questionData: any) => any;
   },
-  IPriorityQuestion
+  IPriority
 > {
-  state: IPriorityQuestion = {
+  state: IPriority = {
     questionType: "priorityQuestion",
     question: "",
     description: "",
     answers: [
       {
         priority: 0,
-        answer: ""
-      }
+        text: "",
+      },
     ],
-    additionalContents: [
-    ],
-    completed: false
+    additionalContents: [],
+    completed: false,
   };
 
   updatePriority = (indexAnswer: number, value: any) => {
@@ -44,37 +39,38 @@ class PriorityQuestion extends React.Component<
       answers: prevState.answers.map((ans, index) => {
         index === indexAnswer ? (ans.priority = value) : "";
         return ans;
-      })
+      }),
     }));
   };
   componentDidMount() {
     this.setState(prevState => ({
-        ...prevState,
-        question: this.props.questionData.question,
-        description: this.props.questionData.description,
-        answers: this.props.questionData.answers,
-        additionalContents: this.props.questionData.additionalContents
-    }))
-}
+      ...prevState,
+      question: this.props.questionData.question,
+      description: this.props.questionData.description,
+      answers: this.props.questionData.answers,
+      additionalContents: this.props.questionData.additionalContents,
+    }));
+  }
 
   handleUpdateAnswerContent = (index: number, indexQuestion: number, value: string) => {
-      this.setState( prevState => ({
-          ...prevState,
-          additionalContents: prevState.additionalContents.map((additionalContent: any, indexContent: number) => {
-            index === indexContent ? additionalContent.contents.map((contentQuestion: any, indexContentQuestion: number) => {
-                indexContentQuestion === indexQuestion ? contentQuestion.answers = value: ""; return contentQuestion;
-            }) : ""; return additionalContent;
-          })
-      }))
-  }
+    this.setState(prevState => ({
+      ...prevState,
+      additionalContents: prevState.additionalContents.map((additionalContent: any, indexContent: number) => {
+        index === indexContent
+          ? additionalContent.contents.map((contentQuestion: any, indexContentQuestion: number) => {
+              indexContentQuestion === indexQuestion ? (contentQuestion.answers = value) : "";
+              return contentQuestion;
+            })
+          : "";
+        return additionalContent;
+      }),
+    }));
+  };
   renderClientForm() {
-    const {
-      props: { questionIndex, removeQuestion, questionData },
-      updatePriority
-    } = this;
+    const { props: { questionIndex, removeQuestion, questionData }, updatePriority } = this;
     const { question, description, answers, additionalContents } = questionData;
     const length: any = [];
-    for (let i = 1; i <= answers.length; i++) {
+    for (let i = 1; i <= answers.length; i += 1) {
       length.push(i);
     }
     return (
@@ -89,19 +85,14 @@ class PriorityQuestion extends React.Component<
             {answers.map((ans: any, answerIndex: any) => {
               return (
                 <TableRow key={answerIndex}>
-                  <TableRowColumn className="col-sm-8">
-                    {ans.answer}
-                  </TableRowColumn>
+                  <TableRowColumn className="col-sm-8">{ans.answer}</TableRowColumn>
                   <TableRowColumn className="col-sm-4">
                     <SelectField
                       fullWidth
                       value={ans.priority}
-                      onChange={(event: object, key: number, payload: any) =>
-                        updatePriority(answerIndex, payload)}
+                      onChange={(event: object, key: number, payload: any) => updatePriority(answerIndex, payload)}
                     >
-                      {length.map((temp: any) => (
-                        <MenuItem value={temp} primaryText={temp} key={temp} />
-                      ))}
+                      {length.map((temp: any) => <MenuItem value={temp} primaryText={temp} key={temp} />)}
                     </SelectField>
                   </TableRowColumn>
                 </TableRow>
@@ -118,17 +109,14 @@ class PriorityQuestion extends React.Component<
                   {content.contents.map((question: any, indexQuestion: any) => {
                     return (
                       <div>
-                        <div className="content-question">
-                          {question.question}
-                        </div>
+                        <div className="content-question">{question.question}</div>
                         <div className="content-answer">
                           <TextField
                             name="answerText"
                             hintText="Add an answer here."
                             value={question.answers}
                             fullWidth
-                            onChange={(e: any) =>
-                              this.handleUpdateAnswerContent(index, indexQuestion, e.target.value)}
+                            onChange={(e: any) => this.handleUpdateAnswerContent(index, indexQuestion, e.target.value)}
                           />
                         </div>
                       </div>
@@ -142,15 +130,9 @@ class PriorityQuestion extends React.Component<
       </div>
     );
   }
-  
+
   render() {
-    return (
-        <div className="padding-bottom-25 question-component">
-            {
-                this.renderClientForm()
-            }
-        </div>
-    )
+    return <div className="padding-bottom-25 question-component">{this.renderClientForm()}</div>;
   }
 
   componentDidUpdate() {
@@ -159,10 +141,8 @@ class PriorityQuestion extends React.Component<
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
-  removeQuestion: (questionIndex: number) =>
-    dispatch(removeQuestion(questionIndex)),
-  updateQuestion: (questionIndex: number, questionData: any) =>
-    dispatch(updateQuestion(questionIndex, questionData))
+  removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
+  updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
 });
 
 export default connect(null, mapDispatchToProps)(PriorityQuestion);

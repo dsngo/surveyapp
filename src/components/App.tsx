@@ -6,7 +6,7 @@ import FoF from "./FoF";
 // import FormSubmit from "./FormSubmit";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import NavBar from "./NavBar";
-import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
+import QuestionContainer from "./questionComponents/QuestionContainer";
 import SurveyForm from "./SurveyForm";
 import Homepage from "./Homepage";
 import ClientSurvey from "./ClientSurvey";
@@ -19,8 +19,8 @@ export const App: React.SFC = () => (
                     <NavBar showSearch />
                     <Switch>
                         <Route exact path="/" component={Homepage} />
-                        <Route path="/survey/preview" component={ClientSurvey} />
-                        <Route path="/survey/:id" component={ClientSurvey} />
+                        {/* <Route path="/survey/preview" component={ClientSurvey} /> */}
+                        {/* <Route path="/survey/:id" component={ClientSurvey} /> */}
                         <Route path="/survey" component={SurveyForm} />
                         <Route component={FoF} />
                     </Switch>

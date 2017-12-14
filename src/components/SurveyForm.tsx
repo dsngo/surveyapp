@@ -8,49 +8,35 @@ import RaisedButton from "material-ui/RaisedButton";
 import { Tabs, Tab } from "material-ui/Tabs";
 import Settings from "./Settings";
 import SurveyInfo from "./questionComponents/SurveyInfo";
-import { saveFormToDb, clearSubmitStatus, getDataFromDbById } from "./redux/actionCreators";
-// Import question components
-import MultipleDropdownQuestion from "./questionComponents/MultipleDropdownQuestion";
-import CheckboxQuestion from "./questionComponents/CheckboxQuestion";
-import DropdownQuestion from "./questionComponents/DropdownQuestion";
-import LongQuestion from "./questionComponents/LongQuestion";
-import MultipleChoicesQuestion from "./questionComponents/MultipleChoicesQuestion";
-import PriorityQuestion from "./questionComponents/PriorityQuestion";
-import AddQuestionComponent from "./questionComponents/AddQuestionComponent";
+import { saveFormToDb, clearSubmitStatus, getDataFromDbById} from "./redux/actionCreators";
+import QuestionContainer from "./questionComponents/QuestionContainer";
 
 interface ISurveyFormProps {
+  surveyContents: any;
   tempId: string;
-  surveyId: string;
-  surveyContents: any[];
   submitStatus: string;
   saveFormToDb: (completed: boolean) => any;
   clearSubmitStatus: () => any;
-  updateInfoSurvey: (field: string, value: string) => any;
-  saveSurvey: () => any;
-  clearMessage: () => any;
-  getSurveyById: (id: string) => any;
   getDataFromDbById: (id: string) => any;
-  clearSurvey: () => any;
 }
 
-class SurveyForm extends React.Component<ISurveyFormProps, {}> {
+class SurveyForm extends React.Component<
+  ISurveyFormProps,
+  {
+    openConfirmModal: boolean;
+    openSuccessModal: boolean;
+    actionSave: boolean;
+  }
+> {
   scrollBars: Scrollbars;
   tempLengthArea = 0;
   state = {
     openConfirmModal: false,
     openSuccessModal: false,
     actionSave: false, // False: save, True: submit
-    surveyContents: [],
   };
 
   // Life Cycle Methods
-  componentWillReceiveProps(nextProps: any) {
-    console.log(this.props.surveyContents); // tslint:disable-line
-    console.log(nextProps); // tslint:disable-line
-    if (this.props.surveyContents) {
-      this.setState(prevState => ({ ...prevState, surveyContents: nextProps.surveyContents }));
-    }
-  }
   componentDidMount() {
     if (this.props.tempId) {
       this.props.getDataFromDbById(this.props.tempId);
@@ -64,15 +50,18 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
   handleOpenSuccessModal = (open: boolean) =>
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
 
-  handleSaveFormToDb = (actionSave: boolean) => {
+  handleSaveFormToDb = async (actionSave: boolean) => {
     this.props.saveFormToDb(actionSave);
     this.handleOpenConfirmModal(false, false);
   };
-
   // Render Methods
   renderQuestion = () => {
-     return this.state.surveyContents.map((content, index) => (
-      <AddQuestionComponent questionData={content} questionIndex={index} key={`AddQC-${index}`} />
+    const { surveyContents } = this.props;
+    return surveyContents.map((questionData: any) => (
+      <QuestionContainer
+        {...{ questionData }}
+        key={`AddQC-${questionData.questionId}`}
+      />
     ));
   };
 
@@ -82,7 +71,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
       handleOpenSuccessModal,
       handleSaveFormToDb,
       props: { submitStatus, tempId, clearSubmitStatus },
-      state: { surveyContents, openConfirmModal, openSuccessModal, actionSave },
+      state: { openConfirmModal, openSuccessModal, actionSave },
     } = this;
 
     if (submitStatus === "Success") {

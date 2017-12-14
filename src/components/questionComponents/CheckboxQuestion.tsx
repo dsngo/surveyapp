@@ -8,165 +8,131 @@ import Paper from "material-ui/Paper";
 import Checkbox from "material-ui/Checkbox";
 
 class CheckboxQuestion extends React.Component<
-    {
-        questionData: any;
-        questionIndex: number;
-        removeQuestion: (questionIndex: number) => any;
-        updateQuestion: (questionIndex: number, questionData: any) => any;
-    },
-    ICheckBox
-    > {
-    state: ICheckBox = {
-        questionType: "checkbox",
-        question: "",
-        description: "",
-        answers: [{
-            correct: false,
-            text: "",
-            chosen: false
-        }],
-        completed: false
-    };
-    handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
+  {
+    questionData: any;
+    handleUpdateQuestion: (questionId: number, questionData: any) => any;
+  },
+  {}
+> {
+  state = {
+    question: "",
+    description: "",
+    answers: [
+      {
+        correct: false,
+        text: "",
+        chosen: false,
+      },
+    ],
+  };
+  handleUpdateQuestion = (newQuestion: string) => this.setState((prevState: any) => ({ ...prevState, question: newQuestion }));
+  handleUpdateDescription = (newDescription: string) =>
+    this.setState((prevState: any) => ({ ...prevState, description: newDescription }));
+  handleUpdateAnswer = (answerIndex: number, answerKey: "correct" | "text" | "chosen", updatedValue: any) =>
+    this.setState((prevState: any) => ({
+      ...prevState,
+      answers: prevState.answers.map(
+        (ansObj: any, i: number) => (i === answerIndex ? { ...ansObj, [answerKey]: updatedValue } : ansObj),
+      ),
+    }));
+  handleAddAnswer = () =>
+    this.setState((prevState: any) => ({
+      ...prevState,
+      answers: prevState.answers.push({ correct: false, text: "", chosen: false }) && prevState.answers,
+    }));
+  handleRemoveAnswer = (answerIndex: number) => {
+    this.setState((prevState: any) => ({
+      ...prevState,
+      answers: prevState.answers.filter((e: any, i: number) => i !== answerIndex),
+    }));
+  };
+  toggleAnswerChecker = (indexAnswer: number, answerKey: string) =>
+    this.setState((prevState: any) => ({
+      ...prevState,
+      answers: prevState.answers.map(
+        (answer: any, index: number) => (index === indexAnswer ? { ...answer, [answerKey]: answer[answerKey] } : answer),
+      ),
+    }));
 
-    handleChangeDescription = (newDescription: string) =>
-        this.setState(prevState => ({ ...prevState, description: newDescription }));
-
-    handleRemoveAnswer = (answerIndex: number) => {
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.splice(answerIndex, 1) && prevState.answers }));
-    };
-
-    handleUpdateAnswer = (answerIndex: number, newAnswer: string) =>
-        this.setState(prevState => ({
-            ...prevState, answers: prevState.answers.map(
-                (ans: any, index) => { index === answerIndex ? ans.text = newAnswer : ""; return ans; }
-            )
-        }))
-
-    handleAddAnswer = () =>
-        this.setState(prevState => ({ ...prevState, answers: prevState.answers.push({ correct: false, text: "", chosen: false }) && prevState.answers }));
-
-    handleUpdateCorrect = (answerIndex: number) => 
-    this.setState(prevState => ({
-        ...prevState,
-        answers: prevState.answers.map((answer, answerIdx) => {
-            answerIdx === answerIndex ? answer.correct = !answer.correct : "";
-            return answer;
-        })
-    }))
-    
-    updateAnswer = (indexAnswer: number) => {
-        this.setState(prevState => ({
-            ...prevState, answers: prevState.answers.map((answer, index) => {
-                index === indexAnswer ? answer.chosen = !answer.chosen : ""; return answer;
-            })
-        }));
-    }
-
-    componentDidMount() {
-        this.setState(prevState => ({
-            ...prevState,
-            question: this.props.questionData.question,
-            description: this.props.questionData.description,
-            answers: this.props.questionData.answers
-        }))
-    }
-
-    renderCreateForm = (question: string, description: string, questionIndex: number, answers: any) => (
-            <div>
-                <div className="input-field input-text-radio input-option-create padding-bottom-25">
-                    <TextField
-                        name="questionText"
-                        hintText="Long question"
-                        multiLine
-                        fullWidth
-                        value={question}
-                        onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
-                        floatingLabelText={`Question ${questionIndex + 1}`}
-                    />
-                    <TextField
-                        name="answerText"
-                        hintText="Add an answer here."
-                        fullWidth
-                        value={description}
-                        onChange={(e: any) => this.handleChangeDescription(e.target.value)}
-                        floatingLabelText={"Question description"}
-                    />
-                    <div className="clear-fix multiple-answer">
-                        {answers.map((answer: any, answerIndex: number) => {
-                            return (
-                                <div className="radio-answer" key={answerIndex}>
-                                    {answers.length > 1 && (
-                                        <div>
-                                            <div className="delete-area" onClick={() => this.handleRemoveAnswer(answerIndex)}>
-                                                <i className="fa fa-times" />
-                                            </div>
-                                        </div>
-                                    )}
-                                    <div className="check-box">
-                                        <Checkbox
-                                            onCheck={e => {
-                                                this.handleUpdateCorrect(answerIndex);
-                                            }}
-                                            label={""}
-                                        />
-                                    </div>
-                                    <div className="icon-radio clear-fix">
-                                        <i className="material-icons">check_circle</i>
-                                    </div>
-                                    <div className="input-field input-text-radio">
-                                        <TextField
-                                            name="answerText"
-                                            hintText="Add an answer here."
-                                            fullWidth
-                                            value={answer.text}
-                                            onChange={(e: any) =>
-                                                this.handleUpdateAnswer(answerIndex, e.target.value)}
-
-                                        />
-                                    </div>
-                                </div>
-                            );
-                        })}
-                        <div className="radio-answer align-center">
-                            <RaisedButton
-                                label="More option"
-                                primary={true}
-                                onClick={e => this.handleAddAnswer()}
-                            />
-                        </div>
+  renderFormCreate = (question: string, description: string, answers: any) => (
+    <div>
+      <div className="input-field input-text-radio input-option-create padding-bottom-25">
+        <TextField
+          name="questionText"
+          hintText="Long question"
+          multiLine
+          fullWidth
+          value={question}
+          onChange={(e: any) => this.handleUpdateQuestion(e.target.value)}
+          floatingLabelText="Question"
+        />
+        <TextField
+          name="answerText"
+          hintText="Add an answer here."
+          fullWidth
+          value={description}
+          onChange={(e: any) => this.handleUpdateDescription(e.target.value)}
+          floatingLabelText="Description"
+        />
+        <div className="clear-fix multiple-answer">
+          {answers.map((answer: any, answerIndex: number) => {
+            return (
+              <div className="radio-answer" key={answerIndex}>
+                {answers.length > 1 && (
+                  <div>
+                    <div className="delete-area" onClick={() => this.handleRemoveAnswer(answerIndex)}>
+                      <i className="fa fa-times" />
                     </div>
+                  </div>
+                )}
+                <div className="check-box">
+                  <Checkbox
+                    onCheck={e => {
+                      this.toggleAnswerChecker(answerIndex, "correct");
+                    }}
+                  />
                 </div>
-            </div>
-        );
-        
-    render() {
-        const {
-            props: { 
-                questionIndex, 
-                removeQuestion, 
-                questionData: { 
-                    question, 
-                    answers, 
-                    description
-                } 
-            }
-        } = this;
-        return (
-        <div className="question-component">
-            {this.renderCreateForm(question, description, questionIndex, answers)}
+                <div className="icon-radio clear-fix">
+                  <i className="material-icons">check_circle</i>
+                </div>
+                <div className="input-field input-text-radio">
+                  <TextField
+                    name="answerText"
+                    hintText="Add an answer here."
+                    fullWidth
+                    value={answer.text}
+                    onChange={(e: any) => this.handleUpdateAnswer(answerIndex, "text", e.target.value)}
+                  />
+                </div>
+              </div>
+            );
+          })}
+          <div className="radio-answer align-center">
+            <RaisedButton label="More option" primary={true} onClick={e => this.handleAddAnswer()} />
+          </div>
         </div>
-        );
-    }
+      </div>
+    </div>
+  );
 
-    componentDidUpdate() {
-        return this.props.updateQuestion(this.props.questionIndex, this.state);
-    }
+  render() {
+    const { props: { questionData: { question, answers, description } } } = this;
+    return <div className="question-component">{this.renderFormCreate(question, description, answers)}</div>;
+  }
+
+  componentDidUpdate() {
+    const { question, answers, description } = this.state;
+    const { questionType, questionId, position, completed } = this.props.questionData;
+    const questionData: ICheckBox = {
+      questionType,
+      questionId,
+      position,
+      question,
+      description,
+      answers,
+    };
+    return this.props.handleUpdateQuestion(questionId, questionData);
+  }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-    removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
-    updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
-});
-
-export default connect(null, mapDispatchToProps)(CheckboxQuestion);
+export default CheckboxQuestion;

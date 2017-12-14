@@ -31,7 +31,6 @@ interface IClientSurveyProps {
   clearSurvey: () => any;
   tempId: string;
   clientSurveyContents: any[];
-  test: any;
 }
 
 class ClientSurvey extends React.Component<IClientSurveyProps> {
@@ -166,7 +165,6 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
 // };
 
 const mapStateToProps = (state: any) => ({
-  test: state,
   surveyInfo: state.surveyInfo,
   surveyContents: state.surveyContents,
   currentIndex: state.stateStatus.currentIndex,

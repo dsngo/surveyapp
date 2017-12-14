@@ -1,5 +1,4 @@
 import * as React from "react";
-import { removeQuestion, updateQuestion } from "../redux/actionCreators";
 import { ILongQuestion } from "../../types/customTypes";
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
@@ -7,83 +6,63 @@ import TextField from "material-ui/TextField";
 class LongQuestion extends React.Component<
   {
     questionData: any;
-    questionIndex: number;
-    removeQuestion: (questionIndex: number) => any;
-    updateQuestion: (questionIndex: number, questionData: any) => any;
+    handleUpdateQuestion: (questionId: number, questionData: any) => any;
   },
-  ILongQuestion
-  > {
-  state: ILongQuestion = {
-    questionType: "longQuestion",
+  {}
+> {
+  state = {
     question: "",
     description: "",
     answers: [""],
-    completed: false
   };
 
-  handleChangeQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
-
-  handleChangeDescription = (newDescription: string) =>
-    this.setState(prevState => ({ ...prevState, description: newDescription }));
-
+  handleUpdateState = (stateKey: string, value: any) => this.setState(prevState => ({ ...prevState, [stateKey]: value }));
   handleUpdateAnswer = (newAnswer: string) => this.setState(prevState => ({ ...prevState, answers: newAnswer.split("\n") }));
 
-  getAnswerString(answers: string[]) {
-    return answers.join("\n");
-  }
+  renderFormCreate = () => {
+    const { state: { question, answers, description } } = this;
+    return (
+    <div>
+      <div className="input-option-create padding-bottom-25">
+        <TextField
+          name="questionText"
+          hintText="Please type in question"
+          multiLine
+          fullWidth
+          value={question}
+          onChange={(e: any) => this.handleUpdateState("question",e.target.value)}
+          floatingLabelText="Question"
+        />
+        <TextField
+          name="questionDescription"
+          hintText="Please type in description"
+          multiLine
+          fullWidth
+          value={description}
+          onChange={(e: any) => this.handleUpdateState("description",e.target.value)}
+          floatingLabelText="Description"
+        />
+      </div>
+    </div>
+  )};
 
-  renderFormCreate = (question: string, description: string, questionIndex: number, answers: any) => (
-      <div>
-        <div className="input-option-create padding-bottom-25">
-          <TextField
-            name="questionText"
-            hintText="Long question"
-            multiLine
-            fullWidth
-            value={question}
-            onChange={(e: any) => this.handleChangeQuestion(e.target.value)}
-            floatingLabelText={`Question ${questionIndex + 1}`}
-          />
-          <TextField
-            name="questionDescription"
-            hintText="Extra Description"
-            multiLine
-            fullWidth
-            value={description}
-            onChange={(e: any) => this.handleChangeDescription(e.target.value)}
-            floatingLabelText={"Question description"}
-          />
-        </div>
-      </div>
-    )
-    
-    render() {
-      const {
-          props: { 
-              questionIndex, 
-              removeQuestion, 
-              questionData: { 
-                  question, 
-                  answers, 
-                  description
-              } 
-          }
-      } = this;
-      return (
-      <div className="question-component">
-          {this.renderFormCreate(question, description, questionIndex, answers)}
-      </div>
-      );
+  render() {
+    return <div className="question-component">{this.renderFormCreate()}</div>;
   }
 
   componentDidUpdate() {
-    return this.props.updateQuestion(this.props.questionIndex, this.state);
+    const { question, answers, description } = this.state;
+    const { questionType, questionId, position, completed } = this.props.questionData;
+    const questionData: ILongQuestion = {
+      position,
+      questionType,
+      questionId,
+      question,
+      answers,
+      description,
+    };
+    return this.props.handleUpdateQuestion(questionId, questionData);
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  removeQuestion: (questionIndex: number) => dispatch(removeQuestion(questionIndex)),
-  updateQuestion: (questionIndex: number, questionData: any) => dispatch(updateQuestion(questionIndex, questionData)),
-});
-
-export default connect(null, mapDispatchToProps)(LongQuestion);
+export default LongQuestion;
