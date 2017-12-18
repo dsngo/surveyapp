@@ -44,7 +44,7 @@ class MultipleDropdownQuestion extends React.Component<
   IMultipleDropdown
 > {
   checkBox = false;
-  state: IMultipleDropdown = {
+  state = {
     questionType: "multipleDropdown",
     question: "",
     description: "",

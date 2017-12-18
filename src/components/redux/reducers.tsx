@@ -21,6 +21,68 @@ import {
 } from "./actions";
 import { ISurveyFormFromDatabase } from "../../types/customTypes";
 
+// REDUCER FUNCTIONS
+function addQuestionReducer(state: any, action: any) {
+  const newState = [...state];
+  newState.splice(action.currentIndex + 1, 0, action.template);
+  return newState;
+}
+function removeQuestionReducer(state: any, action: any) {
+  return state.filter((e: any) => e.questionId !== action.questionId);
+}
+function updateQuestionReducer(state: any, action: any) {
+  return state.map((e: any) => (e.questionId === action.questionId ? { ...e, [action.questionKey]: action.value } : e));
+}
+
+function toggleAnswerCheckerReducer(state: any, action: any) {
+  return state.map(
+    (q: any) =>
+      q.questionId === action.questionId
+        ? {
+            ...q,
+            answers: q.answers.map(
+              (a: any, i: any) => (i === action.answerId ? { ...a, [action.answerKey]: !a[action.answerKey] } : a),
+            ),
+          }
+        : q,
+  );
+}
+function addSectionBreakReducer(state: any, action: any) {
+  return {
+    ...state,
+    sectionBreaks: [
+      ...state.sectionBreaks,
+      { questionId: action.questionId, title: action.title, description: action.description, bigBreak: action.bigBreak },
+    ],
+  };
+}
+function updateSectionBreakReducer(state: any, action: any) {
+  return {
+    ...state,
+    sectionBreaks: [
+      ...state.sectionBreaks,
+      { questionId: action.questionId, title: action.title, description: action.description, bigBreak: action.bigBreak },
+    ],
+  };
+}
+function removeSectionBreakReducer(state: any, action: any) {
+  return {
+    ...state,
+    sectionBreaks: state.sectionBreaks.filter((e: any) => e.questionId !== action.questionId),
+  };
+}
+
+function addAnswer(state: any, action: any) {
+  
+}
+function removeAnswer(state: any, action: any) {
+
+}
+function updateAnswer(state: any, action: any) {
+
+}
+
+// DEFAUL_STATE
 const DEFAULT_STATE = {
   searchTerm: "",
   recentForms: [{ formId: "123as", thumbnail: "asdf33aefasf", title: "string", completed: false }],
@@ -66,18 +128,18 @@ const DEFAULT_STATE = {
     ],
   },
   stateStatus: {
-    currentId: 1,
-    selectedQuestionType: "shortQuestion",
+    currentPosition: 1,
+    currentIndex: 1,
+    selectedQuestionType: "multipleChoices",
     submitStatus: "",
     tempId: "",
   },
 };
 
+// REDUCERS
 const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
-
 const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) =>
   (action.type === GET_RECENT_FORMS_FROM_DB && [...action.recentForms]) || [...state];
-
 const surveyInfo = (state: any = {}, action: any) =>
   // API
   (action.type === GET_DATA_FROM_DB_BY_ID && { ...action.surveyInfo }) ||
@@ -89,29 +151,26 @@ const surveyInfo = (state: any = {}, action: any) =>
   (action.type === "REMOVE_SECTION_BREAK" && removeSectionBreakReducer(state, action)) ||
   (action.type === UPDATE_SECTION_BREAK && updateSectionBreakReducer(state, action)) ||
   (action.type === CLEAR_SURVEY && DEFAULT_STATE.surveyInfo);
-
 const clientSurveyData = (state = { author: {}, clientInfo: {}, contents: [] }, action: any) =>
   // API
   (action.type === GET_DATA_FROM_DB_BY_ID && { ...state, contents: action.surveyContents, formId: action.surveyId }) ||
   (action.type === SAVE_SURVEY_TO_DB && { ...state }) ||
   // MODIFICATION
   (action.type === "UPDATE_CLIENT_INFO" && { ...state, clientInfo: { ...state.clientInfo, [action.infoKey]: action.value } });
-
 const surveyContents = (state = [], action: any) =>
   // API
   (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
   // MODIFICATION
-  (action.type === ADD_QUESTION && toggleAnswerCheckerReducer(state, action)) ||
-  (action.type === REMOVE_QUESTION && toggleAnswerCheckerReducer(state, action)) ||
-  (action.type === UPDATE_QUESTION && toggleAnswerCheckerReducer(state, action)) ||
+  (action.type === ADD_QUESTION && addQuestionReducer(state, action)) ||
+  (action.type === REMOVE_QUESTION && removeQuestionReducer(state, action)) ||
+  (action.type === UPDATE_QUESTION && updateQuestionReducer(state, action)) ||
   (action.type === "TOGGLE_ANSWER_CHECKER" && toggleAnswerCheckerReducer(state, action)) ||
   (action.type === CLEAR_SURVEY && []) ||
   (action.type === SAVE_FORM_TO_DB && []);
-
 const stateStatus = (state = {}, action: any) =>
   action.type === "UPDATE_STATE_STATUS" && { ...state, [action.statusKey]: action.value };
 
-export const rootReducer = combineReducers({
+  export const rootReducer = combineReducers({
   searchTerm,
   recentForms,
   surveyInfo,
@@ -119,50 +178,3 @@ export const rootReducer = combineReducers({
   surveyContents,
   stateStatus,
 });
-
-// REDUCER FUNCTIONS
-
-function addQuestionReducer(state: any, action: any) {
-  const newState
-  return [...state, {}]
-  return state.map((q: any)=> q.questionId === action.questionId ? {}:)
-}
-
-function toggleAnswerCheckerReducer(state: any, action: any) {
-  return state.map(
-    (q: any) =>
-      q.questionId === action.questionId
-        ? {
-            ...q,
-            answers: q.answers.map(
-              (a: any, i: any) => (i === action.answerId ? { ...a, [action.answerKey]: !a[action.answerKey] } : a),
-            ),
-          }
-        : q,
-  );
-}
-
-function addSectionBreakReducer(state: any, action: any) {
-  return {
-    ...state,
-    sectionBreaks: [
-      ...state.sectionBreaks,
-      { questionId: action.questionId, title: action.title, description: action.description, bigBreak: action.bigBreak },
-    ],
-  };
-}
-function updateSectionBreakReducer(state: any, action: any) {
-  return {
-    ...state,
-    sectionBreaks: [
-      ...state.sectionBreaks,
-      { questionId: action.questionId, title: action.title, description: action.description, bigBreak: action.bigBreak },
-    ],
-  };
-}
-function removeSectionBreakReducer(state: any, action: any) {
-  return {
-    ...state,
-    sectionBreaks: state.sectionBreaks.filter((e: any) => e.questionId !== action.questionId),
-  };
-}

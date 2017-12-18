@@ -134,8 +134,8 @@ export const updateSectionBreak = (questionId: number, sectionKey: string, value
 });
 
 //// QUESTION ===
-export const addQuestion = (currentId: number, template: any) => ({
-  currentId,
+export const addQuestion = (currentIndex: number, template: any) => ({
+  currentIndex,
   template,
   type: ADD_QUESTION,
 });
@@ -143,9 +143,10 @@ export const removeQuestion = (questionId: number) => ({
   questionId,
   type: REMOVE_QUESTION,
 });
-export const updateQuestion = (questionId: number, questionData: any) => ({
+export const updateQuestion = (questionId: number, questionKey: string, value: any) => ({
   questionId,
-  questionData,
+  questionKey,
+  value,
   type: UPDATE_QUESTION,
 });
 
@@ -166,13 +167,48 @@ export const removeAnswer = (questionId: number, answerId: number) => ({
   type: "REMOVE_ANSWER",
   answerId,
 });
-const toggleAnswerChecker = (questionId: number, answerId: number, answerKey: string) => ({
+export const toggleAnswerChecker = (questionId: number, answerId: number, answerKey: string) => ({
   questionId,
   answerId,
   answerKey,
   type: "TOGGLE_ANSWER_CHECKER",
 });
 
+// TABLE
+export const addColumn = (questionId: number, newColumn: any) => ({
+  type: "ADD_COLUMN",
+  questionId,
+  newColumn,
+})
+export const removeColumn = (questionId: number, refId: any) => ({
+  type: "REMOVE_COLUMN",
+  questionId,
+  refId,
+})
+export const updateColumn = (questionId: number, refId: number, columnKey: string, value: any) => ({
+  type: "UPDATE_COLUMN",
+  questionId,
+  refId,
+  columnKey,
+  value,
+})
+export const addRow = (questionId: number, newRow: any) => ({
+  type: "ADD_ROW",
+  questionId,
+  newRow,
+})
+export const removeRow = (questionId: number, rowId: number) => ({
+  type: "REMOVE_ROW",
+  questionId,
+  rowId,
+})
+export const updateRow = (questionId: number, rowId: number, rowKey: string, value: any) => ({
+  type: "UPDATE_ROW",
+  questionId,
+  rowId,
+  rowKey,
+  value,
+})
 // ================= UPDATE STATE STATUS
 export const updateStateStatus = (statusKey: string, value: any) => ({
   statusKey,

@@ -10,27 +10,19 @@ import Settings from "./Settings";
 import SurveyInfo from "./clientSurvey/SurveyInfo";
 import { saveFormToDb, clearSubmitStatus, getDataFromDbById, saveClientDataToDb } from "./redux/actionCreators";
 // Import question components
-import AddQuestionComponent from "./clientSurvey/AddQuestionComponent";
+import QuestionContainer from "./questionComponents/QuestionContainer";
 import ClientInfoComponent from "./clientSurvey/ClientInfoComponent";
 
 
 interface IClientSurveyProps {
-  match: any;
-  saveFormToDb: (completed: boolean) => any;
-  clearSubmitStatus: () => any;
   surveyInfo: any;
   surveyContents: any[];
-  currentIndex: number;
   submitStatus: string;
-  updateInfoSurvey: (field: string, value: string) => any;
+  tempId: string;
+  clientContents: any[];
+  clearSubmitStatus: () => any;
   getDataFromDbById: (id: string) => any;
   saveClientDataToDb: (clientSurveyId: string, completed: boolean) => any;
-  saveSurvey: () => any;
-  clearMessage: () => any;
-  getSurveyById: (id: string) => any;
-  clearSurvey: () => any;
-  tempId: string;
-  clientSurveyContents: any[];
 }
 
 class ClientSurvey extends React.Component<IClientSurveyProps> {
@@ -47,28 +39,24 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
   };
 
   componentDidMount() {
-    if (this.props.match.params.id) {
-      this.props.getDataFromDbById(this.props.match.params.id);
+    if (this.props.tempId) {
+      this.props.getDataFromDbById(this.props.tempId);
     }    
   }
-
   handleChangeCurrentTab = (currentTab: any) =>
     this.setState(prevState => ({ ...prevState, currentTab }));
-
   handleOpenConfirmModal = (open: boolean, completed: boolean) =>
     this.setState(prevState => ({ ...prevState, openConfirmModal: open, actionSave: completed }));
-
   handleOpenSuccessModal = (open: boolean) =>
     this.setState(prevState => ({ ...prevState, openSuccessModal: open, openConfirmModal: false }));
-
   renderQuestion() {
-    if (this.props.match.params.id && this.props.clientSurveyContents) {
-      return this.props.clientSurveyContents.map((content, index) => (
-        <AddQuestionComponent questionData={content} questionIndex={index} key={index} isPreview={ false }/>
+    if (this.props.tempId && this.props.clientContents) {
+      return this.props.clientContents.map((content, index) => (
+        <QuestionContainer questionData={content} key={index} />
       ));
     }
     return this.props.surveyContents.map((content, index) => (
-      <AddQuestionComponent questionData={content} questionIndex={index} key={index} isPreview={ true }/>
+      <QuestionContainer questionData={content} key={index}/>
     ));
   }
   render() {
@@ -167,14 +155,11 @@ class ClientSurvey extends React.Component<IClientSurveyProps> {
 const mapStateToProps = (state: any) => ({
   surveyInfo: state.surveyInfo,
   surveyContents: state.surveyContents,
-  currentIndex: state.stateStatus.currentIndex,
   submitStatus: state.stateStatus.submitStatus,
   tempId: state.stateStatus.tempId,
-  clientSurveyContents: state.clientSurveyData.contents
+  clientContents: state.clientSurveyData.contents
 });
-
 const mapDispatchToProps = (dispatch: any) => ({
-  saveFormToDb: (completed: boolean) => dispatch(saveFormToDb(completed)),
   clearSubmitStatus: () => dispatch(clearSubmitStatus()),
   getDataFromDbById: (id: string) => dispatch(getDataFromDbById(id)),
   saveClientDataToDb: (clientSurveyId: string, completed: boolean) => dispatch(saveClientDataToDb(clientSurveyId, completed))

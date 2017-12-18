@@ -24,7 +24,7 @@ class DropdownQuestion extends React.Component<
       {
         correct: false,
         answer: "",
-        chosen: false,
+        checked: false,
       },
     ],
   };
@@ -39,7 +39,7 @@ class DropdownQuestion extends React.Component<
         (ansObj: any, i: number) => (i === answerIndex ? { ...ansObj, [answerKey]: updatedValue } : ansObj),
       ),
     }));
-  handleAddAnswer = (newAnswer = { chosen: false, correct: false, answer: "" }) =>
+  handleAddAnswer = (newAnswer = { checked: false, correct: false, answer: "" }) =>
     this.setState((prevState: any) => ({ ...prevState, answers: [...prevState.answers, newAnswer] }));
   handleRemoveAnswer = (answerIndex: number) =>
     this.setState((prevState: any) => ({
@@ -110,7 +110,7 @@ class DropdownQuestion extends React.Component<
             );
           })}
           <div className="radio-answer align-center">
-            <FloatingActionButton mini onClick={e => this.handleAddAnswer({ chosen: false, correct: false, answer: "" })}>
+            <FloatingActionButton mini onClick={e => this.handleAddAnswer({ checked: false, correct: false, answer: "" })}>
               <ContentAdd />
             </FloatingActionButton>
           </div>

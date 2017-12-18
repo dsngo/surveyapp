@@ -15,48 +15,34 @@ export interface IMultipleChoices {
   position?: number;
   question: string;
   description: string;
-  answers: { chosen: boolean, correct: boolean; answer: string }[];
+  answers: { checked: boolean; correct: boolean; text: string }[];
 }
 
 export interface IDropdown {
   [key: string]: any;
   questionType: "dropdown";
-  questionId?: number;  
+  questionId?: number;
   position?: number;
   question: string;
   description: string;
-  answers: { chosen: boolean, correct: boolean; answer: string }[];
+  answers: { checked: boolean; correct: boolean; answer: string }[];
 }
 
 export interface IMultipleDropdown {
   [key: string]: any;
   questionType: "multipleDropdown";
-  questionId?: number;  
+  questionId?: number;
   position?: number;
   question: string;
   description: string;
-  headers: { headerId: number; text: string; tooltip: string; answerOptions: string[] }[];
-  answers: { answerId: number; contents: { refId: number; textAnswer: string, chosen: boolean }[] }[];
-}
-
-export interface ICheckBox {
-  [key: string]: any;
-  questionType: "checkbox";
-  questionId?: number;  
-  position?: number;
-  question: string;
-  description: string;
-  answers: {
-    correct: boolean,
-    text: string,
-    chosen: boolean
-  }[];
+  columns: { refId: string; tooltip: string; options: string[] }[];
+  rows: { text: string; answers: {refId: number, text: string}[] }[];
 }
 
 export interface IPriority {
   [key: string]: any;
   questionType: "priorityQuestion";
-  questionId?: number;  
+  questionId?: number;
   position?: number;
   question: string;
   description: string;
@@ -64,6 +50,20 @@ export interface IPriority {
   additionalContents: {
     description: string;
     entries: { question: string; answers: string }[];
+  }[];
+}
+
+export interface ICheckBox {
+  [key: string]: any;
+  questionType: "checkbox";
+  questionId?: number;
+  position?: number;
+  question: string;
+  description: string;
+  answers: {
+    correct: boolean;
+    text: string;
+    checked: boolean;
   }[];
 }
 

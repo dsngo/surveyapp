@@ -4,12 +4,12 @@ import Paper from "material-ui/Paper";
 import FontIcon from "material-ui/FontIcon";
 import {addQuestion} from "./redux/actionCreators";
 interface ISettings {
-  currentId: number;
+  currentPosition: number;
   addNewQuestion: (questionId: number, template: any) => any;
 }
 
 const Settings: React.SFC<ISettings> = props => {
-  const { currentId, addNewQuestion } = props;
+  const { currentPosition, addNewQuestion } = props;
   const template = {
       questionType: "multipleChoices",
       questionId: Date.now(),
@@ -22,7 +22,7 @@ const Settings: React.SFC<ISettings> = props => {
   }
   return (
     <Paper className="menu-settings">
-      <Paper className="settings-icon" onClick={e => addNewQuestion(currentId, template)}>
+      <Paper className="settings-icon" onClick={e => addNewQuestion(currentPosition, template)}>
         <FontIcon className="material-icons">add_box</FontIcon>
       </Paper>
       <Paper className="settings-icon add-text">

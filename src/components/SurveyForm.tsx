@@ -15,6 +15,7 @@ interface ISurveyFormProps {
   surveyContents: any;
   tempId: string;
   submitStatus: string;
+  currentPosition: number;  
   saveFormToDb: (completed: boolean) => any;
   clearSubmitStatus: () => any;
   getDataFromDbById: (id: string) => any;
@@ -70,7 +71,7 @@ class SurveyForm extends React.Component<
       handleOpenConfirmModal,
       handleOpenSuccessModal,
       handleSaveFormToDb,
-      props: { submitStatus, tempId, clearSubmitStatus },
+      props: { submitStatus, tempId, clearSubmitStatus, currentPosition },
       state: { openConfirmModal, openSuccessModal, actionSave },
     } = this;
 
@@ -144,7 +145,7 @@ class SurveyForm extends React.Component<
             </div>
           </div>
         </div>
-        <Settings />
+        <Settings {...{currentPosition}} />
       </Scrollbars>
     );
   }
@@ -154,6 +155,7 @@ const mapStateToProps = (state: any) => ({
   surveyContents: state.surveyContents,
   submitStatus: state.stateStatus.submitStatus,
   tempId: state.stateStatus.tempId,
+  currentPosition: state.stateStatus.currentPosition,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({

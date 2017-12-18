@@ -15,7 +15,6 @@ import ContentClear from "material-ui/svg-icons/content/clear";
 import FlatButton from "material-ui/FlatButton";
 import { removeQuestion, updateStateStatus, updateQuestion } from "../redux/actionCreators";
 import SelectField from "material-ui/SelectField";
-import * as Templates from "../../types/questionTemplate";
 
 const options = {
   "Long Question": "longQuestion",
@@ -36,7 +35,9 @@ for (const [key, val] of Object.entries(options)) {
 class QuestionContainer extends React.Component<
   {
     questionData: any;
+    isRenderClient?: boolean;
     removeQuestion: (questionId: number) => any;
+    updateStateStatus: (statusKey: string, value: any) => any;
   },
   {}
 > {
@@ -50,7 +51,7 @@ class QuestionContainer extends React.Component<
 
   handleUpdateState = (stateKey: string, value: any) => this.setState((prevState: any) => ({ ...prevState, [stateKey]: value }));
 
-  handleCreateQuestion = (questionType: string) => {
+  handleCreateQuestion = (questionType: string, isRenderClient: boolean) => {
     const { props: { questionData } } = this;
     return (
       // (questionType === "longQuestion" && <LongQuestion {...{ questionId }} />) ||
@@ -66,18 +67,28 @@ class QuestionContainer extends React.Component<
     this.handleUpdateState("openDialog", false);
   };
 
-  render() {
+  renderFormClient = () => {
+    const { handleCreateQuestion, handleRemoveQuestion, props: { questionData }, state: { questionType, currentId } } = this;
+    const renderTemplate = questionType || "multipleChoices";
+    return (
+      <div style={{ paddingBottom: "40px" }} onClick={e => updateStateStatus("currentId", questionData.questionId)}>
+        <div>{handleCreateQuestion(renderTemplate, true)}</div>
+      </div>
+    );
+  };
+
+  renderFormCreate = () => {
     const {
       handleCreateQuestion,
       handleUpdateState,
       handleRemoveQuestion,
-      props: { questionData },
+      props: { questionData, updateStateStatus },
       state: { openDialog, questionType, currentId },
     } = this;
     const renderTemplate = questionType || "multipleChoices";
     const activeQuestiton = `component-question ${currentId === questionData.questionId ? "active-area" : ""}`;
     const actionsClosingDialog = [
-      <FlatButton label="Cancel" primary onClick={() => handleUpdateState("openDialog",false)} />,
+      <FlatButton label="Cancel" primary onClick={() => handleUpdateState("openDialog", false)} />,
       <FlatButton label="Submit" secondary onClick={() => handleRemoveQuestion(questionData)} />,
     ];
     return (
@@ -86,30 +97,34 @@ class QuestionContainer extends React.Component<
         style={{ paddingBottom: "40px" }}
         onClick={e => updateStateStatus("currentId", questionData.questionId)}
       >
-        <Dialog actions={actionsClosingDialog} open={openDialog} onRequestClose={() => handleUpdateState("openDialog",false)}>
+        <Dialog actions={actionsClosingDialog} open={openDialog} onRequestClose={() => handleUpdateState("openDialog", false)}>
           Are you sure you want to delete this question?
         </Dialog>
         <IconButton
           style={{ float: "right" }}
           tooltip="Remove question box"
           tooltipPosition="top-left"
-          onClick={() => handleUpdateState("openDialog",true)}
+          onClick={() => handleUpdateState("openDialog", true)}
         >
           <ContentClear />
         </IconButton>
         <div className="padding-25">
-          <SelectField fullWidth onChange={(e, i, p) => handleUpdateState("questionType",p)} value={renderTemplate}>
+          <SelectField fullWidth onChange={(e, i, p) => handleUpdateState("questionType", p)} value={renderTemplate}>
             {selectOptionsArr.map((e, i) => <MenuItem key={`questionOption-${i}`} value={questionTypeArr[i]} primaryText={e} />)}
           </SelectField>
         </div>
-        <div>{handleCreateQuestion(renderTemplate)}</div>
+        <div>{handleCreateQuestion(renderTemplate, false)}</div>
       </div>
     );
+  };
+  render() {
+    return this.props.isRenderClient ? this.renderFormClient() : this.renderFormCreate();
   }
 }
 
 const mapDispatchToProps = (dispatch: any) => ({
   removeQuestion: (questionId: number) => dispatch(removeQuestion(questionId)),
+  updateStateStatus: (statusKey: string, value: any) => dispatch(updateStateStatus(statusKey, value)),
 });
 
 export default connect(null, mapDispatchToProps)(QuestionContainer);

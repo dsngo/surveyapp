@@ -12,6 +12,7 @@ import Checkbox from "material-ui/Checkbox";
 class MultipleChoicesQuestion extends React.Component<
   {
     questionData: any;
+    isRenderClient?: boolean;
     updateQuestionDetail: (questionId: number, detailKey: string, value: any) => any;
     addAnswer: (questionId: number, newAnswer: any) => any;
     updateAnswer: (questionId: number, answerId: number, answerKey: string, value: any) => any;
@@ -20,43 +21,6 @@ class MultipleChoicesQuestion extends React.Component<
   },
   {}
 > {
-  // state = {
-  //   question: "",
-  //   description: "",
-  //   answers: [
-  // {
-  //   correct: false,
-  //   answer: "",
-  //   chosen: false,
-  // },
-  //   ],
-  // };
-
-  // handleUpdateState = (stateKey: string, value: any) => this.setState(prevState => ({ ...prevState, [stateKey]: value }));
-  // handleUpdateAnswer = (answerIndex: number, answerKey: string, updatedValue: any) =>
-  //   this.setState((prevState: any) => ({
-  //     ...prevState,
-  //     answers: prevState.answers.map(
-  //       (ansObj: any, i: number) => (i === answerIndex ? { ...ansObj, [answerKey]: updatedValue } : ansObj),
-  //     ),
-  //   }));
-
-  // handleAddAnswer = (newAnswer = { chosen: false, correct: false, answer: "" }) =>
-  //   this.setState((prevState: any) => ({ ...prevState, answers: [...prevState.answers, newAnswer] }));
-  // handleRemoveAnswer = (answerIndex: number) =>
-  //   this.setState((prevState: any) => ({
-  //     ...prevState,
-  //     answers: prevState.answers.filter((e: any, i: number) => i !== answerIndex),
-  //   }));
-
-  // toggleAnswerChecker = (indexAnswer: number, answerKey: string) =>
-  //   this.setState((prevState: any) => ({
-  //     ...prevState,
-  //     answers: prevState.answers.map(
-  //       (answer: any, index: number) => (index === indexAnswer ? { ...answer, [answerKey]: answer[answerKey] } : answer),
-  //     ),
-  //   }));
-
   renderFormCreate = () => {
     const {
       updateQuestionDetail,
@@ -121,7 +85,7 @@ class MultipleChoicesQuestion extends React.Component<
               );
             })}
             <div className="radio-answer align-center">
-              <FloatingActionButton mini onClick={e => addAnswer(questionId, { correct: false, answer: "", chosen: false })}>
+              <FloatingActionButton mini onClick={e => addAnswer(questionId, { correct: false, text: "", checked: false })}>
                 <ContentAdd />
               </FloatingActionButton>
             </div>
@@ -130,21 +94,43 @@ class MultipleChoicesQuestion extends React.Component<
       </div>
     );
   };
-
+  renderFormClient() {
+    const { questionData: { questionId, question, description, answers }, toggleAnswerChecker } = this.props;
+    return (
+      <div className="input-option-create">
+        <div className="question-info">
+          <div className="question">{question}</div>
+          <div className="description">{description}</div>
+        </div>
+        <div className="padding-25">
+          {answers.map((answer: any, answerId: number) => (
+            <RadioButton
+              key={`MTC-ans${answerId}`}
+              label={answer.text}
+              onClick={toggleAnswerChecker(questionId, answerId, "checked")}
+              checked={answer.checked}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
   render() {
-    const { renderFormCreate } = this;
-    return <div className="question-component">{renderFormCreate()}</div>;
+    const { renderFormCreate, renderFormClient } = this;
+    const { isRenderClient } = this.props;
+    return <div className="question-component">{isRenderClient ? renderFormClient() : renderFormCreate()}</div>;
   }
 }
-const mapStateToProps = (state: any) => ({
-
-})
+const mapStateToProps = (state: any) => ({});
 
 const mapDispatchToProps = (dispatch: any) => ({
-  updateQuestionDetail: (questionId: number, detailKey: string, value: any) => dispatch(updateQuestionDetail(questionId, detailKey, value)),
+  updateQuestionDetail: (questionId: number, detailKey: string, value: any) =>
+    dispatch(updateQuestionDetail(questionId, detailKey, value)),
   addAnswer: (questionId: number, newAnswer: any) => dispatch(addAnswer(questionId, newAnswer)),
-  updateAnswer: (questionId: number, answerId: number, answerKey: string, value: any) => dispatch(updateAnswer(questionId, answerId, answerKey, value)),
+  updateAnswer: (questionId: number, answerId: number, answerKey: string, value: any) =>
+    dispatch(updateAnswer(questionId, answerId, answerKey, value)),
   removeAnswer: (questionId: number, answerId: number) => dispatch(removeAnswer(questionId, answerId)),
-  toggleAnswerChecker: (questionId: number, answerId: number, answerKey: string) => dispatch(toggleAnswerChecker(questionId, answerId, answerKey)),
-})
+  toggleAnswerChecker: (questionId: number, answerId: number, answerKey: string) =>
+    dispatch(toggleAnswerChecker(questionId, answerId, answerKey)),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(MultipleChoicesQuestion);

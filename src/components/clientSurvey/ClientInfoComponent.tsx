@@ -1,23 +1,17 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import Paper from "material-ui/Paper";
-import { updateFirstName, updateLastName, updateEmail, updatePhone, updateAddress, updateGender } from "../redux/actionCreators";
+import { updateClientSurveyInfo } from "../redux/actionCreators";
 import TextField from "material-ui/TextField";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 
 interface ICICProps {
   clientInfo: any;
-  updateFirstName: (firstName: string) => any;
-  updateLastName: (lastName: string) => any;
-  updateEmail: (email: string) => any;
-  updatePhone: (phone: string) => any;
-  updateAddress: (address: string) => any;
-  updateGender: (gender: string) => any;
+  updateClientSurveyInfo: (infoKey: string, value: any) => any;
 }
 
-const ClientInfoComponent: React.SFC<ICICProps> = props => {
-  const { updateFirstName, updateLastName, updateEmail, updatePhone, updateAddress, updateGender, clientInfo } = props;
+const ClientInfoComponent: React.SFC<ICICProps> = ({ updateClientSurveyInfo, clientInfo }) => {
   return (
     <Paper className="info-client-survey" zDepth={1}>
       <div className="info-section">
@@ -25,7 +19,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         hintText="Enter your first name here"
         floatingLabelText="First Name"
         value={clientInfo.firstName || ""}
-        onChange={(e: any) => updateFirstName(e.target.value)}
+        onChange={(e: any) => updateClientSurveyInfo("firstName", e.target.value)}
         className="input-info-client"
       />
       </div>
@@ -34,7 +28,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         hintText="Enter your last name here"
         floatingLabelText="Last Name"
         value={clientInfo.lastName || ""}
-        onChange={(e: any) => updateLastName(e.target.value)}
+        onChange={(e: any) => updateClientSurveyInfo("lastName", e.target.value)}
         className="input-info-client"
       />
       </div>
@@ -43,7 +37,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         hintText="Enter your email here"
         floatingLabelText="Email"
         value={clientInfo.email || ""}
-        onChange={(e: any) => updateEmail(e.target.value)}
+        onChange={(e: any) => updateClientSurveyInfo("email", e.target.value)}
         className="input-info-client"
       />
       </div>
@@ -52,7 +46,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         hintText="Enter your phone number here"
         floatingLabelText="Phone Number"
         value={clientInfo.phone || ""}
-        onChange={(e: any) => updatePhone(e.target.value)}
+        onChange={(e: any) => updateClientSurveyInfo("phoneNumber", e.target.value)}
         className="input-info-client"
       />
       </div>
@@ -61,7 +55,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         hintText="Enter your address here"
         floatingLabelText="Address"
         value={clientInfo.address || ""}
-        onChange={(e: any) => updateAddress(e.target.value)}
+        onChange={(e: any) => updateClientSurveyInfo("address", e.target.value)}
         className="input-info-client"
       />
       </div>
@@ -70,7 +64,7 @@ const ClientInfoComponent: React.SFC<ICICProps> = props => {
         floatingLabelText="Gender"
         hintText="Input your gender"
         value={clientInfo.gender || "Other"}
-        onChange={(e, i, v) => updateGender(v)}
+        onChange={(e, i, v) => updateClientSurveyInfo("gender", v)}
         className="input-info-client"
       >
         <MenuItem value={"Male"} primaryText="Male" />
@@ -87,11 +81,6 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  updateFirstName: (firstName: string) => dispatch(updateFirstName(firstName)),
-  updateLastName: (lastName: string) => dispatch(updateLastName(lastName)),
-  updateEmail: (email: string) => dispatch(updateEmail(email)),
-  updatePhone: (phone: string) => dispatch(updatePhone(phone)),
-  updateAddress: (address: string) => dispatch(updateAddress(address)),
-  updateGender: (gender: string) => dispatch(updateGender(gender)),
+  updateClientSurveyInfo: (infoKey: string, value: any) => dispatch(updateClientSurveyInfo(infoKey, value)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ClientInfoComponent);
