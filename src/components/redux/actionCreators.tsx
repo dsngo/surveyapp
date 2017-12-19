@@ -209,6 +209,30 @@ export const updateRow = (questionId: number, rowId: number, rowKey: string, val
   rowKey,
   value,
 })
+export const addOption = (questionId: number, key: string, value: any) => ({
+  type: "ADD_OPTION",
+  questionId,
+  key,
+  value
+})
+export const removeOption = (questionId: number, optionId: number) => ({
+  type: "REMOVE_OPTION",
+  questionId,
+  optionId,
+})
+export const updateOption = (questionId: number, optionId: number, key: string, value: any) => ({
+  type: "UPDATE_OPTION",
+  questionId,
+  optionId,
+  key,
+  value
+})
+export const toggleOptionChecker = (questionId: number, optionId: number, optionKey: string) => ({
+  questionId,
+  optionId,
+  optionKey,
+  type: "TOGGLE_OPTION_CHECKER",
+});
 // ================= UPDATE STATE STATUS
 export const updateStateStatus = (statusKey: string, value: any) => ({
   statusKey,

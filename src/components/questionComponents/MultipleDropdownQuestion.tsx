@@ -49,6 +49,7 @@ class MultipleDropdownQuestion extends React.Component<
   },
   {}
 > {
+  checkbox = false;
   // =========================================================
   // state = {
   //   question: "",
@@ -63,11 +64,76 @@ class MultipleDropdownQuestion extends React.Component<
   handleAddRow = (questionId: number, columns: any) => {
     const newRow = {
       text: "",
-      answers: columns.map((e: any) => ({refId: e.refId, text: ""})),
-    }
-    return this.props.addRow(questionId, newRow)
-  }
-  renderFormClient = () => {};
+      answers: columns.map((e: any) => ({ refId: e.refId, text: "" })),
+    };
+    return this.props.addRow(questionId, newRow);
+  };
+  handleUpdateRow = (quesionId: number, rowId: number, answerId: number, newText: string) => {};
+  getOptions = (columns: any, refId: number) => columns[columns.findIndex((e: any) => e.refId === refId)].options;
+  renderFormClient = () => {
+    const {
+      props: {
+        questionData: { questionId, question, columns, rows, description },
+        updateQuestionDetail,
+        removeRow,
+        updateRow,
+      },
+      checkbox,
+      handleUpdateRow,
+      getOptions,
+    } = this;
+    return (
+      <Paper zDepth={1} className="question-component">
+        <div className="question-info">
+          <div className="question">{question}</div>
+          <div className="description">{description}</div>
+        </div>
+        <Table>
+          <TableHeader displaySelectAll={checkbox} adjustForCheckbox={checkbox}>
+            <TableRow>
+              <TableHeaderColumn tooltip="Context" style={styles.textQuestionColumn}>
+                Context
+              </TableHeaderColumn>
+              {columns.map((e: any) => (
+                <TableHeaderColumn key={`hCol-${e.refId}`} tooltip={e.tooltip}>
+                  {e.title}
+                </TableHeaderColumn>
+              ))}
+              <TableHeaderColumn tooltip="Remove" style={styles.removeColumn}>
+                Remove
+              </TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody displayRowCheckbox={checkbox}>
+            {rows.map((row: any, rowId: number) => (
+              <TableRow key={`row-${rowId}`}>
+                <TableRowColumn style={styles.textQuestionColumn}>{row.text}</TableRowColumn>
+                {row.answers.map((answer: any, answerId: number) => (
+                  <TableRowColumn key={`answer-${answerId}`} style={styles.optionAnswerFieldCoumn}>
+                    <DropDownMenu
+                      autoWidth={false}
+                      style={{ width: "100%" }}
+                      value={answer.text}
+                      onChange={(e, i, p) => handleUpdateRow(questionId, rowId, answerId, p)}
+                    >
+                      {getOptions(columns, answer.refId).map((e: any, i: number) => (
+                        <MenuItem key={`option-${i}`} value={e} primaryText={e} />
+                      ))}
+                    </DropDownMenu>
+                  </TableRowColumn>
+                ))}
+                <TableRowColumn style={styles.removeColumn}>
+                  <FloatingActionButton mini secondary onClick={e => removeRow(questionId, rowId)}>
+                    <ContentRemove />
+                  </FloatingActionButton>
+                </TableRowColumn>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  };
   renderFormCreate = () => {
     const {
       props: {
@@ -76,7 +142,7 @@ class MultipleDropdownQuestion extends React.Component<
         addRow,
         removeRow,
         updateRow,
-        addColumn, 
+        addColumn,
         removeColumn,
         updateColumn,
       },
@@ -138,15 +204,13 @@ class MultipleDropdownQuestion extends React.Component<
         </div>
       </div>
     );
-  }
+  };
   render() {
     return <div>{this.props.isRenderClient ? this.renderFormClient() : this.renderFormCreate()}</div>;
   }
 }
 
-const mapStateToProps = (state: any) => ({
-  questionData: state.
-});
+const mapStateToProps = (state: any) => ({});
 const mapDispatchToProps = (dispatch: any) => ({
   updateQuestionDetail: (questionId: number, detailKey: string, value: any) =>
     dispatch(updateQuestionDetail(questionId, detailKey, value)),
@@ -162,7 +226,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(MultipleDropdownQuestion);
 
-{/* <div className="dropdown-multi">
+{
+  /* <div className="dropdown-multi">
 <div className="title">{First dropdown}</div>
 <TextField
   name="answerText"
@@ -241,4 +306,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(MultipleDropdownQues
     <ContentAdd />
   </FloatingActionButton>
 </div>
-</div> */}
+</div> */
+}

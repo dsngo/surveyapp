@@ -25,7 +25,8 @@ export interface IDropdown {
   position?: number;
   question: string;
   description: string;
-  answers: { checked: boolean; correct: boolean; answer: string }[];
+  answer: string;
+  options: { correct: boolean; text: string }[];
 }
 
 export interface IMultipleDropdown {

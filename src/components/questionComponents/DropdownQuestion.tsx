@@ -1,7 +1,7 @@
 import * as React from "react";
-import { removeQuestion, updateQuestion } from "../redux/actionCreators";
-import { IDropdown } from "../../types/customTypes";
 import { connect } from "react-redux";
+import { addOption, updateOption, removeOption, updateQuestionDetail, toggleOptionChecker } from "../redux/actionCreators";
+import { IDropdown } from "../../types/customTypes";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
 import ContentAdd from "material-ui/svg-icons/content/add";
@@ -13,131 +13,136 @@ import Checkbox from "material-ui/Checkbox";
 class DropdownQuestion extends React.Component<
   {
     questionData: any;
-    handleUpdateQuestion: (questionId: number, questionData: any) => any;
+    isRenderClient?: boolean;
+    updateQuestionDetail: (questionId: number, detailKey: string, value: any) => any;
+    addOption: (questionId: number, key: string, value: any) => any;
+    removeOption: (questionId: number, optionId: number) => any;
+    updateOption: (questionId: number, optionId: number, key: string, value: any) => any;
   },
   {}
 > {
-  state = {
-    question: "",
-    description: "",
-    answers: [
-      {
-        correct: false,
-        answer: "",
-        checked: false,
-      },
-    ],
-  };
   // Methods
-  handleUpdateQuestion = (newQuestion: string) => this.setState(prevState => ({ ...prevState, question: newQuestion }));
-  handleUpdateDescription = (newDescription: string) =>
-    this.setState(prevState => ({ ...prevState, description: newDescription }));
-  handleUpdateAnswer = (answerIndex: number, answerKey: string, updatedValue: any) =>
-    this.setState((prevState: any) => ({
-      ...prevState,
-      answers: prevState.answers.map(
-        (ansObj: any, i: number) => (i === answerIndex ? { ...ansObj, [answerKey]: updatedValue } : ansObj),
-      ),
-    }));
-  handleAddAnswer = (newAnswer = { checked: false, correct: false, answer: "" }) =>
-    this.setState((prevState: any) => ({ ...prevState, answers: [...prevState.answers, newAnswer] }));
-  handleRemoveAnswer = (answerIndex: number) =>
-    this.setState((prevState: any) => ({
-      ...prevState,
-      answers: prevState.answers.filter((e: any, i: number) => i !== answerIndex),
-    }));
-  toggleAnswerChecker = (indexAnswer: number, answerKey: string) =>
-    this.setState((prevState: any) => ({
-      ...prevState,
-      answers: prevState.answers.map(
-        (answer: any, index: number) => (index === indexAnswer ? { ...answer, [answerKey]: answer[answerKey] } : answer),
-      ),
-    }));
+
+  getCurrentSelection = () => {};
+
   // Render Methods
-  renderFormCreate = (question: string, description: string, answers: any) => (
-    <div>
-      <div className="padding-25-except-top input-option-create">
-        <TextField
-          name="questionText"
-          hintText="Multiple choices question"
-          multiLine
-          fullWidth
-          value={question}
-          onChange={(e: any) => this.handleUpdateQuestion(e.target.value)}
-          floatingLabelText="Question"
-        />
-        <TextField
-          name="questionDescription"
-          hintText="Extra Description"
-          multiLine
-          fullWidth
-          value={description}
-          onChange={(e: any) => this.handleUpdateDescription(e.target.value)}
-          floatingLabelText="Description"
-        />
-        <div className="clear-fix multiple-answer">
-          {answers.map((answer: any, answerIndex: number) => {
-            return (
-              <div className="radio-answer" key={answerIndex}>
-                {answers.length > 1 && (
-                  <div>
-                    <div className="delete-area" onClick={() => this.handleRemoveAnswer(answerIndex)}>
-                      <i className="fa fa-times" />
+  renderFormClient = () => {
+    const { props: { questionData: { questionId, question, answer, description, options }, updateQuestionDetail } } = this;
+    return (
+      <div className="input-option-create">
+        <div className="question-info">
+          <div className="question">{question}</div>
+          <div className="description">{description}</div>
+        </div>
+        <div className="padding-25">
+          <SelectField
+            floatingLabelText="Answer"
+            fullWidth={true}
+            value={answer}
+            onChange={(event: object, key: number, payload: any) => {
+              updateQuestionDetail(questionId, "answer", payload);
+            }}
+            className="mui-select"
+          >
+            {options.map((option: any, key: any) => (
+              <MenuItem key={`DOption-${key}`} value={option.text} primaryText={option.text} />
+            ))}
+          </SelectField>
+        </div>
+      </div>
+    );
+  };
+  renderFormCreate = () => {
+    const {
+      props: {
+        questionData: { questionId, question, description, options },
+        updateQuestionDetail,
+        addOption,
+        updateOption,
+        removeOption,
+      },
+    } = this;
+    return (
+      <div>
+        <div className="padding-25-except-top input-option-create">
+          <TextField
+            name="questionText"
+            hintText="Multiple choices question"
+            multiLine
+            fullWidth
+            value={question}
+            onChange={(e: any) => updateQuestionDetail(questionId, "question", e.target.value)}
+            floatingLabelText="Question"
+          />
+          <TextField
+            name="questionDescription"
+            hintText="Extra Description"
+            multiLine
+            fullWidth
+            value={description}
+            onChange={(e: any) => updateQuestionDetail(questionId, "description", e.target.value)}
+            floatingLabelText="Description"
+          />
+          <div className="clear-fix multiple-answer">
+            {options.map((option: any, optionId: number) => {
+              return (
+                <div className="radio-answer" key={optionId}>
+                  {options.length > 1 && (
+                    <div>
+                      <div className="delete-area" onClick={() => removeOption(questionId, optionId)}>
+                        <i className="fa fa-times" />
+                      </div>
                     </div>
+                  )}
+                  <div className="check-box">
+                    <Checkbox
+                      checked={option.correct}
+                      onCheck={e => {
+                        updateOption(questionId, optionId, "correct", !option.correct);
+                      }}
+                    />
                   </div>
-                )}
-                <div className="check-box">
-                  <Checkbox
-                    onCheck={e => {
-                      this.toggleAnswerChecker(answerIndex, "correct");
-                    }}
-                    label={""}
-                  />
+                  <div className="icon-radio clear-fix">
+                    <i className="material-icons">arrow_drop_down_circle</i>
+                  </div>
+                  <div className="input-field input-text-radio">
+                    <TextField
+                      name="optionText"
+                      hintText="Add an answer here."
+                      fullWidth
+                      value={option.text}
+                      onChange={(e: any) => updateOption(questionId, optionId, "text", e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="icon-radio clear-fix">
-                  <i className="material-icons">arrow_drop_down_circle</i>
-                </div>
-                <div className="input-field input-text-radio">
-                  <TextField
-                    name="answerText"
-                    hintText="Add an answer here."
-                    fullWidth
-                    value={answer.answer}
-                    onChange={(e: any) => this.handleUpdateAnswer(answerIndex, "text", e.target.value)}
-                  />
-                </div>
-              </div>
-            );
-          })}
-          <div className="radio-answer align-center">
-            <FloatingActionButton mini onClick={e => this.handleAddAnswer({ checked: false, correct: false, answer: "" })}>
-              <ContentAdd />
-            </FloatingActionButton>
+              );
+            })}
+            <div className="radio-answer align-center">
+              <FloatingActionButton mini onClick={e => addOption(questionId, "options", { correct: false, answer: "" })}>
+                <ContentAdd />
+              </FloatingActionButton>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   render() {
-    const { props: { questionData: { question, answers, description } } } = this;
-    return <div className="question-component">{this.renderFormCreate(question, description, answers)}</div>;
-  }
-
-  // Lifecycle Methods
-  componentDidUpdate() {
-    const { question, answers, description } = this.state;
-    const { questionType, questionId, position, completed } = this.props.questionData;
-    const questionData: IDropdown = {
-      questionType,
-      questionId,
-      position,
-      question,
-      description,
-      answers,
-    };
-    return this.props.handleUpdateQuestion(questionId, questionData);
+    return (
+      <div className="question-component">{this.props.isRenderClient ? this.renderFormClient() : this.renderFormCreate()}</div>
+    );
   }
 }
 
-export default DropdownQuestion;
+const mapStateToProps = (state: any) => ({});
+const mapDispatchToProps = (dispatch: any) => ({
+  updateQuestionDetail: (questionId: number, detailKey: string, value: any) =>
+    dispatch(updateQuestionDetail(questionId, detailKey, value)),
+  addOption: (questionId: number, key: string, value: any) => dispatch(addOption(questionId, key, value)),
+  updateOption: (questionId: number, optionId: number, key: string, value: any) =>
+    dispatch(updateOption(questionId, optionId, key, value)),
+  removeOption: (questionId: number, optionId: number) => dispatch(removeOption(questionId, optionId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DropdownQuestion);
