@@ -13,7 +13,7 @@ import {
   UPDATE_CURRENT_INDEX,
   UPDATE_SECTION_BREAK,
   GET_RECENT_FORMS_FROM_DB,
-  UPDATE_SUBMIT_STATUS,
+  UPDATE_STATE_STATUS,
   SAVE_FORM_TO_DB,
   SAVE_SURVEY_TO_DB,
 } from "./actions";
@@ -24,22 +24,47 @@ const config = require("../../config.json");
 const urlServer = config.URL_SERVER_API;
 const clearMsgTimeout = config.CLEAR_MESSAGE_TIME;
 
+
+// ================= UPDATE STATE STATUS
+export const updateStateStatus = (key: string, value: any) => ({
+  key,
+  value,
+  type: UPDATE_STATE_STATUS,
+});
+export const clearSubmitStatus = () => ({
+  type: CLEAR_SUBMIT_STATUS,
+});
+
+// ================= CLIENTSURVEY INFO
+export const updateClientSurveyInfo = (infoKey: string, value: any) => ({
+  infoKey,
+  value,
+  type: "UPDATE_CLIENT_INFO",
+});
+
 // ================= API REQUESTS
-export const getRecentFormsFromDb = (username = "Daniel") => async (dispatch: any) => {
-  const { data: recentForms, message: submitStatus } = (await axios.get(`${urlServer}/survey/recent-forms`)).data;
+export const getRecentFormsFromDb = (username = "Daniel") => async (
+  dispatch: any,
+) => {
+  const { data: recentForms, message: value } = (await axios.get(
+    `${urlServer}/survey/recent`,
+  )).data;
   dispatch({
     recentForms,
     type: GET_RECENT_FORMS_FROM_DB,
   });
-  dispatch({
-    submitStatus,
-    type: UPDATE_SUBMIT_STATUS,
-  });
+  dispatch(updateStateStatus("statusText", value));
 };
 
-export const getDataFromDbById = (formId: string) => async (dispatch: any, getState: any) => {
+export const getDataFromDbById = (formId: string) => async (
+  dispatch: any,
+  getState: any,
+) => {
   const resData = (await axios.get(`${urlServer}/survey/${formId}`)).data;
-  const { data: { contents: surveyContents, _id: surveyId, ...surveyInfo }, message: submitStatus } = resData;
+  const {
+    data: { contents: surveyContents, _id: surveyId, ...surveyInfo },
+    message: value,
+  } = resData;
   if (surveyContents) {
     dispatch({
       surveyContents,
@@ -47,47 +72,49 @@ export const getDataFromDbById = (formId: string) => async (dispatch: any, getSt
       surveyId,
       type: GET_DATA_FROM_DB_BY_ID,
     });
+    dispatch(updateStateStatus("statusText", value));
     return surveyContents;
   }
 };
-export const saveFormToDb = (completed: boolean) => async (dispatch: any, getState: any) => {
+export const saveFormToDb = (completed: boolean) => async (
+  dispatch: any,
+  getState: any,
+) => {
   const contents = getState().surveyContents;
   const { _id: formId, ...surveyInfo } = getState().surveyInfo;
   const formData = { ...surveyInfo, contents, completed };
-  const resSubmit = (await (formId
-    ? axios.put(`${urlServer}/survey/${formId}`, formData)
+  const { data, message: value } = (await (formId
+    ? axios.put(`${urlServer}/survey/form/${formId}`, formData)
     : axios.post(`${urlServer}/survey`, formData))).data;
-  const submitStatus = resSubmit.message;
-  const id = resSubmit.data._id;
-  if (submitStatus) {
+  if (value) {
     dispatch({
-      formId: id,
+      formId: data._id,
       type: SAVE_FORM_TO_DB,
     });
-    dispatch({
-      submitStatus,
-      type: UPDATE_SUBMIT_STATUS,
-    });
+    dispatch(updateStateStatus("statusText", value));
   }
 };
-export const saveClientDataToDb = (clientSurveyId: string, isCompleted: boolean) => async (dispatch: any, getState: any) => {
+export const saveClientDataToDb = (
+  clientSurveyId: string,
+  isCompleted: boolean,
+) => async (dispatch: any, getState: any) => {
   const clientSurveyData = {
     contents: getState().surveyContents,
     completed: true,
     surveyId: getState().surveyInfo._id,
     clientInfo: getState().clientInfo,
   };
-  const { message: submitStatus } = (await (clientSurveyId
-    ? axios.put(`${urlServer}/client-survey/${clientSurveyId}`, clientSurveyData)
+  const { message: value } = (await (clientSurveyId
+    ? axios.put(
+        `${urlServer}/client-survey/${clientSurveyId}`,
+        clientSurveyData,
+      )
     : axios.post(`${urlServer}/client-survey`, clientSurveyData))).data;
-  if (submitStatus) {
+  if (value) {
     dispatch({
       type: SAVE_SURVEY_TO_DB,
     });
-    dispatch({
-      submitStatus,
-      type: UPDATE_SUBMIT_STATUS,
-    });
+    dispatch(updateStateStatus("statusText", value));
   }
 };
 
@@ -104,18 +131,18 @@ export const updateSurveyInfo = (infoKey: string, value: any) => ({
   value,
   type: UPDATE_SURVEY_INFO,
 });
-export const updateQuestionDetail = (questionId: number, detailKey: string, value: any) => ({
-  questionId,
-  detailKey,
-  value,
-  type: "UPDATE_QUESTION_DETAIL",
-});
+
 export const clearSurveyData = () => ({
   type: CLEAR_SURVEY,
 });
 
 //// SECTION BREAK ===
-export const addSectionBreak = (questionId: number, title = "", description = "", bigBreak = false) => ({
+export const addSectionBreak = (
+  questionId: number,
+  title = "",
+  description = "",
+  bigBreak = false,
+) => ({
   questionId,
   title,
   description,
@@ -126,7 +153,11 @@ export const removeSectionBreak = (questionId: number) => ({
   questionId,
   type: "REMOVE_SECTION_BREAK",
 });
-export const updateSectionBreak = (questionId: number, sectionKey: string, value: any) => ({
+export const updateSectionBreak = (
+  questionId: number,
+  sectionKey: string,
+  value: any,
+) => ({
   questionId,
   sectionKey,
   value,
@@ -134,8 +165,8 @@ export const updateSectionBreak = (questionId: number, sectionKey: string, value
 });
 
 //// QUESTION ===
-export const addQuestion = (currentIndex: number, template: any) => ({
-  currentIndex,
+export const addQuestion = (template: any, position = null) => ({
+  position,
   template,
   type: ADD_QUESTION,
 });
@@ -143,12 +174,21 @@ export const removeQuestion = (questionId: number) => ({
   questionId,
   type: REMOVE_QUESTION,
 });
-export const updateQuestion = (questionId: number, questionKey: string, value: any) => ({
+export const updateQuestion = (
+  questionId: number,
+  questionKey: string,
+  value: any,
+) => ({
   questionId,
   questionKey,
   value,
   type: UPDATE_QUESTION,
 });
+export const replaceQuestion = (questionId, template) => ({
+  questionId,
+  template,
+  type: "REPLACE_QUESTION"
+})
 
 //// ANSWER ===
 export const addAnswer = (questionId: number, newAnswer: any) => ({
@@ -156,7 +196,12 @@ export const addAnswer = (questionId: number, newAnswer: any) => ({
   newAnswer,
   type: "ADD_ANSWER",
 });
-export const updateAnswer = (questionId: number, answerId: number, answerKey: string, value: any) => ({
+export const updateAnswer = (
+  questionId: number,
+  answerId: number,
+  answerKey: string,
+  value: any,
+) => ({
   type: "UPDATE_ANSWER",
   questionId,
   answerId,
@@ -167,7 +212,11 @@ export const removeAnswer = (questionId: number, answerId: number) => ({
   type: "REMOVE_ANSWER",
   answerId,
 });
-export const toggleAnswerChecker = (questionId: number, answerId: number, answerKey: string) => ({
+export const toggleAnswerChecker = (
+  questionId: number,
+  answerId: number,
+  answerKey: string,
+) => ({
   questionId,
   answerId,
   answerKey,
@@ -179,73 +228,76 @@ export const addColumn = (questionId: number, newColumn: any) => ({
   type: "ADD_COLUMN",
   questionId,
   newColumn,
-})
+});
 export const removeColumn = (questionId: number, refId: any) => ({
   type: "REMOVE_COLUMN",
   questionId,
   refId,
-})
-export const updateColumn = (questionId: number, refId: number, columnKey: string, value: any) => ({
+});
+export const updateColumn = (
+  questionId: number,
+  refId: number,
+  columnKey: string,
+  value: any,
+) => ({
   type: "UPDATE_COLUMN",
   questionId,
   refId,
   columnKey,
   value,
-})
+});
 export const addRow = (questionId: number, newRow: any) => ({
   type: "ADD_ROW",
   questionId,
   newRow,
-})
+});
 export const removeRow = (questionId: number, rowId: number) => ({
   type: "REMOVE_ROW",
   questionId,
   rowId,
-})
-export const updateRow = (questionId: number, rowId: number, rowKey: string, value: any) => ({
+});
+export const updateRow = (
+  questionId: number,
+  rowId: number,
+  rowKey: string,
+  value: any,
+) => ({
   type: "UPDATE_ROW",
   questionId,
   rowId,
   rowKey,
   value,
-})
+});
 export const addOption = (questionId: number, key: string, value: any) => ({
   type: "ADD_OPTION",
   questionId,
   key,
-  value
-})
+  value,
+});
 export const removeOption = (questionId: number, optionId: number) => ({
   type: "REMOVE_OPTION",
   questionId,
   optionId,
-})
-export const updateOption = (questionId: number, optionId: number, key: string, value: any) => ({
+});
+export const updateOption = (
+  questionId: number,
+  optionId: number,
+  key: string,
+  value: any,
+) => ({
   type: "UPDATE_OPTION",
   questionId,
   optionId,
   key,
-  value
-})
-export const toggleOptionChecker = (questionId: number, optionId: number, optionKey: string) => ({
+  value,
+});
+export const toggleOptionChecker = (
+  questionId: number,
+  optionId: number,
+  optionKey: string,
+) => ({
   questionId,
   optionId,
   optionKey,
   type: "TOGGLE_OPTION_CHECKER",
-});
-// ================= UPDATE STATE STATUS
-export const updateStateStatus = (statusKey: string, value: any) => ({
-  statusKey,
-  value,
-  type: "UPDATE_STATE_STATUS",
-});
-export const clearSubmitStatus = () => ({
-  type: CLEAR_SUBMIT_STATUS,
-});
-
-// ================= CLIENTSURVEY INFO
-export const updateClientSurveyInfo = (infoKey: string, value: any) => ({
-  infoKey,
-  value,
-  type: "UPDATE_CLIENT_INFO",
 });

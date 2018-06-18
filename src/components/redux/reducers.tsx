@@ -1,37 +1,42 @@
 import { combineReducers } from "redux";
+import { ISurveyFormFromDatabase } from "../../types/customTypes";
 import {
-  CLEAR_SUBMIT_STATUS,
-  CLEAR_SURVEY,
-  SET_SEARCH_TERM,
-  UPDATE_SURVEY_INFO,
   ADD_QUESTION,
-  UPDATE_QUESTION,
-  REMOVE_QUESTION,
-  UPDATE_QUESTION_TYPE,
-  UPDATE_TEMP_SURVEY_ID,
+  CLEAR_SURVEY,
   GET_DATA_FROM_DB_BY_ID,
-  UPDATE_SELECTED_QUESTION_TYPE,
-  UPDATE_CURRENT_INDEX,
-  UPDATE_SECTION_BREAK,
   GET_RECENT_FORMS_FROM_DB,
-  UPDATE_SUBMIT_STATUS,
+  REMOVE_QUESTION,
   SAVE_FORM_TO_DB,
   SAVE_SURVEY_TO_DB,
-  GET_CLIENT_SURVEY_FROM_DB,
+  SET_SEARCH_TERM,
+  UPDATE_QUESTION,
+  UPDATE_SECTION_BREAK,
+  UPDATE_SURVEY_INFO,
+  UPDATE_STATE_STATUS,
 } from "./actions";
-import { ISurveyFormFromDatabase } from "../../types/customTypes";
 
 // REDUCER FUNCTIONS
 function addQuestionReducer(state: any, action: any) {
-  const newState = [...state];
-  newState.splice(action.currentIndex + 1, 0, action.template);
-  return newState;
+  return [...state, action.template];
+  // const newState = [...state];
+  // newState.splice(action.currentIndex + 1, 0, action.template);
+  // return newState;
 }
 function removeQuestionReducer(state: any, action: any) {
   return state.filter((e: any) => e.questionId !== action.questionId);
 }
 function updateQuestionReducer(state: any, action: any) {
-  return state.map((e: any) => (e.questionId === action.questionId ? { ...e, [action.questionKey]: action.value } : e));
+  return state.map(
+    (e: any) =>
+      e.questionId === action.questionId
+        ? { ...e, [action.questionKey]: action.value }
+        : e,
+  );
+}
+function replaceQuestionReducer(state, action) {
+  return state.map(
+    e => (e.questionId === action.questionId ? action.template : e),
+  );
 }
 
 function toggleAnswerCheckerReducer(state: any, action: any) {
@@ -41,7 +46,10 @@ function toggleAnswerCheckerReducer(state: any, action: any) {
         ? {
             ...q,
             answers: q.answers.map(
-              (a: any, i: any) => (i === action.answerId ? { ...a, [action.answerKey]: !a[action.answerKey] } : a),
+              (a: any, i: any) =>
+                i === action.answerId
+                  ? { ...a, [action.answerKey]: !a[action.answerKey] }
+                  : a,
             ),
           }
         : q,
@@ -52,7 +60,12 @@ function addSectionBreakReducer(state: any, action: any) {
     ...state,
     sectionBreaks: [
       ...state.sectionBreaks,
-      { questionId: action.questionId, title: action.title, description: action.description, bigBreak: action.bigBreak },
+      {
+        questionId: action.questionId,
+        title: action.title,
+        description: action.description,
+        bigBreak: action.bigBreak,
+      },
     ],
   };
 }
@@ -61,42 +74,53 @@ function updateSectionBreakReducer(state: any, action: any) {
     ...state,
     sectionBreaks: [
       ...state.sectionBreaks,
-      { questionId: action.questionId, title: action.title, description: action.description, bigBreak: action.bigBreak },
+      {
+        questionId: action.questionId,
+        title: action.title,
+        description: action.description,
+        bigBreak: action.bigBreak,
+      },
     ],
   };
 }
 function removeSectionBreakReducer(state: any, action: any) {
   return {
     ...state,
-    sectionBreaks: state.sectionBreaks.filter((e: any) => e.questionId !== action.questionId),
+    sectionBreaks: state.sectionBreaks.filter(
+      (e: any) => e.questionId !== action.questionId,
+    ),
   };
 }
 
-function addAnswer(state: any, action: any) {
-  
-}
-function removeAnswer(state: any, action: any) {
-
-}
-function updateAnswer(state: any, action: any) {
-
-}
+function addAnswer(state: any, action: any) {}
+function removeAnswer(state: any, action: any) {}
+function updateAnswer(state: any, action: any) {}
 
 // DEFAUL_STATE
 const DEFAULT_STATE = {
   searchTerm: "",
-  recentForms: [{ formId: "123as", thumbnail: "asdf33aefasf", title: "string", completed: false }],
+  recentForms: [
+    {
+      formId: "123as",
+      thumbnail: "asdf33aefasf",
+      title: "string",
+      completed: false,
+    },
+  ],
   surveyInfo: {
     title: "",
     description: "",
     isDeleted: false,
     completed: false,
     author: { username: "daniel" },
-    sectionBreaks: [{ questionId: 112314, title: "", description: "", bigBreak: false }],
+    sectionBreaks: [
+      { questionId: 112314, title: "", description: "", bigBreak: false },
+    ],
     formId: "",
   },
   surveyContents: [
     {
+      questionId: Date.now().toString(36),
       questionType: "longQuestion",
       question: "",
       description: "",
@@ -131,46 +155,106 @@ const DEFAULT_STATE = {
     currentPosition: 1,
     currentIndex: 1,
     selectedQuestionType: "multipleChoices",
-    submitStatus: "",
+    statusText: "",
     tempId: "",
   },
 };
 
 // REDUCERS
-const searchTerm = (state = "", action: any) => (action.type === SET_SEARCH_TERM ? action.searchTerm : state);
-const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) =>
-  (action.type === GET_RECENT_FORMS_FROM_DB && [...action.recentForms]) || [...state];
-const surveyInfo = (state: any = {}, action: any) =>
-  // API
-  (action.type === GET_DATA_FROM_DB_BY_ID && { ...action.surveyInfo }) ||
-  (action.type === SAVE_FORM_TO_DB && { ...state }) ||
-  // MODIFICATION
-  (action.type === UPDATE_SURVEY_INFO && { ...state, [action.infoKey]: action.value }) ||
-  // SECTION BREAK
-  (action.type === "ADD_SECTION_BREAK" && addSectionBreakReducer(state, action)) ||
-  (action.type === "REMOVE_SECTION_BREAK" && removeSectionBreakReducer(state, action)) ||
-  (action.type === UPDATE_SECTION_BREAK && updateSectionBreakReducer(state, action)) ||
-  (action.type === CLEAR_SURVEY && DEFAULT_STATE.surveyInfo);
-const clientSurveyData = (state = { author: {}, clientInfo: {}, contents: [] }, action: any) =>
-  // API
-  (action.type === GET_DATA_FROM_DB_BY_ID && { ...state, contents: action.surveyContents, formId: action.surveyId }) ||
-  (action.type === SAVE_SURVEY_TO_DB && { ...state }) ||
-  // MODIFICATION
-  (action.type === "UPDATE_CLIENT_INFO" && { ...state, clientInfo: { ...state.clientInfo, [action.infoKey]: action.value } });
-const surveyContents = (state = [], action: any) =>
-  // API
-  (action.type === GET_DATA_FROM_DB_BY_ID && [...action.surveyContents]) ||
-  // MODIFICATION
-  (action.type === ADD_QUESTION && addQuestionReducer(state, action)) ||
-  (action.type === REMOVE_QUESTION && removeQuestionReducer(state, action)) ||
-  (action.type === UPDATE_QUESTION && updateQuestionReducer(state, action)) ||
-  (action.type === "TOGGLE_ANSWER_CHECKER" && toggleAnswerCheckerReducer(state, action)) ||
-  (action.type === CLEAR_SURVEY && []) ||
-  (action.type === SAVE_FORM_TO_DB && []);
-const stateStatus = (state = {}, action: any) =>
-  action.type === "UPDATE_STATE_STATUS" && { ...state, [action.statusKey]: action.value };
+const searchTerm = (state = "", action: any) =>
+  action.type === SET_SEARCH_TERM ? action.searchTerm : state;
 
-  export const rootReducer = combineReducers({
+const recentForms = (state: ISurveyFormFromDatabase[] = [], action: any) => {
+  switch (action.type) {
+    case GET_RECENT_FORMS_FROM_DB:
+      return [...action.recentForms] || state;
+    default:
+      return state;
+  }
+};
+
+const surveyInfo = (state = DEFAULT_STATE.surveyInfo, action: any) => {
+  switch (action.type) {
+    case GET_DATA_FROM_DB_BY_ID:
+      return { ...state, ...action.surveyInfo };
+    case SAVE_FORM_TO_DB:
+      return { ...state };
+    case UPDATE_SURVEY_INFO:
+      return {
+        ...state,
+        [action.infoKey]: action.value,
+      };
+    case "ADD_SECTION_BREAK":
+      return addSectionBreakReducer(state, action);
+    case "REMOVE_SECTION_BREAK":
+      return removeSectionBreakReducer(state, action);
+    case UPDATE_SECTION_BREAK:
+      return updateSectionBreakReducer(state, action);
+    case CLEAR_SURVEY:
+      return {};
+    default:
+      return { ...state };
+  }
+};
+
+const clientSurveyData = (
+  state = { author: {}, clientInfo: {}, contents: [] },
+  action: any,
+) => {
+  switch (action.type) {
+    case GET_DATA_FROM_DB_BY_ID:
+      return {
+        ...state,
+        contents: action.surveyContents,
+        formId: action.surveyId,
+      };
+    case SAVE_SURVEY_TO_DB:
+      return state;
+    case "UPDATE_CLIENT_INFO":
+      return {
+        ...state,
+        clientInfo: { ...state.clientInfo, [action.infoKey]: action.value },
+      };
+    default:
+      return state;
+  }
+};
+
+const surveyContents = (state = [], action: any) => {
+  switch (action.type) {
+    case GET_DATA_FROM_DB_BY_ID:
+      return [...action.surveyContents];
+    case ADD_QUESTION:
+      return addQuestionReducer(state, action);
+    case REMOVE_QUESTION:
+      return removeQuestionReducer(state, action);
+    case UPDATE_QUESTION:
+      return updateQuestionReducer(state, action);
+    case "REPLACE_QUESTION":
+      return replaceQuestionReducer(state, action);
+    case "TOGGLE_ANSWER_CHECKER":
+      return toggleAnswerCheckerReducer(state, action);
+    case CLEAR_SURVEY:
+      return [];
+    case SAVE_FORM_TO_DB:
+      return [...state];
+    default:
+      return state;
+  }
+};
+
+const stateStatus = (state = {}, action: any) => {
+  switch (action.type) {
+    case UPDATE_STATE_STATUS:
+      console.log(action.value);
+      return { ...state, [action.key]: action.value };
+    default:
+      return state;
+  }
+};
+
+const rootReducer = combineReducers({
+  brandName: () => "Survey Test Sites",
   searchTerm,
   recentForms,
   surveyInfo,
@@ -178,3 +262,5 @@ const stateStatus = (state = {}, action: any) =>
   surveyContents,
   stateStatus,
 });
+
+export default rootReducer;

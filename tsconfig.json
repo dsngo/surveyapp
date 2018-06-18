@@ -17,11 +17,14 @@
     "downlevelIteration": true,
     "strict": true,
     "jsx": "react",
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "strictNullChecks": false,
+    // "strictFunctionTypes": false,
+    "keyofStringsOnly": true
     // "outDir": "./js" 
     // "outFile": "./app/bundle.js"
     

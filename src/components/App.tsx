@@ -1,31 +1,39 @@
+// import FormSubmit from "./FormSubmit";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import * as React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
 import FoF from "./FoF";
-// import FormSubmit from "./FormSubmit";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Landing from "./Landing";
 import NavBar from "./NavBar";
-import QuestionContainer from "./questionComponents/QuestionContainer";
+// import QuestionContainer from './questionComponents/QuestionContainer';
 import SurveyForm from "./SurveyForm";
-import Homepage from "./Homepage";
-import ClientSurvey from "./ClientSurvey";
+// import ClientSurvey from './ClientSurvey';
+import Scrollbars from "react-custom-scrollbars";
+import SurveyClient from "./SurveyClient";
+
+
+const theme = createMuiTheme({});
+
+const App1 = () => (
+  <React.Fragment>
+    <NavBar showSearch />
+    <Scrollbars style={{ height: "calc(100vh - 90px)" }}>
+      <Switch>
+        <Route exact path="/" component={Landing} />
+        <Route path="/survey" component={SurveyForm} />
+        <Route component={FoF} />
+      </Switch>
+    </Scrollbars>
+  </React.Fragment>
+);
 
 export const App: React.SFC = () => (
-    <Router>
-        <Provider store={store}>
-            <MuiThemeProvider>
-                <div>
-                    <NavBar showSearch />
-                    <Switch>
-                        <Route exact path="/" component={Homepage} />
-                        {/* <Route path="/survey/preview" component={ClientSurvey} /> */}
-                        {/* <Route path="/survey/:id" component={ClientSurvey} /> */}
-                        <Route path="/survey" component={SurveyForm} />
-                        <Route component={FoF} />
-                    </Switch>
-                </div>
-            </MuiThemeProvider>
-        </Provider>
-    </Router>
+  <Router>
+    <MuiThemeProvider theme={theme}>
+      <Switch>
+        <Route exact path="/client-survey/render/:id" component={SurveyClient} />
+        <Route component={App1} />
+      </Switch>
+    </MuiThemeProvider>
+  </Router>
 );

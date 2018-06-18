@@ -1,28 +1,26 @@
 import * as React from "react";
-import { App } from "./components/App";
 import { render } from "react-dom";
+import Root from "./components/Root";
+import configureStore from "./components/redux/configureStore";
+import reducers from "./components/redux/reducers";
 
-const renderApp = (app: JSX.Element) => {
-  render(app, document.getElementById("app"));
+const store = configureStore();
+
+const renderApp = Component => {
+  render(<Component store={store} />, document.getElementById("app"));
 };
 
-if (process.env.NODE_ENV === "production") {
-  renderApp(<App />);
-} else {
-  const HotContainer = require("react-hot-loader").AppContainer;
-  renderApp(
-    <HotContainer>
-      <App />
-    </HotContainer>,
-  );
+renderApp(Root);
+
+if (process.env.NODE_ENV === "development") {
   if (module.hot) {
-    module.hot.accept("./components/App", async () => {
-      const NextApp = (await import("./components/App")).App;
-      renderApp(
-        <HotContainer>
-          <NextApp />
-        </HotContainer>,
-      );
+    module.hot.accept("./components/Root", () => {
+      import("./components/Root").then(({ default: nextRoot }) => {
+        renderApp(nextRoot);
+      });
+    });
+    module.hot.accept("./components/redux/reducers", () => {
+      store.replaceReducer(reducers);
     });
   }
 }
