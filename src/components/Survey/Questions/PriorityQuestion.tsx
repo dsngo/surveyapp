@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutline";
 import * as React from "react";
 import { connect } from "react-redux";
-import { updateQuestion } from "../redux/actionCreators";
+import { updateQuestion } from "../../redux/actionCreators";
 import Checkbox from "@material-ui/core/Checkbox";
 import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -44,7 +44,6 @@ class PriorityQuestion extends React.Component<
   {
     classes: any;
     questionData: any;
-    isRenderClient?: boolean;
     updateQuestion: (questionId: number, detailKey: string, value: any) => any;
   },
   {}
@@ -135,7 +134,7 @@ class PriorityQuestion extends React.Component<
                     fullWidth
                     placeholder="Enter a response here."
                     multiline
-                    value={choice.answer}
+                    value={choice.text}
                     onChange={this.handleChange("priority-text", choice.id)}
                   />
                 }
@@ -160,31 +159,9 @@ class PriorityQuestion extends React.Component<
       </div>
     );
   };
-  renderFormClient() {
-    const {
-      questionData: { questionId, question, description, options },
-    } = this.props;
-    return (
-      <div>
-        {/* <Typography>{question}</Typography>
-        <Typography>{description}</Typography>
-        <RadioGroup>
-          {options.map((answer: any, answerId: number) => (
-            <FormControlLabel
-              key={`${answer.text}`}
-              label={answer.text}
-              value={answer.text}
-              control={<Radio color="primary" />}
-            />
-          ))}
-        </RadioGroup> */}
-      </div>
-    );
-  }
+
   render() {
-    return this.props.isRenderClient
-      ? this.renderFormClient()
-      : this.renderFormCreate();
+    return this.renderFormCreate();
   }
 }
 const mapStateToProps = (state: any) => ({});

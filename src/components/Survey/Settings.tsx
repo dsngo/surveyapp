@@ -9,9 +9,9 @@ import PreviewIcon from "@material-ui/icons/FormatIndentIncrease";
 import SaveIcon from "@material-ui/icons/Save";
 import * as React from "react";
 import { connect } from "react-redux";
-import { addQuestion, saveFormToDb } from "./redux/actionCreators";
+import { addQuestion, saveFormToDb } from "../redux/actionCreators";
 import Tooltip from "@material-ui/core/Tooltip";
-import { createTemplate } from "./ultis";
+import { createTemplate } from "../ultis";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -108,7 +108,6 @@ class Settings extends React.Component<
   };
   render() {
     const { classes } = this.props;
-    console.log(this.state);
     return (
       <Paper elevation={4} className={classes.root}>
         <MenuList className={classes.column}>

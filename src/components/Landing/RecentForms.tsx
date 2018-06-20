@@ -1,10 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  getRecentFormsFromDb,
-  updateStateStatus,
-} from "../redux/actionCreators";
+import { fetchRecentForms } from "../redux/actionCreators";
 import Template from "./Template";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -13,12 +10,14 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core";
 
 const styles: { [key: string]: React.CSSProperties } = {
-  root: {
+  gridContainter: {
     display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
     padding: 5,
+    justifyContent: "center",
+  },
+  gridItem: {
+    display: "flex",
+    justifyContent: "center",
   },
 };
 
@@ -26,29 +25,22 @@ class RecentForms extends React.Component<
   {
     classes: any;
     recentForms: any;
-    getRecentFormsFromDb: () => any;
-    updateStateStatus: (statusKey: string, value: any) => any;
+    fetchRecentForms: () => any;
   },
   {}
 > {
   componentDidMount() {
-    if (this.props.recentForms.length === 0) this.props.getRecentFormsFromDb();
+    this.props.fetchRecentForms();
   }
   renderTemplate = () => {
-    const {
-      classes,
-      recentForms,
-      getRecentFormsFromDb,
-      updateStateStatus,
-    } = this.props;
-    console.log(recentForms);
+    const { classes, recentForms } = this.props;
     return (
-      <Grid container spacing={8} className={classes.root}>
+      <Grid container spacing={8} className={classes.gridContainter}>
         {recentForms.length === 0 ? (
           <Fade
             in={recentForms.length === 0}
             style={{
-              transitionDelay: recentForms.length === 0 ? "800ms" : "0ms",
+              transitionDelay: recentForms.length === 0 ? "500ms" : "0ms",
             }}
             unmountOnExit
           >
@@ -56,11 +48,16 @@ class RecentForms extends React.Component<
           </Fade>
         ) : (
           recentForms.map(form => (
-            <Template
-              key={form.formId}
-              linkTo={`/survey${form.completed ? `/${form.formId}` : ""}`}
-              meta={form}
-            />
+            <Grid item key={form.id} className={classes.gridItem} md={3} xl={4}>
+              <Template
+                linkTo={
+                  !form.completed
+                    ? `/survey/${form.id}`
+                    : `/client-survey/render/${form.id}`
+                }
+                meta={form}
+              />
+            </Grid>
           ))
         )}
       </Grid>
@@ -72,7 +69,7 @@ class RecentForms extends React.Component<
         <Typography gutterBottom align="center" variant="display2">
           Your recent forms
         </Typography>
-        <div>{this.renderTemplate()}</div>
+        {this.renderTemplate()}
       </div>
     );
   }
@@ -81,11 +78,9 @@ class RecentForms extends React.Component<
 const mapStateToProps = (state: any) => ({
   recentForms: state.recentForms,
 });
-const mapDispatchToProps = (dispatch: any) => ({
-  getRecentFormsFromDb: () => dispatch(getRecentFormsFromDb()),
-  updateStateStatus: (statusKey: string, value: any) =>
-    dispatch(updateStateStatus(statusKey, value)),
-});
+const mapDispatchToProps = {
+  fetchRecentForms,
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

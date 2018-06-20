@@ -17,7 +17,7 @@
     "downlevelIteration": true,
     "strict": true,
     "jsx": "react",
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "noEmitHelpers": true,
     "noImplicitAny": false,

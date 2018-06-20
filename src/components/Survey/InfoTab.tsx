@@ -1,7 +1,7 @@
 import TextField from "@material-ui/core/TextField";
 import * as React from "react";
 import { connect } from "react-redux";
-import { updateSurveyInfo } from "./redux/actionCreators";
+import { updateFormInfo } from "../redux/actionCreators";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
@@ -17,7 +17,7 @@ const styles = {
   },
 };
 
-const SurveyInfo = ({ classes, title, description, updateSurveyInfo }) => {
+const SurveyInfo = ({ classes, title, description, updateFormInfo }) => {
   return (
     <div className={classes.root}>
       <div className={classes.content}>
@@ -25,13 +25,13 @@ const SurveyInfo = ({ classes, title, description, updateSurveyInfo }) => {
           fullWidth
           placeholder="Title"
           value={title}
-          onChange={(e: any) => updateSurveyInfo("title", e.target.value)}
+          onChange={(e: any) => updateFormInfo("title", e.target.value)}
         />
         <TextField
           fullWidth
           placeholder="Description"
           value={description}
-          onChange={(e: any) => updateSurveyInfo("description", e.target.value)}
+          onChange={(e: any) => updateFormInfo("description", e.target.value)}
         />
       </div>
       <Divider light />
@@ -40,12 +40,12 @@ const SurveyInfo = ({ classes, title, description, updateSurveyInfo }) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  title: state.surveyInfo.title,
-  description: state.surveyInfo.description,
+  title: state.formInfo.title,
+  description: state.formInfo.description,
 });
 
 const mapDispatchToProps = {
-  updateSurveyInfo,
+  updateFormInfo,
 };
 export default connect(
   mapStateToProps,

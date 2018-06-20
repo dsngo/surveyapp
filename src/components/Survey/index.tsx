@@ -10,12 +10,13 @@ import Scrollbars from "react-custom-scrollbars";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import QuestionContainer from "./Questions";
-import SurveyInfo from "./SurveyInfo";
+import InfoTab from "./InfoTab";
 import {
   updateStateStatus,
-  getDataFromDbById,
+  getFormDataById,
   saveFormToDb,
-} from "./redux/actionCreators";
+  createNewForm,
+} from "../redux/actionCreators";
 import Settings from "./Settings";
 import Paper from "@material-ui/core/Paper";
 import SwipeableViews from "react-swipeable-views";
@@ -30,47 +31,49 @@ const styles: { [key: string]: React.CSSProperties } = {
 
 interface ISurveyFormProps {
   classes: any;
-  surveyContents: [any];
-  tempId: string;
+  match: any;
+  formQuestions: [any];
   submitStatus: string;
   currentPosition: number;
+  createNewForm: () => any;
   saveFormToDb: (completed: boolean) => any;
   updateStateStatus: any;
-  getDataFromDbById: (id: string) => any;
+  getFormDataById: (id: string) => any;
 }
 
 class SurveyForm extends React.Component<ISurveyFormProps, {}> {
   scrollBars!: Scrollbars;
   state = {
     activeTab: 0,
-    isModalOpen: false,
+    isDialogOpen: false,
     isSubmitting: false,
     isPreview: false,
   };
 
   componentDidMount() {
-    if (this.props.tempId) {
-      this.props.getDataFromDbById(this.props.tempId);
+    if (this.props.match.params.activeId) {
+      if (this.props.match.params.activeId === "create") this.props.createNewForm();
+      this.props.getFormDataById(this.props.match.params.activeId);
     }
   }
   handleUpdateState = (k, v) => () => this.setState({ [k]: v });
   handleSave = (type: string) => () => {
     this.props.saveFormToDb(type === "submit");
-    this.handleUpdateState("isModalOpen", false);
+    this.handleUpdateState("isDialogOpen", false);
   };
   handleSubmit = () => {
-    this.setState({ isSubmitting: true, isModalOpen: true });
+    this.setState({ isSubmitting: true, isDialogOpen: true });
   };
   renderQuestion = () => {
-    const { surveyContents } = this.props;
-    return surveyContents.map((e: any) => (
+    const { formQuestions } = this.props;
+    return formQuestions.map((e: any) => (
       <QuestionContainer questionData={e} key={`${e.questionId}`} />
     ));
   };
-  renderDialog = isModalOpen => (
+  renderDialog = isDialogOpen => (
     <Dialog
-      open={isModalOpen}
-      onClose={this.handleUpdateState("isModalOpen", false)}
+      open={isDialogOpen}
+      onClose={this.handleUpdateState("isDialogOpen", false)}
     >
       <DialogTitle>{`Are you sure you want to ${
         this.state.isSubmitting ? "submit" : "create"
@@ -78,7 +81,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
       <DialogActions>
         <Button
           color="primary"
-          onClick={this.handleUpdateState("isModalOpen", false)}
+          onClick={this.handleUpdateState("isDialogOpen", false)}
         >
           Cancel
         </Button>
@@ -95,11 +98,11 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
     </Dialog>
   );
   render() {
-    const { classes, submitStatus, tempId, currentPosition } = this.props;
-    const { isModalOpen, activeTab } = this.state;
+    const { classes, submitStatus, currentPosition } = this.props;
+    const { isDialogOpen, activeTab } = this.state;
     return (
       <Paper className={classes.root}>
-        {this.renderDialog(isModalOpen)}
+        {this.renderDialog(isDialogOpen)}
         <Tabs
           value={activeTab}
           onChange={(e: any, v) => this.handleUpdateState("activeTab", v)()}
@@ -108,17 +111,17 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
           centered
         >
           <Tab label="Survey Form" />
-          <Tab label="Preview Form" />
+          {/* <Tab label="Preview Form" /> */}
         </Tabs>
         <SwipeableViews
           index={activeTab}
           onChangeIndex={i => this.handleUpdateState("activeTab", i)()}
         >
           <React.Fragment>
-            <SurveyInfo />
+            <InfoTab />
             {this.renderQuestion()}
           </React.Fragment>
-          <Paper>Client Form</Paper>
+          {/* <Paper>Client Form</Paper> */}
         </SwipeableViews>
         <Settings />
       </Paper>
@@ -128,18 +131,17 @@ class SurveyForm extends React.Component<ISurveyFormProps, {}> {
 
 const mapStateToProps = (state: any) => {
   return {
-    surveyContents: state.surveyContents,
+    formQuestions: state.formQuestions,
     submitStatus: state.stateStatus.submitStatus,
-    tempId: state.stateStatus.tempId,
     currentPosition: state.stateStatus.currentPosition,
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  saveFormToDb: (completed: boolean) => dispatch(saveFormToDb(completed)),
-  updateStateStatus,
-  getDataFromDbById: (id: string) => dispatch(getDataFromDbById(id)),
-});
+const mapDispatchToProps = {
+  createNewForm,
+  saveFormToDb,
+  getFormDataById,
+};
 
 export default connect(
   mapStateToProps,

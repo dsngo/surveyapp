@@ -1,17 +1,14 @@
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import AddIcon from "@material-ui/icons/Add";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import IconButton from "@material-ui/core/IconButton";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutline";
 import * as React from "react";
 import { connect } from "react-redux";
-import { updateQuestion } from "../redux/actionCreators";
-import Checkbox from "@material-ui/core/Checkbox";
-import { withStyles } from "@material-ui/core/styles";
+import { updateQuestion } from "../../redux/actionCreators";
 
 const styles: { [key: string]: React.CSSProperties } = {
   root: {
@@ -39,7 +36,6 @@ class CheckboxQuestion extends React.Component<
   {
     classes: any;
     questionData: any;
-    isRenderClient?: boolean;
     updateQuestion: (questionId: number, detailKey: string, value: any) => any;
   },
   {}
@@ -113,14 +109,14 @@ class CheckboxQuestion extends React.Component<
               <FormControlLabel
                 classes={{ label: classes.label }}
                 control={
-                  <Checkbox onChange={this.handleChange("check", choice.id)} />
+                  <Checkbox checked={choice.correct} onChange={this.handleChange("check", choice.id)} />
                 }
                 label={
                   <TextField
                     fullWidth
                     placeholder="Enter a choice here."
                     multiline
-                    value={choice.answer}
+                    value={choice.text}
                     onChange={this.handleChange("checkbox-text", choice.id)}
                   />
                 }
@@ -145,31 +141,9 @@ class CheckboxQuestion extends React.Component<
       </div>
     );
   };
-  renderFormClient() {
-    const {
-      questionData: { questionId, question, description, options },
-    } = this.props;
-    return (
-      <div>
-        {/* <Typography>{question}</Typography>
-        <Typography>{description}</Typography>
-        <RadioGroup>
-          {options.map((answer: any, answerId: number) => (
-            <FormControlLabel
-              key={`${answer.text}`}
-              label={answer.text}
-              value={answer.text}
-              control={<Radio color="primary" />}
-            />
-          ))}
-        </RadioGroup> */}
-      </div>
-    );
-  }
+
   render() {
-    return this.props.isRenderClient
-      ? this.renderFormClient()
-      : this.renderFormCreate();
+    return this.renderFormCreate();
   }
 }
 const mapStateToProps = (state: any) => ({});

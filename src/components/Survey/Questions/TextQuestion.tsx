@@ -2,7 +2,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { connect } from "react-redux";
-import { updateQuestion } from "../redux/actionCreators";
+import { updateQuestion } from "../../redux/actionCreators";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles: { [key: string]: React.CSSProperties } = {
@@ -15,7 +15,6 @@ class TextQuestion extends React.Component<
   {
     classes: any;
     questionData: any;
-    isRenderClient?: boolean;
     updateQuestion: (questionId: number, detailKey: string, value: any) => any;
   },
   {}
@@ -24,27 +23,7 @@ class TextQuestion extends React.Component<
     const { questionId } = this.props.questionData;
     this.props.updateQuestion(questionId, key, val || e.target.value);
   };
-  renderFormClient() {
-    const {
-      questionData: { questionId, question, answers, description },
-      updateQuestion,
-    } = this.props;
-    return (
-      <div>
-        {/* <Typography>{question}</Typography>
-        <Typography>{description}</Typography>
-        <TextField
-          label="Answer"
-          placeholder="Put your answer here"
-          multiline
-          fullWidth
-          rows={4}
-          value={this.getAnswerString(answers)}
-          onChange={(e: any) => saveAnswerString(questionId, e.target.value)}
-        /> */}
-      </div>
-    );
-  }
+
   renderFormCreate = () => {
     const { classes } = this.props;
     const { question, description } = this.props.questionData;
@@ -70,9 +49,7 @@ class TextQuestion extends React.Component<
     );
   };
   render() {
-    return this.props.isRenderClient
-      ? this.renderFormClient()
-      : this.renderFormCreate();
+    return this.renderFormCreate();
   }
 }
 const mapStateToProps = (state: any) => ({});

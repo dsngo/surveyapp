@@ -12,8 +12,8 @@ import { Link } from "react-router-dom";
 const styles = {
   card: {
     maxWidth: 345,
-    minWidth: 150,
-    minHeight: 185,
+    minWidth: 220,
+    minHeight: 150,
   },
   media: {
     height: 0,
@@ -27,36 +27,63 @@ const styles = {
       transition: "all .5s ease",
     },
   },
+  actions: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 };
 
-const Template = ({ classes, linkTo, meta = { title: "Sample Survey", author: "Daniel", description: "Sample description" } }) => (
-  <ButtonBase className={classes.button}>
-    <Link to={linkTo}>
-      <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image="assets/img/temp1.png"
-          title={meta.title}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="headline" component="h2">
-            {meta.author}
-          </Typography>
+const Template = ({
+  classes,
+  linkTo,
+  meta = {
+    title: "Sample Survey",
+    author: "Daniel",
+    description: "Sample description",
+    createdDate: new Date().toDateString(),
+    completed: false,
+  },
+}) => (
+  <Card className={classes.card}>
+    <CardMedia
+      className={classes.media}
+      image="assets/img/temp1.png"
+      title={meta.title}
+    />
+    <CardContent>
+      <Typography gutterBottom variant="headline" component="h2">
+        {meta.author}
+      </Typography>
+      <Typography component="p">{meta.description}</Typography>
+      <Typography component="p">{meta.createdDate}</Typography>
+      {linkTo !== "/survey/create" && (
+        <React.Fragment>
           <Typography component="p">
-            {meta.description}
+            {meta.createdDate.substr(0, 10)}
           </Typography>
-        </CardContent>
-        {/* <CardActions>
-          <Button size="small" color="primary">
-            Share
+          <Typography color="secondary">
+            {meta.completed ? "Completed" : "Incompleted"}
+          </Typography>
+        </React.Fragment>
+      )}
+    </CardContent>
+    <CardActions className={classes.actions}>
+      <Link to={linkTo}>
+        {!meta.completed ? (
+          <Button
+            size="small"
+            color={linkTo === "/survey/create" ? "secondary" : "primary"}
+          >
+            {linkTo === "/survey/create" ? "Create" : "Edit"}
           </Button>
-          <Button size="small" color="primary">
-            Learn More
+        ) : (
+          <Button size="small" color="secondary">
+            Preview
           </Button>
-        </CardActions> */}
-      </Card>
-    </Link>
-  </ButtonBase>
+        )}
+      </Link>
+    </CardActions>
+  </Card>
 );
 
 export default withStyles(styles)(Template);

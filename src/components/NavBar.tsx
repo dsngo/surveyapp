@@ -31,18 +31,9 @@ const styles = {
   },
 };
 
-interface INavBar {
-  classes: any;
-  statusText: string;
-  showSearch: boolean;
-  brandName: string;
-  searchTerm: string;
-  surveyData: any[];
-  setSearchTerm: any;
-  updateStateStatus: any;
-}
+const MyLink = props => <Link {...props} to="/" />;
 
-class Navbar extends React.Component<INavBar, {}> {
+class Navbar extends React.Component<any, {}> {
   state = {
     // auth: true,
     anchorEl: null,
@@ -92,6 +83,7 @@ class Navbar extends React.Component<INavBar, {}> {
               <MenuIcon />
             </IconButton> */}
             <Typography
+              component={MyLink}
               variant="title"
               color="inherit"
               className={classes.flex}

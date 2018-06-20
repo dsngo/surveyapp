@@ -1,62 +1,50 @@
-const { join } = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { join } = require("path");
+const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 // Initial configurations
-const pageTitle = 'Survey App';
-const PATH = {
-  app: join(__dirname, 'app'),
-  src: join(__dirname, 'src'),
-  root: join(__dirname, ''),
-  nodeModules: join(__dirname, 'node_modules'),
-  template: join(__dirname, 'src/template.ejs'),
-  styles: join(__dirname, 'src/css'),
-
-};
+const pageTitle = "Survey App";
 const developmentPort = 8080;
-
-function defineDevtool(num) {
-  switch (num) {
-    case 1:
-      return 'eval';
-    case 2:
-      return 'cheap-module-eval-source-map';
-    default:
-      return 'source-map';
-  }
-}
+const PATH = {
+  app: join(__dirname, "app"),
+  src: join(__dirname, "src"),
+  root: join(__dirname, ""),
+  nodeModules: join(__dirname, "node_modules"),
+  template: join(__dirname, "src/template.ejs"),
+  styles: join(__dirname, "src/css"),
+};
 
 module.exports = (env = {}) => {
-  const devtool = defineDevtool(env.production ? 2 : 3);
-  const stats = {
-    colors: true,
-    reasons: true,
-    assets: true,
-    errorDetails: true,
-  };
-  const extensions = ['.ts', '.tsx', '.css', '.scss', '.js', '.json'];
+  const target = "web";
+  const main = ["./src/index", "./src/css/index"];
+  if (!env.production) {
+    main.unshift(
+      `webpack-dev-server/client?http://localhost:${developmentPort}/`,
+      "react-hot-loader/patch",
+    );
+  }
+  const extensions = [".ts", ".tsx", ".css", ".scss", ".js", ".json"];
   // Typescript compiling configurations
   const tsBundleConfig = {
+    target,
     context: PATH.root,
-    entry: {
-      main: ['./src/index', './src/css/index'],
-    },
+    entry: { main },
     output: {
       path: PATH.app,
-      filename: 'assets/[name]/bundle.js',
-      publicPath: '/',
-      pathinfo: true,
+      filename: "assets/[name]/bundle.js",
+      publicPath: "/",
+      pathinfo: !env.production,
     },
-    mode: 'development',
-    stats,
-    devtool,
+    mode: env.production ? "production" : "development",
+    stats: env.production ? "minimal" : "normal",
+    devtool: env.production ? "false" : "source-map",
     devServer: {
       hot: true,
       open: true,
       inline: true,
       port: developmentPort,
-      publicPath: '/',
+      publicPath: "/",
       compress: true,
       historyApiFallback: { disableDotRule: true },
       contentBase: PATH.app,
@@ -68,26 +56,22 @@ module.exports = (env = {}) => {
         {
           test: /\.tsx?$/,
           include: PATH.src,
-          use: [
-            {
-              loader: "ts-loader",
-            },
-          ],
+          use: [{ loader: "ts-loader" }],
         },
         {
           test: /\.s?css$/,
           include: PATH.styles,
           use: [
-            env.production ? MiniCssExtractPlugin.loader : 'style-loader',
+            env.production ? MiniCssExtractPlugin.loader : "style-loader",
             {
-              loader: 'css-loader',
+              loader: "css-loader",
               options: {
                 sourceMap: Boolean(env.development),
                 importLoaders: 1,
                 minimize: Boolean(env.production),
               },
             },
-            'sass-loader',
+            "sass-loader",
           ],
         },
       ],
@@ -97,30 +81,14 @@ module.exports = (env = {}) => {
       new webpack.NamedModulesPlugin(),
       new HtmlWebpackPlugin({
         title: `${pageTitle} - Development`,
-        filename: 'index.html',
+        filename: "index.html",
         template: PATH.template,
       }),
     ],
   };
   // Webpack configurations
-  if (!env.production) {
-    tsBundleConfig.entry.main.unshift(
-      `webpack-dev-server/client?http://localhost:${developmentPort}/`,
-      'react-hot-loader/patch'
-    );
-  }
   if (env.production) {
-    delete tsBundleConfig.devtool;
     delete tsBundleConfig.devServer;
-    delete tsBundleConfig.output.pathinfo;
-    tsBundleConfig.mode = 'production';
-    tsBundleConfig.watch = false;
-    tsBundleConfig.output = {
-      path: PATH.app,
-      filename: 'assets/js/[name].bundle.js',
-      publicPath: '/',
-    };
-    tsBundleConfig.stats = 'normal';
     // tsBundleConfig.resolve.alias = {
     //   react: 'preact-compat',
     //   'react-dom': 'preact-compat',
@@ -130,25 +98,25 @@ module.exports = (env = {}) => {
         cacheGroups: {
           manifest: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'manifest',
-            chunks: 'all',
+            name: "manifest",
+            chunks: "all",
           },
         },
       },
     };
     tsBundleConfig.plugins = [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': '"production"',
+        "process.env.NODE_ENV": '"production"',
       }),
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: 'assets/styles/[name].css',
-        chunkFilename: 'assets/styles/[name].[id].css',
+        filename: "assets/styles/[name].css",
+        chunkFilename: "assets/styles/[name].[id].css",
       }),
       new HtmlWebpackPlugin({
         title: `${pageTitle}`,
-        filename: 'index.html',
+        filename: "index.html",
         template: PATH.template,
         minify: {
           removeAttributeQuotes: true,

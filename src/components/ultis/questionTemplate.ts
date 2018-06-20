@@ -40,18 +40,20 @@ export function createTemplate(
       text: "",
     },
   ];
-  const priorityOptions = [{
-    id: (Date.now() + 1).toString(36),
-    key: "A",
-    text: "",
-  }]
+  const priorityOptions = [
+    {
+      id: (Date.now() + 1).toString(36),
+      key: "A",
+      text: "",
+    },
+  ];
   switch (questionType) {
     case "text":
       return { ...base };
     case "checkbox":
-      return { ...base, answers: [""], options };
+      return { ...base, answers: [], options, maxChoice: options.length };
     case "priority":
-      return {...base, answers:[""], options: priorityOptions}
+      return { ...base, answers: {}, options: priorityOptions };
     default:
       return { ...base, options };
   }

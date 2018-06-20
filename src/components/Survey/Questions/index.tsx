@@ -2,25 +2,20 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
+// import * as classNames from "classnames";
+import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
-import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Clear from "@material-ui/icons/Clear";
 import * as React from "react";
 import { connect } from "react-redux";
-import {
-  removeQuestion,
-  replaceQuestion,
-  updateStateStatus,
-} from "../redux/actionCreators";
+import { removeQuestion, replaceQuestion } from "../../redux/actionCreators";
+import { createTemplate } from "../../ultis";
 import CheckboxQuestion from "./CheckboxQuestion";
-import TextQuestion from "./TextQuestion";
 import PriorityQuestion from "./PriorityQuestion";
-// import * as classNames from "classnames";
-import Divider from "@material-ui/core/Divider";
-import { createTemplate } from "../ultis";
+import TextQuestion from "./TextQuestion";
 
 const options = {
   text: "Text Question",
@@ -50,7 +45,6 @@ class QuestionContainer extends React.Component<
   {
     classes: any;
     questionData: any;
-    isRenderClient?: boolean;
     replaceQuestion: (questionId, template) => any;
     removeQuestion: (questionId: number) => any;
   },
@@ -98,15 +92,15 @@ class QuestionContainer extends React.Component<
       </Dialog>
     );
   };
-  renderQuestion = (isRenderClient: boolean = false) => {
+  renderQuestion = () => {
     const { questionData } = this.props;
     switch (questionData.questionType) {
       case "text":
-        return <TextQuestion {...{ questionData, isRenderClient }} />;
+        return <TextQuestion {...{ questionData }} />;
       case "priority":
-        return <PriorityQuestion {...{ questionData, isRenderClient }} />;
+        return <PriorityQuestion {...{ questionData }} />;
       default:
-        return <CheckboxQuestion {...{ questionData, isRenderClient }} />;
+        return <CheckboxQuestion {...{ questionData }} />;
     }
   };
 
