@@ -4,6 +4,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import FoF from "./FoF";
 import LandingPage from "./Landing";
+// import HomePage from "./Home"
 import NavBar from "./NavBar";
 // import QuestionContainer from './questionComponents/QuestionContainer';
 import SurveyPage from "./Survey";
@@ -20,6 +21,7 @@ const MainApp = () => (
     <Scrollbars style={{ height: "calc(100vh - 90px)" }}>
       <Switch>
         <Route exact path="/" component={LandingPage} />
+        {/* <Route exact path="/home" component={HomePage} /> */}
         <Route path="/survey/:activeId" component={SurveyPage} />
         <Route component={FoF} />
       </Switch>
@@ -31,7 +33,7 @@ export const App: React.SFC = () => (
   <Router>
     <MuiThemeProvider theme={theme}>
       <Switch>
-        <Route exact path="/client-survey/render/:formId" component={ClientPage} />
+        <Route exact path="/client-survey/render/(:formId)" component={ClientPage} />
         <Route component={MainApp} />
       </Switch>
     </MuiThemeProvider>

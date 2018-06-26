@@ -49,7 +49,7 @@ class PriorityQuestion extends React.Component<
   {}
 > {
   handleChange = (type = "text", key?, val?) => (e, v?) => {
-    const { questionId, options } = this.props.questionData;
+    const { questionId, options, answers } = this.props.questionData;
     switch (type) {
       case "priority-add":
         return this.props.updateQuestion(questionId, "options", [

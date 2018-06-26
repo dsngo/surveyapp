@@ -21,8 +21,13 @@ import { ADD_QUESTION } from "../../redux/actions";
 
 const styles: { [key: string]: React.CSSProperties } = {
   root: {
-    margin: 5,
+    display: "flex",
+    flexDirection: "column",
+    margin: 15,
   },
+  content: {
+
+  }
 };
 
 class QuestionContainer extends React.Component<
@@ -43,17 +48,7 @@ class QuestionContainer extends React.Component<
       case "dropdown":
         return <DropdownQuestion {...{ questionData, onChangeContent }} />;
       case "priority":
-        const temp = {
-          ...questionData,
-          answers: questionData.options.reduce((a, e, i) => {
-            a[`priority${i + 1}`] = e.key;
-            return a;
-          }, {}),
-        };
-        console.log(temp);
-        return (
-          <PriorityQuestion {...{ questionData: temp, onChangeContent }} />
-        );
+        return <PriorityQuestion {...{ questionData, onChangeContent }} />;
       // case "priority":
       //   return <PriorityQuestion {...{ questionData }} />;
       default:
@@ -64,11 +59,9 @@ class QuestionContainer extends React.Component<
     const { classes, questionData } = this.props;
     return (
       <div className={classes.root}>
-        <Typography>{questionData.questionId}</Typography>
-        <Typography>{questionData.questionType}</Typography>
-        <Typography>{questionData.question}</Typography>
-        <Typography>{questionData.description}</Typography>
-        {this.renderType()}
+        <Typography variant="display1" align="center">{questionData.question}</Typography>
+        <Typography variant="subheading" align="center">{questionData.description}</Typography>
+        <div className={classes.contents}>{this.renderType()}</div>
         <Divider light />
       </div>
     );

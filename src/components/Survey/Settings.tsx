@@ -16,6 +16,8 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
 const styles = theme => ({
   root: {
@@ -73,7 +75,7 @@ class Settings extends React.Component<
     switch (option) {
       case "submit":
         this.props.saveFormToDb(option === "submit");
-        // break;
+      // break;
       case "save":
         this.props.saveFormToDb(option === "submit");
         break;
@@ -91,6 +93,13 @@ class Settings extends React.Component<
       >
         <DialogTitle
         >{`Are you sure you want to ${dialogType} this survey?`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {dialogType === "submit"
+              ? "You will not be able to edit the form when you choose submit this form."
+              : "You can edit this form later on."}
+          </DialogContentText>
+        </DialogContent>
         <DialogActions>
           <Button color="primary" onClick={this.handleState("dialogType")}>
             Cancel

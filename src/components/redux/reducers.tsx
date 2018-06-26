@@ -59,6 +59,7 @@ function removeSectionBreakReducer(state: any, action: any) {
 
 // DEFAUL_STATE
 const DEFAULT_STATE = {
+  authentication: { status: "LOGGED_OUT", user: {} },
   searchTerm: "",
   recentForms: [
     {
@@ -71,9 +72,6 @@ const DEFAULT_STATE = {
   formInfo: {
     title: "",
     description: "",
-    isDeleted: false,
-    completed: false,
-    author: { username: "daniel" },
   },
   formQuestions: [
     {
@@ -118,6 +116,20 @@ const DEFAULT_STATE = {
 };
 
 // REDUCERS
+const authentication = (state = DEFAULT_STATE.authentication, action: any) => {
+  switch (action.type) {
+    case "LOGIN_SUCCESS":
+      return action.payload;
+    case "LOGIN_PENDING":
+      return action.payload;
+    case "LOGIN_FAILED":
+      return action.payload;
+    case "LOGGED_OUT":
+      return action.payload;
+    default:
+      return state;
+  }
+};
 const searchTerm = (state = "", action: any) =>
   action.type === SET_SEARCH_TERM ? action.searchTerm : state;
 
@@ -125,6 +137,8 @@ const recentForms = (state = [], action: any) => {
   switch (action.type) {
     case FETCH_RECENT_FORMS:
       return [...action.recentForms] || state;
+    case "REMOVE_FORM_BY_ID":
+      return state.filter(e => e.id !== action.id);
     default:
       return state;
   }
@@ -135,16 +149,13 @@ const formInfo = (state = DEFAULT_STATE.formInfo, action: any) => {
     case FETCH_FORM_DATA_BY_ID:
       return { ...state, ...action.formInfo };
     case "CREATE_NEW_FORM":
-      return { ...DEFAULT_STATE.formInfo };
-    case SAVE_FORM_BY_ID:
-      return { ...state };
+      return DEFAULT_STATE.formInfo;
     case UPDATE_FORM_INFO:
-      return {
-        ...state,
-        [action.infoKey]: action.value,
-      };
+      return { ...state, [action.k]: action.v };
+    case "LOGGED_OUT":
+      return DEFAULT_STATE.formInfo;
     default:
-      return { ...state };
+      return state;
   }
 };
 
@@ -201,6 +212,7 @@ const stateStatus = (state = {}, action: any) => {
 };
 
 const rootReducer = combineReducers({
+  authentication,
   brandName: () => "Survey Test Sites",
   searchTerm,
   recentForms,

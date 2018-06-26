@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
-// import { loadState, saveState } from "../ultis";
+import { loadState } from "../ultis";
 import rootReducer from "./reducers";
 
 const composeEnhancers =
@@ -10,10 +10,10 @@ const composeEnhancers =
     : compose;
 
 const configureStore = () => {
-  // const persistedState = loadState();
+  const persistedState = loadState();
   const store = createStore(
     rootReducer,
-    // persistedState,
+    persistedState,
     composeEnhancers(applyMiddleware(thunk)),
   );
   // store.subscribe(

@@ -2,7 +2,6 @@ import TextField from "@material-ui/core/TextField";
 import * as React from "react";
 import { connect } from "react-redux";
 import { updateFormInfo } from "../redux/actionCreators";
-import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 

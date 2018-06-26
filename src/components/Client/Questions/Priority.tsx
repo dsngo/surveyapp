@@ -22,6 +22,10 @@ const styles: { [key: string]: React.CSSProperties } = {
     marginLeft: "10%",
     width: "100%",
   },
+  selectField: {
+    display: "flex",
+    justifyContent: "center"
+  }
 };
 
 class PriorityQuestion extends React.Component<
@@ -34,6 +38,7 @@ class PriorityQuestion extends React.Component<
 > {
   handleChange = key => e => {
     const { questionId, answers, options } = this.props.questionData;
+    console.log(questionId, key, e.target.value)
     this.props.onChangeContent(questionId, "answers", {
       ...answers,
       [key]: e.target.value,
@@ -58,23 +63,25 @@ class PriorityQuestion extends React.Component<
             {e.key} - {e.text}
           </Typography>
         ))}
-        {options.map((e, i) => (
-          <TextField
-            key={e.id}
-            select
-            value={answers[`priority${i + 1}`]}
-            onChange={this.handleChange(`priority${i + 1}`)}
-            margin="normal"
-            style={{ width: 90 }}
-            helperText={`${i + 1} priority`}
-          >
-            {choices.map(c => (
-              <MenuItem key={c} value={c}>
-                {c}
-              </MenuItem>
-            ))}
-          </TextField>
-        ))}
+        <div className={classes.selectField}>
+          {options.map((e, i) => (
+            <TextField
+              key={e.id}
+              select
+              value={answers[`priority${i + 1}`]}
+              onChange={this.handleChange(`priority${i + 1}`)}
+              margin="normal"
+              style={{ width: 90 }}
+              helperText={`${i + 1} priority`}
+            >
+              {choices.map(c => (
+                <MenuItem key={c} value={c}>
+                  {c}
+                </MenuItem>
+              ))}
+            </TextField>
+          ))}
+        </div>
         {this.findDuplicate() && (
           <Typography color="error">
             Please only select each option once *

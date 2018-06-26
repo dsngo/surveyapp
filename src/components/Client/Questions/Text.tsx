@@ -36,6 +36,7 @@ class TextQuestion extends React.Component<
           rows={3}
           rowsMax={6}
           fullWidth
+          required={!Boolean(answer)}
           value={answer}
           onChange={this.handleChange("answer")}
         />

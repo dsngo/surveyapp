@@ -1,21 +1,16 @@
-import * as React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setSearchTerm, updateStateStatus } from "./redux/actionCreators";
-import TextField from "@material-ui/core/TextField";
 import AppBar from "@material-ui/core/AppBar";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Snackbar from "@material-ui/core/Snackbar";
+import { withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import Snackbar from "@material-ui/core/Snackbar";
+import * as React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { requestLogout, setSearchTerm, updateStateStatus } from "./redux/actionCreators";
 
 const styles = {
   root: {
@@ -50,6 +45,10 @@ class Navbar extends React.Component<any, {}> {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+  handleLoggedOut = () => {
+    this.setState({ anchorEl: null });
+    this.props.requestLogout();
+  }
   handleSnackbar = (k, v) => () => this.props.updateStateStatus(k, v);
   renderSnackBar = () => {
     const { statusText } = this.props;
@@ -61,7 +60,7 @@ class Navbar extends React.Component<any, {}> {
           horizontal: "center",
         }}
         open={Boolean(statusText)}
-        autoHideDuration={2500}
+        autoHideDuration={3000}
         onClose={this.handleSnackbar("statusText", "")}
         message={<span id="message-id">{statusText}</span>}
       />
@@ -90,15 +89,16 @@ class Navbar extends React.Component<any, {}> {
             >
               {brandName}
             </Typography>
-            <div>
+            {this.props.authenticationText === "LOGIN_SUCCESS" && <div>
               <IconButton onClick={this.handleMenu} color="inherit">
                 <AccountCircle />
               </IconButton>
               <Menu anchorEl={anchorEl} open={open} onClose={this.handleClose}>
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                {/* <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                <MenuItem onClick={this.handleClose}>My account</MenuItem> */}
+                <MenuItem onClick={this.handleLoggedOut}>Log out</MenuItem>
               </Menu>
-            </div>
+            </div>}
           </Toolbar>
         </AppBar>
         {this.renderSnackBar()}
@@ -108,6 +108,7 @@ class Navbar extends React.Component<any, {}> {
 }
 
 const mapStateToProps = (state: any) => ({
+  authenticationText: state.authentication.text,
   searchTerm: state.searchTerm,
   brandName: state.brandName,
   surveyData: state.surveyData,
@@ -117,6 +118,7 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = {
   setSearchTerm,
   updateStateStatus,
+  requestLogout,
 };
 
 export default connect(

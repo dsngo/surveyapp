@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DBSERVER } from "../ultis";
+import { DBSERVER, saveState, clearAuthenticationKey } from "../ultis";
 import {
   ADD_QUESTION,
   FETCH_FORM_DATA_BY_ID,
@@ -28,9 +28,9 @@ export const updateStateStatus = (key: string, value: any) => ({
 // ================= FORM INFOS
 
 export const createNewForm = () => ({ type: "CREATE_NEW_FORM" });
-export const updateFormInfo = (infoKey: string, value: any) => ({
-  infoKey,
-  value,
+export const updateFormInfo = (k: string, v: any) => ({
+  k,
+  v,
   type: UPDATE_FORM_INFO,
 });
 
@@ -62,6 +62,47 @@ export const replaceQuestion = (questionId, template) => ({
 
 // ================= APIs
 const API = DBSERVER.url;
+
+//// AUTHENTICATION
+
+export const requestLogin = (username, password) => async dispatch => {
+  try {
+    dispatch(updateStateStatus("statusText", "Loggin User In"));
+    dispatch({
+      type: "LOGIN_PENDING",
+      payload: { text: "LOGIN_PENDING", user: {} },
+    });
+    const { data, message, user } = (await axios.post(
+      `${API}/survey/authenticate`,
+      {
+        username,
+        password,
+      },
+    )).data;
+    if (data === "LOGIN_SUCCESS") {
+      dispatch({ type: data, payload: { text: data, user } });
+      saveState({ authentication: { text: data, user } });
+    }
+    if (data === "LOGIN_FAILED") {
+      dispatch({ type: data, payload: { text: data, user: {} } });
+    }
+    dispatch(updateStateStatus("statusText", message));
+  } catch (e) {
+    console.log(e);
+    dispatch(updateStateStatus("statusText", "Cannot Reach Server"));
+    dispatch({
+      type: "LOGIN_FAILED",
+      payload: { text: "LOGIN_FAILED", user: {} },
+    });
+  }
+};
+
+export const requestLogout = () => dispatch => {
+  clearAuthenticationKey();
+  dispatch({ type: "LOGGED_OUT", payload: { text: "LOGGED_OUT", user: {} } });
+  dispatch(updateStateStatus("statusText", "Sucessfully Logged Out"));
+};
+
 export const fetchRecentForms = (username = "Daniel") => async (
   dispatch: any,
   getState,
@@ -69,7 +110,9 @@ export const fetchRecentForms = (username = "Daniel") => async (
   const { data: recentForms, message: value } = (await axios.get(
     `${API}/survey/recent`,
   )).data;
-  const check = JSON.stringify(getState().recentForms).length === JSON.stringify(recentForms).length
+  const check =
+    JSON.stringify(getState().recentForms).length ===
+    JSON.stringify(recentForms).length;
   if (check) return;
   dispatch({
     recentForms,
@@ -81,7 +124,8 @@ export const fetchRecentForms = (username = "Daniel") => async (
 export const getFormDataById = (formId: string) => async (dispatch: any) => {
   const resData = (await axios.get(`${API}/survey/form/${formId}`)).data;
   if (resData.data) {
-    const { contents, ...formInfo } = resData.data;
+    const { contents, title, description, _id: formId } = resData.data;
+    const formInfo = { title, description, formId };
     dispatch({
       contents,
       formInfo,
@@ -94,19 +138,30 @@ export const saveFormToDb = (completed: boolean) => async (
   dispatch: any,
   getState: any,
 ) => {
-  const contents = getState().formQuestions;
-  const { _id: formId, ...formInfo } = getState().formInfo;
-  const formData = { ...formInfo, contents, completed };
-  const { data, message: value } = (await (formId
-    ? axios.put(`${API}/survey/form/${formId}`, formData)
+  const {
+    formQuestions: contents,
+    formInfo,
+    authentication: { user },
+  } = getState();
+  const formData = { ...formInfo, contents, completed, author: user };
+  const { data, message } = (await (formInfo.formId
+    ? axios.put(`${API}/survey/form/${formInfo.formId}`, formData)
     : axios.post(`${API}/survey`, formData))).data;
-  if (value) {
+  if (message) {
     dispatch({
       formId: data,
       type: SAVE_FORM_BY_ID,
     });
-    dispatch(updateStateStatus("statusText", value));
+    dispatch(updateStateStatus("statusText", message));
   }
+};
+export const removeFormById = id => async dispatch => {
+  const { data, message } = (await axios.delete(
+    `${API}/survey/form/${id}`,
+  )).data;
+  if (!message) return;
+  dispatch({ type: "REMOVE_FORM_BY_ID", id });
+  dispatch(updateStateStatus("statusText", message));
 };
 // export const saveClientDataToDb = (
 //   clientSurveyId: string,
