@@ -33,7 +33,7 @@ export const App: React.SFC = () => (
   <Router>
     <MuiThemeProvider theme={theme}>
       <Switch>
-        <Route exact path="/client-survey/render/(:formId)" component={ClientPage} />
+        <Route exact path="/client-survey/render/:formId" component={ClientPage} />
         <Route component={MainApp} />
       </Switch>
     </MuiThemeProvider>

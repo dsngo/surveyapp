@@ -23,7 +23,12 @@ const styles: { [key: string]: React.CSSProperties } = {
   root: {
     display: "flex",
     flexDirection: "column",
-    margin: "0 5vw",
+    alignItems: "center",
+  },
+  formContainer: {
+    display: "flex",
+    flexDirection: "column",
+    margin: "0 5vw 5px",
     // justifyContent: "center",
     alignItems: "center",
   },
@@ -56,10 +61,10 @@ class Landing extends React.Component<
   };
 
   handleChange = (key, value?) => (e?) => {
-    console.log(value);
     this.setState({ [key]: value || e.target.value });
   };
   handleChangeTabs = (e, v) => this.setState({ activeTab: v });
+  
   handleContinueSurvey = clientId => async () => {
     if (clientId) {
       try {
@@ -67,14 +72,15 @@ class Landing extends React.Component<
           `${DBSERVER.url}/survey/client/${clientId}`,
         )).data;
         if (data) {
-          console.log("proc")
-          return this.setState({redirect: data._id})
+          console.log("proc");
+          return this.setState({ redirect: data._id });
         }
       } catch (e) {
         console.log(e);
       }
     }
   };
+  // 5b2b590aaf807233dc15d1f4
   renderLogin = () => {
     const { classes, authentication } = this.props;
     const {
@@ -83,12 +89,19 @@ class Landing extends React.Component<
       showPassword,
       activeTab,
       clientId,
+      redirect,
     } = this.state;
     const showLoading = authentication.text === "LOGIN_PENDING";
-    console.log(activeTab);
     return (
       <div className={classes.root}>
-      {this.state.redirect && <Redirect to={{ pathname: "/client-survey/render/continue", state: this.state.redirect }} />}
+        {this.state.redirect && (
+          <Redirect
+            to={{
+              pathname: "/client-survey/render/continue",
+              state: this.state.redirect,
+            }}
+          />
+        )}
         <Tabs
           value={activeTab}
           onChange={this.handleChangeTabs}
@@ -103,7 +116,7 @@ class Landing extends React.Component<
           index={activeTab}
           onChangeIndex={i => this.handleChange("activeTab", i)()}
         >
-          <React.Fragment>
+          <Paper className={classes.formContainer}>
             <TextField
               className={classes.textField}
               placeholder="Username"
@@ -141,30 +154,33 @@ class Landing extends React.Component<
                 Login
               </Button>
             </div>
-            {showLoading && (
-              <Fade
-                in={showLoading}
-                style={{
-                  transitionDelay: showLoading ? "500ms" : "0ms",
-                }}
-                unmountOnExit
-              >
-                <CircularProgress size={100} />
-              </Fade>
-            )}
-          </React.Fragment>
-          <Paper>
+          </Paper>
+          <Paper className={classes.formContainer}>
             <TextField
               className={classes.textField}
               placeholder="Client Id"
               value={clientId}
               onChange={this.handleChange("clientId")}
             />
-            <Button color="primary" onClick={this.handleContinueSurvey(clientId)}>
+            <Button
+              color="primary"
+              onClick={this.handleContinueSurvey(clientId)}
+            >
               Continue
             </Button>
           </Paper>
         </SwipeableViews>
+        {showLoading && (
+            <Fade
+              in={showLoading}
+              style={{
+                transitionDelay: showLoading ? "500ms" : "0ms",
+              }}
+              unmountOnExit
+            >
+              <CircularProgress size={100} />
+            </Fade>
+        )}
       </div>
     );
   };

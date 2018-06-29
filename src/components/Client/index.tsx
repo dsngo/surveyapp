@@ -92,7 +92,7 @@ class ClientForm extends React.Component<IClientFormProps, {}> {
     // 5b28900a2d5bf41accfd2319
     if (this.state.contents.length > 0) return null;
     if (this.props.location.state) {
-      console.log(this.props.location.state)
+      console.log(this.props.location.state);
       this.handleContinueSurvey();
     } else if (this.props.match.params.formId) {
       this.handleInitSurvey();
@@ -103,7 +103,7 @@ class ClientForm extends React.Component<IClientFormProps, {}> {
     const { data, message } = (await axios.get(
       `${API}/survey/client/${clientId}`,
     )).data;
-    console.log((data))
+    console.log(data);
     this.setState({ ...data });
   };
   handleInitSurvey = async () => {
@@ -145,8 +145,18 @@ class ClientForm extends React.Component<IClientFormProps, {}> {
   };
   handleSaveSurvey = async () => {
     const { _id, savingStatus, openDialog, ...clientSurvey } = this.state;
+    switch (openDialog) {
+      case "submit":
+        clientSurvey.completed = true;
+        break;
+      case "save":
+        clientSurvey.completed = false;
+        break;
+      default:
+        break;
+    }
     const { state: clientId } = this.props.location;
-    console.log(clientSurvey)
+    console.log(clientSurvey);
     this.setState({ savingStatus: "SAVING" });
     try {
       const { data, message } = (await (!clientId
@@ -349,15 +359,15 @@ class ClientForm extends React.Component<IClientFormProps, {}> {
   }
   render() {
     const { classes } = this.props;
-    const { title } = this.state;
-    console.log(this.state)
+    const { contents } = this.state;
+    console.log(this.state);
     return (
       <Paper className={classes.root}>
-        {title.length === 0 ? (
+        {contents.length === 0 ? (
           <Fade
-            in={title.length === 0}
+            in={contents.length === 0}
             style={{
-              transitionDelay: title.length === 0 ? "500ms" : "0ms",
+              transitionDelay: contents.length === 0 ? "500ms" : "0ms",
               margin: 16,
             }}
             unmountOnExit
